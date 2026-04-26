@@ -4306,11 +4306,12 @@ function loadAllStudents() {
       }
       allStudents = raw;
     }
-    const active = localStorage.getItem('catechism_active');
-    if (active && allStudents[active]) {
-      activeStudent = active;
-      completedChallenges = allStudents[active].challenges || {};
-    }
+    // IMPORTANT: Do NOT auto-restore active student.
+    // Always make the user pick "Who's playing?" each time the app loads.
+    // This prevents one kid from accidentally landing in another kid's account
+    // on a shared phone (especially when clicking a shared Facebook link).
+    activeStudent = '';
+    completedChallenges = {};
   } catch (e) {
     console.log('localStorage unavailable');
   }
@@ -4319,6 +4320,8 @@ function loadAllStudents() {
 function saveAllStudents() {
   try {
     localStorage.setItem('catechism_all_students', JSON.stringify(allStudents));
+    // We still save activeStudent during a session (so refreshes mid-quiz don't lose state)
+    // but loadAllStudents ignores it on fresh page load
     if (activeStudent) localStorage.setItem('catechism_active', activeStudent);
   } catch (e) {}
 }
@@ -4942,7 +4945,13 @@ function renderWhoIsPlaying() {
   const kidsHtml = kids.length > 0 ? `
     <h3 style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-pink-darker); font-size: 1.15rem; margin: 18px 0 12px;">Who is playing now?</h3>
     <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;">
-      ${kids.map(name => `<button class="kid-btn" onclick="pickStudent('${escapeHtml(name).replace(/'/g, "\\'")}')">👤 ${escapeHtml(name)}</button>`).join('')}
+      ${kids.map(name => {
+        const safe = escapeHtml(name).replace(/'/g, "\\'");
+        return `<div style="position: relative; display: inline-block;">
+          <button class="kid-btn" onclick="pickStudent('${safe}')" style="padding-right: 32px;">👤 ${escapeHtml(name)}</button>
+          <button onclick="event.stopPropagation(); confirmDeleteStudent('${safe}')" title="Remove this name" style="position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; background: var(--pastel-pink-deep, #ec4899); color: #fff; font-size: 0.78rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">✕</button>
+        </div>`;
+      }).join('')}
     </div>
     <p class="muted small" style="margin: 12px 0;">— or —</p>
   ` : '';
@@ -4997,6 +5006,57 @@ function pickStudent(name) {
   setActiveStudent(name);
   if (ambientEnabled) startAmbientPad();
   renderHome();
+}
+
+// Confirm + delete a student name (and all their progress)
+function confirmDeleteStudent(name) {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal" style="border-color: var(--pastel-pink-deep); max-width: 400px;">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">🗑️</div>
+      <h3 style="color: var(--pastel-pink-darker); font-family: 'Pacifico', cursive; font-size: 1.5rem;">Remove "${escapeHtml(name)}"?</h3>
+      <p style="margin: 8px 0; font-family: 'Quicksand', sans-serif; color: var(--plum-deep);">
+        This will erase ${escapeHtml(name)}'s progress, badges, and reward codes from this device.
+      </p>
+      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.85rem;">
+        Mawala ang tanang progress ni ${escapeHtml(name)} sa kini nga device.
+      </p>
+      <p style="margin-top: 10px; font-weight: 700; color: var(--pastel-pink-darker); font-size: 0.9rem;">
+        This cannot be undone. Are you sure?
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap;">
+        <button class="btn btn-secondary" id="del-cancel">No, keep it</button>
+        <button class="btn" id="del-confirm" style="background: linear-gradient(180deg, #fff 0%, #fecaca 100%); border-color: var(--pastel-pink-deep); color: var(--pastel-pink-darker); box-shadow: 0 4px 0 var(--pastel-pink-deep);">Yes, remove</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('#del-cancel').onclick = () => backdrop.remove();
+  backdrop.querySelector('#del-confirm').onclick = () => {
+    backdrop.remove();
+    deleteStudent(name);
+  };
+  backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
+}
+
+function deleteStudent(name) {
+  try {
+    if (allStudents[name]) {
+      delete allStudents[name];
+      saveAllStudents();
+    }
+    // If the deleted student was the active one, clear active too
+    if (activeStudent === name) {
+      activeStudent = '';
+      completedChallenges = {};
+      try { localStorage.removeItem('catechism_active'); } catch (e) {}
+    }
+    // Re-render the picker
+    renderWhoIsPlaying();
+  } catch (e) {
+    showModal('❌ Error', 'Could not remove: ' + e.message);
+  }
 }
 
 function addNewStudent() {
@@ -7423,6 +7483,15 @@ function otTapEvent(orderNum) {
 // ============================================
 // INIT
 // ============================================
+
+// Clean up Facebook tracking param (?fbclid=...) from URL when shared link is clicked
+try {
+  if (window.location.search.indexOf('fbclid=') !== -1 && window.history && window.history.replaceState) {
+    const cleanUrl = window.location.pathname + window.location.hash;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }
+} catch (e) {}
+
 loadAllStudents();
 loadTeacherName();
 loadSoundPref();
