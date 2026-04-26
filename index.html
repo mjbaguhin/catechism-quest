@@ -2011,6 +2011,17 @@ body::after {
   100% { transform: scale(1); }
 }
 
+@keyframes codePulse {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(251, 191, 36, 0.5), 0 6px 0 #f59e0b;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(251, 191, 36, 0.8), 0 6px 0 #f59e0b;
+    transform: scale(1.01);
+  }
+}
+
 .mm-card:disabled {
   cursor: not-allowed;
 }
@@ -3268,6 +3279,17 @@ const MINI_GAMES = [
     available: false
   },
   {
+    id: 'society-match',
+    name: 'Society Match',
+    nameBisaya: 'Pares sa Simbahan',
+    icon: '🛡️',
+    color: 'sky',
+    desc: 'Match parts of the Church as a Perfect Society',
+    descBisaya: 'I-pares ang mga bahin sa Simbahan ingon Hingpit nga Katilingban',
+    unlockLesson: 4,
+    available: false
+  },
+  {
     id: 'fill-blank',
     name: 'Fill the Blank',
     nameBisaya: 'Tagboi ang Bakante',
@@ -3279,14 +3301,14 @@ const MINI_GAMES = [
     available: false
   },
   {
-    id: 'ot-timeline',
-    name: 'Old Testament Timeline',
-    nameBisaya: 'Han-ay sa Daang Tugon',
-    icon: '🌳',
-    color: 'orange',
-    desc: 'Put 12 Old Testament events in correct order',
-    descBisaya: 'Han-aya ang 12 ka panghitabo sa Daang Tugon',
-    unlockLesson: 8,
+    id: 'pope-quiz',
+    name: 'Pope Quiz',
+    nameBisaya: 'Pasagdan sa Santo Papa',
+    icon: '👑',
+    color: 'gold',
+    desc: 'Quiz on the Pope and Infallibility teachings',
+    descBisaya: 'Pasagdan bahin sa Santo Papa ug Pagkadili Masayop',
+    unlockLesson: 6,
     available: false
   },
   {
@@ -3297,7 +3319,18 @@ const MINI_GAMES = [
     color: 'violet',
     desc: 'Rebuild scrambled prayers (Hail Mary, Our Father)',
     descBisaya: 'Tukda ang nasambog nga mga pag-ampo',
-    unlockLesson: 'all',  // unlocks after ALL lessons perfected
+    unlockLesson: 7,
+    available: false
+  },
+  {
+    id: 'ot-timeline',
+    name: 'Old Testament Timeline',
+    nameBisaya: 'Han-ay sa Daang Tugon',
+    icon: '🌳',
+    color: 'orange',
+    desc: 'Put 12 Old Testament events in correct order',
+    descBisaya: 'Han-aya ang 12 ka panghitabo sa Daang Tugon',
+    unlockLesson: 8,
     available: false
   }
 ];
@@ -4301,7 +4334,7 @@ function renderTeacherSetup() {
       <div class="prayer-card" style="max-width: 520px;">
         <div class="prayer-icon">📖</div>
         <h1 class="prayer-title">Welcome!</h1>
-        <p class="prayer-subtitle">Maayong Pag-abot!</p>
+        <p class="prayer-subtitle">May Jesus, Mary and Joseph be with you! 🙏</p>
 
         <div class="prayer-section" style="text-align: center; padding: 22px 18px;">
           <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px;">
@@ -4596,7 +4629,13 @@ function generateCode(lessonId, score, total, name) {
   const random = Math.floor(1000 + Math.random() * 9000);
   const percent = Math.round((score / total) * 100);
   const tier = percent === 100 ? 'PERFECT' : percent >= 90 ? 'GOLD' : percent >= 75 ? 'SILVER' : 'TRY';
-  return `${initials}-L${lessonId}-${score}of${total}-${tier}-${random}`;
+  // Date stamp: YYMMDD format (e.g., 260427 = April 27, 2026) — helps teacher spot duplicate claims
+  const now = new Date();
+  const yy = String(now.getFullYear()).slice(2);
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const dateStamp = `${yy}${mm}${dd}`;
+  return `${initials}-L${lessonId}-${score}of${total}-${tier}-${dateStamp}-${random}`;
 }
 
 function escapeHtml(s) {
@@ -5591,40 +5630,27 @@ function renderResults() {
   if (newlyUnlockedMiniGames.length > 0) {
     setTimeout(() => playBadgeSound(), 1500);
 
+    // For challenge mode passes, delay until save-code reminder is dismissed
+    // For practice mode, show normally after 2.2s
+    const popupDelay = (state.currentMode === 'challenge' && percent >= 75) ? 4500 : 2200;
+
     // Show a prominent popup modal so user can't miss it
     setTimeout(() => {
-      const games = newlyUnlockedMiniGames;
-      const gameItems = games.map(g => `
-        <div style="display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #fff, var(--pastel-mint, #a7f3d0)); padding: 14px 18px; border-radius: 18px; margin: 8px 0; border: 3px solid var(--pastel-mint-deep); box-shadow: 0 4px 0 var(--pastel-mint-deep); font-family: 'Quicksand', sans-serif;">
-          <span style="font-size: 2.4rem;">${g.icon}</span>
-          <div style="text-align: left;">
-            <div style="font-weight: 700; color: var(--plum-deep); font-size: 1.05rem;">${escapeHtml(g.name)}</div>
-            <div style="font-style: italic; color: var(--pastel-mint-deep); font-size: 0.85rem;">${g.available ? '🎮 Ready to play!' : '⏳ Coming soon'}</div>
-          </div>
-        </div>
-      `).join('');
-
-      const backdrop = document.createElement('div');
-      backdrop.className = 'modal-backdrop';
-      backdrop.innerHTML = `
-        <div class="modal" style="border-color: var(--pastel-mint-deep); max-width: 420px;">
-          <div style="font-size: 3rem; margin-bottom: 8px;">🎮 ✨</div>
-          <h3 style="color: var(--pastel-mint-deep); font-family: 'Pacifico', cursive; font-size: 1.7rem;">Mini-Game${games.length > 1 ? 's' : ''} Unlocked!</h3>
-          <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.9rem; margin: 4px 0 12px;">Bag-ong duwa nabuksan!</p>
-          ${gameItems}
-          <div style="display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap;">
-            <button class="btn btn-secondary" id="mg-later">Continue</button>
-            ${games.some(g => g.available) ? `<button class="btn" id="mg-play" style="background: linear-gradient(180deg, var(--pastel-mint), var(--pastel-mint-deep)); color: #fff; border-color: var(--pastel-mint-deep); box-shadow: 0 4px 0 #047857;">▶ Play Now</button>` : ''}
-          </div>
-        </div>
-      `;
-      document.body.appendChild(backdrop);
-      const laterBtn = backdrop.querySelector('#mg-later');
-      const playBtn = backdrop.querySelector('#mg-play');
-      if (laterBtn) laterBtn.onclick = () => backdrop.remove();
-      if (playBtn) playBtn.onclick = () => { backdrop.remove(); renderMiniGamesHub(); };
-      backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
-    }, 2200);
+      // Don't pile on top of save-code reminder if it's still open
+      if (document.getElementById('save-code-reminder')) {
+        // Wait for it to be dismissed, then show mini-game popup
+        const checkInterval = setInterval(() => {
+          if (!document.getElementById('save-code-reminder')) {
+            clearInterval(checkInterval);
+            showMiniGameUnlockPopup(newlyUnlockedMiniGames);
+          }
+        }, 500);
+        // Stop checking after 60 seconds (in case user just leaves)
+        setTimeout(() => clearInterval(checkInterval), 60000);
+      } else {
+        showMiniGameUnlockPopup(newlyUnlockedMiniGames);
+      }
+    }, popupDelay);
 
     const gamesList = newlyUnlockedMiniGames.map(g => {
       const isAvailable = g.available;
@@ -5671,26 +5697,46 @@ function renderResults() {
   let codeBox = '';
   if (state.currentMode === 'challenge') {
     if (percent >= 75) {
-      // PASSED — show reward code and claim instructions
+      // PASSED — show reward code FRONT AND CENTER with save/share buttons
+      const tierEmoji = percent === 100 ? '👑' : percent >= 90 ? '🏆' : '🥈';
+      const tierName = percent === 100 ? 'PERFECT' : percent >= 90 ? 'GOLD' : 'SILVER';
       codeBox = `
-        <div class="completion-code">
-          <span class="code-label">🏅 Your Reward Code 🏅</span>
-          ${code}
+        <div id="reward-code-card" style="background: linear-gradient(135deg, #fff, var(--pastel-yellow, #fef3c7) 50%, #fff); border: 4px solid #fbbf24; border-radius: 22px; padding: 24px 20px; margin: 22px 0; text-align: center; box-shadow: 0 0 40px rgba(251, 191, 36, 0.5), 0 6px 0 #f59e0b; position: relative; animation: codePulse 2s ease-in-out infinite;">
+          <div style="font-size: 3rem; margin-bottom: 6px;">${tierEmoji}</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.85rem; letter-spacing: 0.25em; margin-bottom: 4px;">⭐ YOUR REWARD CODE ⭐</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.78rem; margin-bottom: 14px;">Imong Code sa Premyo</div>
+          <div style="background: #fff; border: 3px dashed #fbbf24; border-radius: 16px; padding: 16px 14px; margin: 10px 0;">
+            <div id="reward-code-text" style="font-family: 'Courier New', monospace; font-size: 1.4rem; font-weight: 700; color: var(--pastel-pink-darker); letter-spacing: 0.05em; word-break: break-all; line-height: 1.4;">
+              ${code}
+            </div>
+          </div>
+          <div style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.25rem; margin-top: 12px;">
+            ${tierName} ${tierEmoji}
+          </div>
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--ruby, #dc2626); font-size: 0.95rem; margin-top: 12px; padding: 10px; background: rgba(254, 226, 226, 0.7); border-radius: 12px;">
+            ⚠️ Save this code NOW or you'll lose your reward!<br>
+            <span style="font-style: italic; font-size: 0.85rem;">I-save kini KARON o mawala ang imong premyo!</span>
+          </div>
+
+          <!-- Action buttons: Save image + Share -->
+          <div style="display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap;">
+            <button onclick="saveCodeAsImage('${code}', '${tierName}', ${score}, ${total})" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-mint, #a7f3d0) 100%); border: 3px solid var(--pastel-mint-deep, #10b981); color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 18px; border-radius: 14px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 var(--pastel-mint-deep, #10b981);">
+              💾 Save as Image
+            </button>
+            <button onclick="shareCode('${code}', '${tierName}', ${score}, ${total})" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-sky-light, #e0f2fe) 100%); border: 3px solid var(--pastel-sky, #0ea5e9); color: #0369a1; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 18px; border-radius: 14px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 var(--pastel-sky, #0ea5e9);">
+              📤 Send to Ate ${escapeHtml(teacherName.split(' ')[0])}
+            </button>
+          </div>
         </div>
-        <div class="reward-info">
-          <h4>📲 How to Claim Your Reward</h4>
-          <p>1️⃣ <strong>Take a screenshot of this whole page</strong> 📸</p>
-          <p>2️⃣ Send the screenshot to ${escapeHtml(teacherName)} on Messenger</p>
-          <p>3️⃣ Get your reward on Sunday! 🎁</p>
-          <p style="margin-top: 12px; font-style: italic; color: var(--ruby); font-weight: 600;">
-            ⚠ Screenshot ONLY — typed codes will not be accepted!
+
+        <div class="reward-info" style="background: linear-gradient(135deg, var(--pastel-pink-light), #fff); border: 2px dashed var(--pastel-pink-deep); padding: 18px; border-radius: 16px;">
+          <h4 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.3rem; margin-bottom: 10px;">📲 How to Claim Your Reward</h4>
+          <p style="margin: 6px 0;">1️⃣ Tap <strong>💾 Save as Image</strong> to save the code to your phone</p>
+          <p style="margin: 6px 0;">2️⃣ Tap <strong>📤 Send to ${escapeHtml(teacherName.split(' ')[0])}</strong> to share via Messenger</p>
+          <p style="margin: 6px 0;">3️⃣ Get your reward on Sunday! 🎁</p>
+          <p style="margin-top: 10px; font-style: italic; color: var(--ruby, #dc2626); font-weight: 600; font-size: 0.9rem;">
+            ⚠️ Screenshot or saved image ONLY — typed codes will not be accepted!
           </p>
-          <p style="margin-top: 6px; font-style: italic; color: var(--ruby); font-weight: 600;">
-            ⚠ Save it now! This screen will not show again.
-          </p>
-        </div>
-        <div class="warning-text" style="margin-top: 15px;">
-          🔒 Challenge Mode is now LOCKED for this lesson. But Practice Mode is always open!
         </div>
       `;
     } else {
@@ -5759,9 +5805,9 @@ function renderResults() {
       ${state.currentMode === 'challenge' && percent >= 75 ? `<p style="margin-top: 12px; font-size: 1.05rem;"><strong>Your Reward:</strong> ${tier.reward}</p>` : ''}
 
       ${pointsBox}
+      ${codeBox}
       ${newBadgesHtml}
       ${newMiniGameHtml}
-      ${codeBox}
 
       <p class="instructions">
         ${percent === 100 ? "🌟 Magnificent! Heaven smiles on you! 🌟" :
@@ -5782,6 +5828,248 @@ function renderResults() {
   // Show level-up overlay AFTER render if applicable
   if (leveledUp && newRank) {
     setTimeout(() => showLevelUp(newRank), 800);
+  }
+
+  // CRITICAL: Show "Save Your Code!" reminder popup for passed challenges
+  // Kids were missing the reward code by tapping past it
+  if (state.currentMode === 'challenge' && percent >= 75) {
+    setTimeout(() => showSaveCodeReminder(code, percent), 1800);
+  }
+}
+
+// Show the mini-game unlock popup
+function showMiniGameUnlockPopup(games) {
+  if (!games || games.length === 0) return;
+  if (document.getElementById('mini-game-unlock-popup')) return; // already shown
+
+  const gameItems = games.map(g => `
+    <div style="display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #fff, var(--pastel-mint, #a7f3d0)); padding: 14px 18px; border-radius: 18px; margin: 8px 0; border: 3px solid var(--pastel-mint-deep); box-shadow: 0 4px 0 var(--pastel-mint-deep); font-family: 'Quicksand', sans-serif;">
+      <span style="font-size: 2.4rem;">${g.icon}</span>
+      <div style="text-align: left;">
+        <div style="font-weight: 700; color: var(--plum-deep); font-size: 1.05rem;">${escapeHtml(g.name)}</div>
+        <div style="font-style: italic; color: var(--pastel-mint-deep); font-size: 0.85rem;">${g.available ? '🎮 Ready to play!' : '⏳ Coming soon'}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const backdrop = document.createElement('div');
+  backdrop.id = 'mini-game-unlock-popup';
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal" style="border-color: var(--pastel-mint-deep); max-width: 420px;">
+      <div style="font-size: 3rem; margin-bottom: 8px;">🎮 ✨</div>
+      <h3 style="color: var(--pastel-mint-deep); font-family: 'Pacifico', cursive; font-size: 1.7rem;">Mini-Game${games.length > 1 ? 's' : ''} Unlocked!</h3>
+      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.9rem; margin: 4px 0 12px;">Bag-ong duwa nabuksan!</p>
+      ${gameItems}
+      <div style="display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap;">
+        <button class="btn btn-secondary" id="mg-later">Continue</button>
+        ${games.some(g => g.available) ? `<button class="btn" id="mg-play" style="background: linear-gradient(180deg, var(--pastel-mint), var(--pastel-mint-deep)); color: #fff; border-color: var(--pastel-mint-deep); box-shadow: 0 4px 0 #047857;">▶ Play Now</button>` : ''}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+  const laterBtn = backdrop.querySelector('#mg-later');
+  const playBtn = backdrop.querySelector('#mg-play');
+  if (laterBtn) laterBtn.onclick = () => backdrop.remove();
+  if (playBtn) playBtn.onclick = () => { backdrop.remove(); renderMiniGamesHub(); };
+  backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
+}
+
+// Big popup that appears so kids don't miss saving their code
+function showSaveCodeReminder(code, percent) {
+  // Don't show if already dismissed for this code
+  if (document.getElementById('save-code-reminder')) return;
+
+  const tierEmoji = percent === 100 ? '👑' : percent >= 90 ? '🏆' : '🥈';
+  const backdrop = document.createElement('div');
+  backdrop.id = 'save-code-reminder';
+  backdrop.className = 'modal-backdrop';
+  backdrop.style.zIndex = '300';
+  backdrop.innerHTML = `
+    <div class="modal" style="border-color: #fbbf24; max-width: 420px; box-shadow: 0 0 40px rgba(251, 191, 36, 0.6);">
+      <div style="font-size: 3.5rem; margin-bottom: 8px;">📸</div>
+      <h3 style="color: #d97706; font-family: 'Pacifico', cursive; font-size: 1.7rem;">Save Your Code!</h3>
+      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.9rem; margin: 4px 0 14px;">I-save ang imong code!</p>
+
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #fbbf24; border-radius: 16px; padding: 14px; margin: 12px 0;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.78rem; letter-spacing: 0.2em; margin-bottom: 6px;">${tierEmoji} YOUR REWARD CODE</div>
+        <div style="font-family: 'Courier New', monospace; font-size: 1.05rem; font-weight: 700; color: var(--pastel-pink-darker); word-break: break-all; line-height: 1.4;">${code}</div>
+      </div>
+
+      <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--ruby, #dc2626); margin: 12px 0; font-size: 1rem;">
+        ⚠️ This code will NOT show again!<br>
+        <span style="font-style: italic; font-size: 0.85rem; font-weight: 500;">Dili na kini ipakita pag-usab!</span>
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+        <button class="btn" onclick="document.getElementById('save-code-reminder').remove(); saveCodeAsImage('${code}', '${percent === 100 ? 'PERFECT' : percent >= 90 ? 'GOLD' : 'SILVER'}', 0, 0);" style="background: linear-gradient(180deg, var(--pastel-mint, #a7f3d0), var(--pastel-mint-deep, #10b981)); color: #fff; border-color: #047857; box-shadow: 0 4px 0 #047857; font-size: 1rem;">
+          💾 Save as Image
+        </button>
+        <button class="btn" onclick="document.getElementById('save-code-reminder').remove(); shareCode('${code}', '${percent === 100 ? 'PERFECT' : percent >= 90 ? 'GOLD' : 'SILVER'}', 0, 0);" style="background: linear-gradient(180deg, var(--pastel-sky-light, #e0f2fe), var(--pastel-sky, #0ea5e9)); color: #fff; border-color: #0369a1; box-shadow: 0 4px 0 #0369a1; font-size: 1rem;">
+          📤 Send to Ate ${escapeHtml(teacherName.split(' ')[0])}
+        </button>
+        <button class="btn btn-secondary" onclick="document.getElementById('save-code-reminder').remove();" style="margin-top: 4px;">
+          I'll screenshot myself
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+}
+
+// Generate a beautiful PNG image of the reward code and download it
+function saveCodeAsImage(code, tier, score, total) {
+  try {
+    const tierEmoji = tier === 'PERFECT' ? '👑' : tier === 'GOLD' ? '🏆' : '🥈';
+    const tierColor = tier === 'PERFECT' ? '#dc2626' : tier === 'GOLD' ? '#d97706' : '#6b7280';
+    const studentName = state.studentName || 'Student';
+
+    // Create a canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 1000;
+    const ctx = canvas.getContext('2d');
+
+    // Background gradient
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, 1000);
+    bgGrad.addColorStop(0, '#fef3c7');
+    bgGrad.addColorStop(0.5, '#fce7f3');
+    bgGrad.addColorStop(1, '#e0e7ff');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, 800, 1000);
+
+    // White card
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 8;
+    roundRect(ctx, 50, 100, 700, 800, 30);
+    ctx.fill();
+    ctx.stroke();
+
+    // Big tier emoji
+    ctx.font = '160px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(tierEmoji, 400, 280);
+
+    // Title "Reward Code"
+    ctx.font = 'bold 48px sans-serif';
+    ctx.fillStyle = '#d97706';
+    ctx.fillText('YOUR REWARD CODE', 400, 360);
+
+    // Tier label
+    ctx.font = 'bold 56px serif';
+    ctx.fillStyle = tierColor;
+    ctx.fillText(tier + ' ' + tierEmoji, 400, 440);
+
+    // Dashed border around code
+    ctx.setLineDash([15, 10]);
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 4;
+    roundRect(ctx, 100, 480, 600, 140, 20);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Code text (auto-fit if too long)
+    ctx.font = 'bold 38px monospace';
+    ctx.fillStyle = '#be185d';
+    let codeFontSize = 38;
+    while (ctx.measureText(code).width > 560 && codeFontSize > 18) {
+      codeFontSize -= 2;
+      ctx.font = `bold ${codeFontSize}px monospace`;
+    }
+    ctx.fillText(code, 400, 565);
+
+    // Student name
+    ctx.font = 'italic 32px serif';
+    ctx.fillStyle = '#6b21a8';
+    ctx.fillText('Earned by: ' + studentName, 400, 690);
+
+    // Date
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    ctx.font = '26px sans-serif';
+    ctx.fillStyle = '#7c3aed';
+    ctx.fillText(today, 400, 740);
+
+    // Footer
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillStyle = '#be185d';
+    ctx.fillText('Catechism Quest', 400, 820);
+
+    ctx.font = 'italic 22px sans-serif';
+    ctx.fillStyle = '#9333ea';
+    ctx.fillText('SSPX Sunday Class', 400, 855);
+
+    // Crosses corners
+    ctx.font = '50px serif';
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillText('✝', 90, 160);
+    ctx.fillText('✝', 710, 160);
+
+    // Convert to blob and download
+    canvas.toBlob(function(blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const safeCode = code.replace(/[^A-Za-z0-9-]/g, '_');
+      link.download = `RewardCode_${safeCode}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      // Show confirmation
+      showModal('✅ Saved!', `Your code image has been saved to your Downloads. Send it to Ate ${teacherName.split(' ')[0]} on Messenger.`);
+    }, 'image/png');
+  } catch (e) {
+    console.error('Save image error:', e);
+    showModal('❌ Error', 'Could not save image. Please take a screenshot instead.');
+  }
+}
+
+// Helper: rounded rectangle for canvas
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// Share code via native share API (Messenger, Facebook Lite, etc.)
+function shareCode(code, tier, score, total) {
+  const tierEmoji = tier === 'PERFECT' ? '👑' : tier === 'GOLD' ? '🏆' : '🥈';
+  const studentName = state.studentName || 'Student';
+  const text = `🎉 ${studentName} earned a reward!\n\n${tierEmoji} ${tier}\n⭐ Code: ${code}\n\nFrom Catechism Quest 📿`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'My Catechism Quest Reward Code',
+      text: text
+    }).catch(err => {
+      // User cancelled or share failed - fallback to copy
+      copyCodeToClipboard(text);
+    });
+  } else {
+    // Fallback: copy to clipboard
+    copyCodeToClipboard(text);
+  }
+}
+
+function copyCodeToClipboard(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      showModal('📋 Copied!', `Code copied to clipboard. Paste it in your Messenger message to Ate ${teacherName.split(' ')[0]}.`);
+    }).catch(() => {
+      showModal('📸 Take a Screenshot', 'Please take a screenshot of the code and send it via Messenger.');
+    });
+  } else {
+    showModal('📸 Take a Screenshot', 'Please take a screenshot of the code and send it via Messenger.');
   }
 }
 
@@ -5858,23 +6146,24 @@ function getUnlockedMiniGames() {
   const student = getCurrentStudent();
   if (!student) return [];
   const perfected = (student.stats && student.stats.lessonsPerfectedInPractice) || [];
-  const passedChallenges = student.challenges || {};
+  const allChallenges = student.challenges || {};
 
   // A lesson counts as "mastered" if EITHER:
   // - Practice was perfected (100% in Practice), OR
-  // - Challenge was passed (75%+ in Challenge — even better proof of mastery)
+  // - Challenge was PASSED (75%+ in Challenge)
   const masteredLessonIds = new Set(perfected);
-  Object.keys(passedChallenges).forEach(lessonIdStr => {
+  Object.keys(allChallenges).forEach(lessonIdStr => {
     const lessonId = parseInt(lessonIdStr, 10);
-    if (!isNaN(lessonId)) masteredLessonIds.add(lessonId);
+    const challenge = allChallenges[lessonIdStr];
+    // Only count if percent >= 75 (failed challenges don't count)
+    if (!isNaN(lessonId) && challenge && (challenge.percent || 0) >= 75) {
+      masteredLessonIds.add(lessonId);
+    }
   });
 
   const unlocked = [];
   for (const game of MINI_GAMES) {
-    if (game.unlockLesson === 'all') {
-      // Special: unlocks when ALL 8 lessons are mastered
-      if (masteredLessonIds.size >= 8) unlocked.push(game.id);
-    } else if (masteredLessonIds.has(game.unlockLesson)) {
+    if (masteredLessonIds.has(game.unlockLesson)) {
       unlocked.push(game.id);
     }
   }
@@ -5888,18 +6177,17 @@ function renderMiniGamesHub() {
   const unlocked = getUnlockedMiniGames();
   const student = getCurrentStudent();
   const perfected = (student.stats && student.stats.lessonsPerfectedInPractice) || [];
-  const passedChallenges = student.challenges || {};
-  const masteredCount = new Set([
-    ...perfected,
-    ...Object.keys(passedChallenges).map(k => parseInt(k, 10)).filter(n => !isNaN(n))
-  ]).size;
+  const allChallenges = student.challenges || {};
+  const passedChallengeLessons = Object.keys(allChallenges)
+    .filter(k => (allChallenges[k].percent || 0) >= 75)
+    .map(k => parseInt(k, 10))
+    .filter(n => !isNaN(n));
+  const masteredCount = new Set([...perfected, ...passedChallengeLessons]).size;
 
   const gamesHtml = MINI_GAMES.map(game => {
     const isUnlocked = unlocked.includes(game.id);
     const isAvailable = game.available;
-    const lockText = game.unlockLesson === 'all'
-      ? `🔒 Master ALL 8 lessons to unlock`
-      : `🔒 Master Lesson ${game.unlockLesson} to unlock`;
+    const lockText = `🔒 Master Lesson ${game.unlockLesson} to unlock`;
 
     if (isUnlocked && isAvailable) {
       return `
