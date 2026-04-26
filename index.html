@@ -2027,6 +2027,120 @@ body::after {
 }
 
 /* ============================================
+   WORD MATCHER + SOCIETY MATCH (two-column tap)
+============================================ */
+.wm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.wm-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wm-header {
+  font-family: 'Pacifico', cursive;
+  color: var(--pastel-pink-darker);
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.wm-card {
+  padding: 12px 10px;
+  background: linear-gradient(135deg, #fff, var(--pastel-pink-light));
+  border: 3px solid var(--pastel-pink);
+  border-radius: 14px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  color: var(--plum-deep);
+  cursor: pointer;
+  font-size: 0.88rem;
+  text-align: center;
+  word-break: break-word;
+  box-shadow: 0 3px 0 var(--pastel-pink);
+  transition: all 0.15s;
+  min-height: 50px;
+}
+
+.wm-card.wm-right {
+  background: linear-gradient(135deg, #fff, var(--pastel-lavender-light));
+  border-color: var(--pastel-lavender-deep);
+  font-style: italic;
+  box-shadow: 0 3px 0 var(--pastel-lavender-deep);
+}
+
+.wm-card.wm-selected {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 3px 0 #f59e0b, 0 0 16px rgba(251, 191, 36, 0.4) !important;
+  transform: scale(1.04);
+}
+
+.wm-card.wm-matched {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0) !important;
+  border-color: #10b981 !important;
+  color: #047857 !important;
+  box-shadow: 0 3px 0 #10b981 !important;
+  font-style: normal !important;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.wm-card:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   PRAYER BUILDER
+============================================ */
+.pb-word {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 4px;
+  background: linear-gradient(135deg, #fff, var(--pastel-lavender-light));
+  border: 2px solid var(--pastel-lavender-deep);
+  border-radius: 14px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  color: var(--plum-deep);
+  cursor: pointer;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 0 var(--pastel-lavender-deep);
+  transition: all 0.15s;
+}
+
+.pb-word:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #fff, var(--pastel-pink-light));
+  border-color: var(--pastel-pink-deep);
+}
+
+.pb-word:disabled,
+.pb-word.pb-used {
+  background: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+  color: #9ca3af !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.pb-built-word {
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 2px;
+  background: linear-gradient(135deg, var(--pastel-mint, #a7f3d0), var(--pastel-mint-deep, #10b981));
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+/* ============================================
    TEACHER SETTINGS GEAR + BANNER
 ============================================ */
 .settings-gear {
@@ -3265,7 +3379,7 @@ const MINI_GAMES = [
     desc: 'Match English words to their Bisaya meaning',
     descBisaya: 'I-pares ang English nga pulong sa Bisaya',
     unlockLesson: 2,
-    available: false  // not built yet
+    available: true
   },
   {
     id: 'marks-sort',
@@ -3276,7 +3390,7 @@ const MINI_GAMES = [
     desc: 'Sort statements into One, Holy, Catholic, Apostolic',
     descBisaya: 'I-han-ay sa Usa, Balaan, Katoliko, Apostoliko',
     unlockLesson: 3,
-    available: false
+    available: true
   },
   {
     id: 'society-match',
@@ -3287,7 +3401,7 @@ const MINI_GAMES = [
     desc: 'Match parts of the Church as a Perfect Society',
     descBisaya: 'I-pares ang mga bahin sa Simbahan ingon Hingpit nga Katilingban',
     unlockLesson: 4,
-    available: false
+    available: true
   },
   {
     id: 'fill-blank',
@@ -3298,7 +3412,7 @@ const MINI_GAMES = [
     desc: 'Fill in missing words from catechism teachings',
     descBisaya: 'Pun-i ang mga nawala nga pulong',
     unlockLesson: 5,
-    available: false
+    available: true
   },
   {
     id: 'pope-quiz',
@@ -3309,7 +3423,7 @@ const MINI_GAMES = [
     desc: 'Quiz on the Pope and Infallibility teachings',
     descBisaya: 'Pasagdan bahin sa Santo Papa ug Pagkadili Masayop',
     unlockLesson: 6,
-    available: false
+    available: true
   },
   {
     id: 'prayer-builder',
@@ -3320,7 +3434,7 @@ const MINI_GAMES = [
     desc: 'Rebuild scrambled prayers (Hail Mary, Our Father)',
     descBisaya: 'Tukda ang nasambog nga mga pag-ampo',
     unlockLesson: 7,
-    available: false
+    available: true
   },
   {
     id: 'ot-timeline',
@@ -3331,7 +3445,7 @@ const MINI_GAMES = [
     desc: 'Put 12 Old Testament events in correct order',
     descBisaya: 'Han-aya ang 12 ka panghitabo sa Daang Tugon',
     unlockLesson: 8,
-    available: false
+    available: true
   }
 ];
 
@@ -4069,105 +4183,7 @@ function toggleAmbient() {
   }
 }
 
-// Debug helpers — let MJ test and report exactly what's happening
-function getAudioDebugInfo() {
-  const lines = [];
-  lines.push('--- SOUND SETTINGS ---');
-  lines.push('soundsEnabled: ' + soundsEnabled);
-  lines.push('ambientEnabled: ' + ambientEnabled);
-  lines.push('ambientVolume: ' + ambientVolume.toFixed(3));
-  lines.push('firstInteractionDone: ' + firstInteractionDone);
-
-  lines.push('--- MP3 AUDIO STATE ---');
-  lines.push('mp3Audio exists: ' + (mp3Audio !== null));
-  lines.push('mp3Loaded: ' + mp3Loaded);
-  lines.push('musicStarted: ' + musicStarted);
-  if (mp3Audio) {
-    lines.push('mp3Audio.paused: ' + mp3Audio.paused);
-    lines.push('mp3Audio.ended: ' + mp3Audio.ended);
-    lines.push('mp3Audio.muted: ' + mp3Audio.muted);
-    lines.push('mp3Audio.volume: ' + mp3Audio.volume.toFixed(2));
-    lines.push('mp3Audio.currentTime: ' + mp3Audio.currentTime.toFixed(1));
-    lines.push('mp3Audio.duration: ' + (isNaN(mp3Audio.duration) ? 'NaN (not loaded)' : mp3Audio.duration.toFixed(1)));
-    lines.push('mp3Audio.readyState: ' + mp3Audio.readyState + ' (' + ['HAVE_NOTHING','HAVE_METADATA','HAVE_CURRENT_DATA','HAVE_FUTURE_DATA','HAVE_ENOUGH_DATA'][mp3Audio.readyState] + ')');
-    lines.push('mp3Audio.networkState: ' + mp3Audio.networkState + ' (' + ['NETWORK_EMPTY','NETWORK_IDLE','NETWORK_LOADING','NETWORK_NO_SOURCE'][mp3Audio.networkState] + ')');
-    lines.push('mp3Audio.error: ' + (mp3Audio.error ? 'ERROR CODE ' + mp3Audio.error.code : 'none'));
-  }
-
-  lines.push('--- WEB AUDIO STATE ---');
-  lines.push('audioCtx exists: ' + (audioCtx !== null));
-  if (audioCtx) {
-    lines.push('audioCtx.state: ' + audioCtx.state);
-    lines.push('sampleRate: ' + audioCtx.sampleRate);
-  }
-
-  lines.push('--- BROWSER INFO ---');
-  const ua = navigator.userAgent;
-  let browser = 'Unknown';
-  if (/SamsungBrowser/.test(ua)) browser = 'Samsung Internet';
-  else if (/Edg\//.test(ua)) browser = 'Edge';
-  else if (/Chrome\//.test(ua)) browser = 'Chrome';
-  else if (/Firefox\//.test(ua)) browser = 'Firefox';
-  else if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) browser = 'Safari';
-  lines.push('browser: ' + browser);
-  lines.push('platform: ' + (/Android/.test(ua) ? 'Android' : /iPhone|iPad/.test(ua) ? 'iOS' : 'Desktop'));
-  lines.push('Web Audio supported: ' + (typeof window.AudioContext !== 'undefined' || typeof window.webkitAudioContext !== 'undefined'));
-  lines.push('HTML5 Audio supported: ' + (typeof Audio !== 'undefined'));
-
-  return lines.join('<br>');
-}
-
-// Diagnostic test that tries to start MP3 with detailed feedback
-function diagnoseMp3() {
-  const audio = getMp3Audio();
-  const log = [];
-  log.push('Step 1: Audio object created ✓');
-  log.push('Step 2: readyState = ' + audio.readyState);
-  log.push('Step 3: Trying to play()...');
-
-  const p = audio.play();
-  if (!p) {
-    log.push('ERROR: play() returned undefined (very old browser)');
-    showModal('🔍 Diagnostic Result', log.join('<br>'));
-    return;
-  }
-  if (!p.then) {
-    log.push('Step 4: play() returned non-promise (assumed sync success)');
-    setTimeout(() => {
-      log.push('Step 5: After 1 sec, paused=' + audio.paused + ', currentTime=' + audio.currentTime.toFixed(2));
-      if (audio.error) log.push('ERROR: ' + audio.error.code);
-      showModal('🔍 Diagnostic Result', log.join('<br>'));
-    }, 1000);
-    return;
-  }
-
-  p.then(() => {
-    log.push('Step 4: play() PROMISE RESOLVED ✓');
-    setTimeout(() => {
-      log.push('Step 5: After 1 sec, paused=' + audio.paused + ', currentTime=' + audio.currentTime.toFixed(2));
-      log.push('Step 6: volume=' + audio.volume + ', muted=' + audio.muted);
-      log.push('---');
-      log.push(audio.paused ? '❌ Audio is PAUSED (something stopped it)' : '✅ Audio is PLAYING');
-      log.push(audio.currentTime > 0 ? '✅ currentTime advancing — audio is working' : '⚠️ currentTime not advancing');
-      showModal('🔍 Diagnostic Result', log.join('<br>'));
-    }, 1500);
-  }).catch(err => {
-    log.push('Step 4: play() PROMISE REJECTED ❌');
-    log.push('Error name: ' + (err.name || 'unknown'));
-    log.push('Error message: ' + (err.message || 'no message'));
-    log.push('---');
-    if (err.name === 'NotAllowedError') {
-      log.push('🔴 BROWSER BLOCKED AUTOPLAY');
-      log.push('The browser refused to play because of mobile autoplay restrictions.');
-    } else if (err.name === 'NotSupportedError') {
-      log.push('🔴 AUDIO FORMAT NOT SUPPORTED');
-      log.push('Your browser does not support this MP3 format.');
-    } else {
-      log.push('🔴 UNKNOWN ERROR');
-    }
-    showModal('🔍 Diagnostic Result', log.join('<br>'));
-  });
-}
+// Debug helpers removed — no longer needed since music is working
 
 function testAmbientPad() {
   // Stop and restart MP3 to test
@@ -4452,28 +4468,7 @@ function renderTeacherSettings() {
           <button class="btn" onclick="testAmbientPad()" style="margin-top: 14px; width: 100%; background: linear-gradient(180deg, #fff 0%, var(--pastel-sky-light) 100%); border-color: var(--pastel-sky); color: var(--plum-deep); box-shadow: 0 4px 0 var(--pastel-sky), 0 6px 12px rgba(125, 211, 252, 0.3);">
             🎵 Test Music Now
           </button>
-
-          <button class="btn" onclick="diagnoseMp3()" style="margin-top: 10px; width: 100%; background: linear-gradient(180deg, #fff 0%, #fde68a 100%); border-color: #fbbf24; color: var(--plum-deep); box-shadow: 0 4px 0 #fbbf24, 0 6px 12px rgba(251, 191, 36, 0.3);">
-            🔍 Diagnose Music Issue
-          </button>
-
-          <div id="audio-debug" style="margin-top: 12px; padding: 12px; background: rgba(255,255,255,0.7); border: 2px dashed var(--pastel-lavender); border-radius: 12px; font-family: monospace; font-size: 0.75rem; color: var(--plum-deep); line-height: 1.6; word-break: break-word;">
-            <strong>Debug Info:</strong><br>
-            ${getAudioDebugInfo()}
-          </div>
           ` : ''}
-        </div>
-
-        <div class="prayer-section" style="padding: 20px 18px; margin-top: 14px; background: linear-gradient(135deg, #fff, #fee2e2); border-color: var(--pastel-pink-deep);">
-          <label style="display: block; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-pink-darker); margin-bottom: 8px; font-size: 1rem;">
-            ⚠️ Reset / I-Reset:
-          </label>
-          <p style="font-family: 'Quicksand', sans-serif; font-weight: 500; font-style: italic; color: var(--plum-deep); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4;">
-            Erase all student progress on this device. Useful for testing or starting fresh with a new class.
-          </p>
-          <button onclick="confirmResetEverything()" style="width: 100%; background: linear-gradient(180deg, #fff 0%, #fecaca 100%); border: 2px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 16px; border-radius: 14px; cursor: pointer; font-size: 0.92rem; box-shadow: 0 3px 0 var(--pastel-pink-deep);">
-            🔄 Reset All Student Progress
-          </button>
         </div>
 
         <div class="prayer-buttons" style="margin-top: 20px;">
@@ -4492,79 +4487,6 @@ function renderTeacherSettings() {
     const input = document.getElementById('teacher-name-edit');
     if (input) input.focus();
   }, 100);
-}
-
-function confirmResetEverything() {
-  const backdrop = document.createElement('div');
-  backdrop.className = 'modal-backdrop';
-  backdrop.innerHTML = `
-    <div class="modal" style="border-color: var(--pastel-pink-deep);">
-      <div style="font-size: 2.5rem; margin-bottom: 8px;">⚠️</div>
-      <h3 style="color: var(--pastel-pink-darker);">Reset Everything?</h3>
-      <p style="margin-bottom: 8px;">This will erase ALL kids' progress, badges, and points on this device.</p>
-      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.85rem;">
-        Mawala ang TANANG progress sa mga bata sa kini nga device.
-      </p>
-      <p style="margin-top: 10px; font-weight: 700; color: var(--pastel-pink-darker); font-size: 0.9rem;">
-        This cannot be undone. Are you sure?
-      </p>
-      <div style="display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap;">
-        <button class="btn btn-secondary" id="reset-cancel">No, keep my data</button>
-        <button class="btn" id="reset-confirm" style="background: linear-gradient(180deg, #fff 0%, #fecaca 100%); border-color: var(--pastel-pink-deep); color: var(--pastel-pink-darker); box-shadow: 0 4px 0 var(--pastel-pink-deep);">Yes, reset everything</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(backdrop);
-  backdrop.querySelector('#reset-cancel').onclick = () => backdrop.remove();
-  backdrop.querySelector('#reset-confirm').onclick = () => {
-    backdrop.remove();
-    doFullReset();
-  };
-  backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
-}
-
-function doFullReset() {
-  try {
-    // Clear all student-related localStorage keys (but keep teacher name & sound prefs)
-    localStorage.removeItem('catechism_all_students');
-    localStorage.removeItem('catechism_active');
-    localStorage.removeItem('catechism_completed');
-    // Reset in-memory state
-    allStudents = {};
-    activeStudent = null;
-    completedChallenges = {};
-    state = {
-      studentName: '',
-      currentLesson: null,
-      currentMode: null,
-      currentQuestionIndex: 0,
-      shuffledQuestions: [],
-      shuffledChoices: [],
-      answers: [],
-      currentStreak: 0,
-      maxStreak: 0,
-      startTime: null
-    };
-
-    // Show success modal
-    const successBackdrop = document.createElement('div');
-    successBackdrop.className = 'modal-backdrop';
-    successBackdrop.innerHTML = `
-      <div class="modal">
-        <div style="font-size: 2.5rem; margin-bottom: 8px;">✨</div>
-        <h3 style="color: var(--pastel-mint-deep);">Reset Complete!</h3>
-        <p>All progress has been cleared. The app is now ready for a fresh start.</p>
-        <button class="btn">OK</button>
-      </div>
-    `;
-    document.body.appendChild(successBackdrop);
-    successBackdrop.querySelector('button').onclick = () => {
-      successBackdrop.remove();
-      renderHome();
-    };
-  } catch (e) {
-    showModal('❌ Error', 'Could not reset: ' + e.message);
-  }
 }
 
 function saveTeacherEdit() {
@@ -5111,9 +5033,36 @@ function renderModeSelect() {
   // Determine challenge status text
   let challengeStatus;
   if (completed) {
-    challengeStatus = completed.percent >= 75
-      ? `<div class="warning-text">⚠ You already finished Challenge Mode!<br>Score: ${completed.score}/${completed.total} (${completed.percent}%) • Code: ${completed.code}<br>Practice Mode is always open if you want to keep learning.</div>`
-      : `<div class="warning-text">⚠ You already used your Challenge attempt.<br>Score: ${completed.score}/${completed.total} (${completed.percent}%) — No reward earned.<br>Practice Mode is always open if you want to keep learning!</div>`;
+    if (completed.percent >= 75) {
+      const tier = completed.percent === 100 ? 'PERFECT' : completed.percent >= 90 ? 'GOLD' : 'SILVER';
+      const tierEmoji = completed.percent === 100 ? '👑' : completed.percent >= 90 ? '🏆' : '🥈';
+      challengeStatus = `
+        <div style="background: linear-gradient(135deg, #fff, var(--pastel-yellow, #fef3c7)); border: 3px solid #fbbf24; border-radius: 18px; padding: 16px; margin: 12px 0; text-align: center; box-shadow: 0 4px 0 #f59e0b;">
+          <div style="font-size: 2rem; margin-bottom: 4px;">${tierEmoji}</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.95rem; margin-bottom: 8px;">
+            ✨ Challenge Completed! ✨<br>
+            <span style="font-size: 0.85rem;">Score: ${completed.score}/${completed.total} (${completed.percent}%) • ${tier} ${tierEmoji}</span>
+          </div>
+          <div style="background: #fff; border: 2px dashed #fbbf24; border-radius: 12px; padding: 10px; margin: 8px 0;">
+            <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.7rem; letter-spacing: 0.15em; margin-bottom: 4px;">YOUR REWARD CODE</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 0.95rem; font-weight: 700; color: var(--pastel-pink-darker); word-break: break-all; line-height: 1.4;">${completed.code}</div>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+            <button onclick="saveCodeAsImage('${completed.code}', '${tier}', ${completed.score}, ${completed.total})" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-mint, #a7f3d0) 100%); border: 2px solid var(--pastel-mint-deep, #10b981); color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 var(--pastel-mint-deep, #10b981);">
+              💾 Save as Image
+            </button>
+            <button onclick="shareCode('${completed.code}', '${tier}', ${completed.score}, ${completed.total})" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-sky-light, #e0f2fe) 100%); border: 2px solid var(--pastel-sky, #0ea5e9); color: #0369a1; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 var(--pastel-sky, #0ea5e9);">
+              📤 Send to Ate ${escapeHtml(teacherName.split(' ')[0])}
+            </button>
+          </div>
+          <div style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.78rem; margin-top: 8px;">
+            Practice Mode is always open if you want to keep learning! ✨
+          </div>
+        </div>
+      `;
+    } else {
+      challengeStatus = `<div class="warning-text">⚠ You already used your Challenge attempt.<br>Score: ${completed.score}/${completed.total} (${completed.percent}%) — No reward earned.<br>Practice Mode is always open if you want to keep learning!</div>`;
+    }
   } else if (!hasPerfectedPractice) {
     challengeStatus = `<div class="warning-text" style="border-left-color: var(--pastel-lavender-deep); background: rgba(196, 181, 253, 0.25); color: var(--pastel-lavender-darker);">🔒 Locked! You must get a PERFECT 7/7 in Practice Mode first.<br>This proves you're ready for the real test. 💪</div>`;
   } else {
@@ -6249,10 +6198,17 @@ function renderMiniGamesHub() {
 }
 
 function startMiniGame(gameId) {
-  if (gameId === 'memory-match') {
-    startMemoryMatch();
-  } else {
-    showModal('⏳ Coming Soon!', 'This mini-game is being built. Check back soon! / Pa-andam pa kini.');
+  switch (gameId) {
+    case 'memory-match':   return startMemoryMatch();
+    case 'word-match':     return startWordMatcher();
+    case 'marks-sort':     return startMarksSorter();
+    case 'society-match':  return startSocietyMatch();
+    case 'fill-blank':     return startFillBlank();
+    case 'pope-quiz':      return startPopeQuiz();
+    case 'prayer-builder': return startPrayerBuilder();
+    case 'ot-timeline':    return startOtTimeline();
+    default:
+      showModal('⏳ Coming Soon!', 'This mini-game is being built. Check back soon! / Pa-andam pa kini.');
   }
 }
 
@@ -6479,6 +6435,989 @@ function exitMemoryMatch() {
   // Resume background music
   if (ambientEnabled && soundsEnabled && firstInteractionDone) playMp3Music();
   renderMiniGamesHub();
+}
+
+// ============================================
+// SHARED MINI-GAME UTILITIES
+// ============================================
+
+// Shared exit handler — restores music and returns to hub
+function exitToMiniGamesHub() {
+  if (ambientEnabled && soundsEnabled && firstInteractionDone) playMp3Music();
+  renderMiniGamesHub();
+}
+
+// Shared completion screen used by simpler mini-games
+function renderMiniGameComplete(opts) {
+  // opts = { icon, title, score, total, points, message, restartFn }
+  const stars = opts.percent === 100 ? '⭐⭐⭐' : opts.percent >= 75 ? '⭐⭐' : '⭐';
+  const tierText = opts.percent === 100 ? 'Perfect!' : opts.percent >= 75 ? 'Very Good!' : 'Keep practicing!';
+
+  // Award points
+  const student = getCurrentStudent();
+  if (student && student.stats && opts.points > 0) {
+    student.stats.totalPoints = (student.stats.totalPoints || 0) + opts.points;
+    saveAllStudents();
+  }
+
+  if (opts.percent === 100) {
+    setTimeout(() => playApplause(2.5), 100);
+    setTimeout(() => playPracticePerfectSound(), 500);
+    spawnConfetti(50);
+  } else if (opts.percent >= 75) {
+    setTimeout(() => playCorrectSound(), 100);
+    spawnConfetti(20);
+  }
+
+  render(`
+    <div class="result-screen">
+      <div class="result-medal">${opts.icon}</div>
+      <h1 class="result-title">${escapeHtml(opts.title)}</h1>
+      <div class="result-tier" style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.6rem;">${stars} ${tierText}</div>
+
+      <div style="margin: 20px 0; padding: 18px; background: linear-gradient(135deg, #fff 0%, var(--pastel-pink-light) 100%); border: 3px solid var(--pastel-pink); border-radius: 18px; box-shadow: 0 4px 0 var(--pastel-pink);">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--plum-deep); line-height: 1.8;">
+          Score: <strong>${opts.score}/${opts.total}</strong> (${opts.percent}%) ✨<br>
+          ${opts.message ? `<span style="font-size: 0.9rem; font-style: italic;">${escapeHtml(opts.message)}</span>` : ''}
+        </div>
+      </div>
+
+      ${opts.points > 0 ? `
+        <div style="margin: 20px 0; padding: 18px; background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #fbbf24; border-radius: 20px; box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), 0 4px 0 #fbbf24;">
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 8px;">✨ HOLY POINTS EARNED ✨</div>
+          <div style="font-family: 'Pacifico', cursive; font-size: 3rem; color: #d97706; text-shadow: 2px 2px 0 #fef3c7;">+${opts.points}</div>
+        </div>
+      ` : ''}
+
+      <div style="text-align: center; margin-top: 24px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn" onclick="${opts.restartFn}()">🔄 Play Again</button>
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Back to Mini-Games</button>
+      </div>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 2: WORD MATCHER (unlocks Lesson 2)
+// Two-column tap matching: English on left, Bisaya on right
+// ============================================
+const WORD_MATCH_PAIRS = [
+  { en: 'Pope',         bs: 'Santo Papa' },
+  { en: 'Bishop',       bs: 'Obispo' },
+  { en: 'Priest',       bs: 'Pari' },
+  { en: 'Saint',        bs: 'Santos' },
+  { en: 'Heaven',       bs: 'Langit' },
+  { en: 'Holy Spirit',  bs: 'Espiritu Santo' },
+  { en: 'Faith',        bs: 'Pagtoo' },
+  { en: 'Church',       bs: 'Simbahan' },
+  { en: 'Prayer',       bs: 'Pag-ampo' },
+  { en: 'Soul',         bs: 'Kalag' },
+  { en: 'Angel',        bs: 'Anghel' },
+  { en: 'Apostle',      bs: 'Apostol' },
+  { en: 'Bible',        bs: 'Bibliya' },
+  { en: 'Holy',         bs: 'Balaan' },
+  { en: 'Sin',          bs: 'Sala' }
+];
+
+let wordMatchState = null;
+
+function startWordMatcher() {
+  stopMp3Music();
+  const pairs = shuffle(WORD_MATCH_PAIRS).slice(0, 6);
+  wordMatchState = {
+    pairs,
+    leftColumn: shuffle(pairs.map((p, i) => ({ id: i, text: p.en }))),
+    rightColumn: shuffle(pairs.map((p, i) => ({ id: i, text: p.bs }))),
+    selectedLeft: null,
+    selectedRight: null,
+    matched: new Set(),
+    moves: 0,
+    startTime: Date.now()
+  };
+  renderWordMatcher();
+}
+
+function renderWordMatcher() {
+  const s = wordMatchState;
+  if (!s) return;
+
+  const leftHtml = s.leftColumn.map(item => {
+    const isMatched = s.matched.has(item.id);
+    const isSelected = s.selectedLeft && s.selectedLeft.id === item.id;
+    const cls = isMatched ? 'wm-matched' : isSelected ? 'wm-selected' : '';
+    return `<button class="wm-card ${cls}" ${isMatched ? 'disabled' : ''} onclick="wmSelectLeft(${item.id})">${escapeHtml(item.text)}</button>`;
+  }).join('');
+
+  const rightHtml = s.rightColumn.map(item => {
+    const isMatched = s.matched.has(item.id);
+    const isSelected = s.selectedRight && s.selectedRight.id === item.id;
+    const cls = isMatched ? 'wm-matched' : isSelected ? 'wm-selected wm-right' : 'wm-right';
+    return `<button class="wm-card ${cls}" ${isMatched ? 'disabled' : ''} onclick="wmSelectRight(${item.id})">${escapeHtml(item.text)}</button>`;
+  }).join('');
+
+  const progress = Math.round((s.matched.size / s.pairs.length) * 100);
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderWordMatcher();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">🔗 Word Matcher</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">
+          Matched: ${s.matched.size}/${s.pairs.length}
+        </div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div style="background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-sky-light)); border: 2px dashed var(--pastel-lavender-deep); border-radius: 14px; padding: 10px 14px; margin: 12px 0; text-align: center; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; color: var(--pastel-lavender-darker); font-weight: 700;">
+        Tap an English word, then tap its Bisaya match!<br>
+        <span style="font-size: 0.82rem; font-style: italic; font-weight: 500;">Tagboa ang English ug Bisaya</span>
+      </div>
+
+      <div class="wm-grid">
+        <div class="wm-column">
+          <div class="wm-header">English</div>
+          ${leftHtml}
+        </div>
+        <div class="wm-column">
+          <div class="wm-header">Bisaya</div>
+          ${rightHtml}
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+        <button class="btn" onclick="startWordMatcher()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-sky-light) 100%); border-color: var(--pastel-sky); color: var(--plum-deep); box-shadow: 0 4px 0 var(--pastel-sky);">🔄 New Game</button>
+      </div>
+    </div>
+  `);
+}
+
+function wmSelectLeft(id) {
+  const s = wordMatchState;
+  if (!s || s.matched.has(id)) return;
+  playTapSound();
+  const item = s.leftColumn.find(x => x.id === id);
+  s.selectedLeft = item;
+  if (s.selectedRight) wmCheckMatch();
+  else renderWordMatcher();
+}
+
+function wmSelectRight(id) {
+  const s = wordMatchState;
+  if (!s || s.matched.has(id)) return;
+  playTapSound();
+  const item = s.rightColumn.find(x => x.id === id);
+  s.selectedRight = item;
+  if (s.selectedLeft) wmCheckMatch();
+  else renderWordMatcher();
+}
+
+function wmCheckMatch() {
+  const s = wordMatchState;
+  if (!s || !s.selectedLeft || !s.selectedRight) return;
+  s.moves++;
+
+  if (s.selectedLeft.id === s.selectedRight.id) {
+    // MATCH
+    s.matched.add(s.selectedLeft.id);
+    playCorrectSound();
+    s.selectedLeft = null;
+    s.selectedRight = null;
+    renderWordMatcher();
+
+    if (s.matched.size >= s.pairs.length) {
+      // COMPLETE
+      setTimeout(() => {
+        const perfectMoves = s.pairs.length;
+        const bonusMoves = Math.max(0, perfectMoves * 2 - s.moves);
+        const points = 30 + bonusMoves * 5;
+        renderMiniGameComplete({
+          icon: '🔗',
+          title: 'Word Matcher Complete!',
+          score: s.pairs.length,
+          total: s.pairs.length,
+          percent: 100,
+          points,
+          message: `Moves: ${s.moves}`,
+          restartFn: 'startWordMatcher'
+        });
+      }, 800);
+    }
+  } else {
+    // NO MATCH
+    playWrongSound();
+    setTimeout(() => {
+      s.selectedLeft = null;
+      s.selectedRight = null;
+      renderWordMatcher();
+    }, 700);
+  }
+}
+
+// ============================================
+// GAME 3: FOUR MARKS SORTER (unlocks Lesson 3)
+// Sort statements into One, Holy, Catholic, Apostolic
+// ============================================
+const MARKS_STATEMENTS = [
+  { mark: 'one',       text: 'All Catholics share one faith',         bs: 'Tanang Katoliko adunay usa ka pagtoo' },
+  { mark: 'one',       text: 'There is only one true Church',          bs: 'Adunay usa lang ka tinuud nga Simbahan' },
+  { mark: 'one',       text: 'Christ founded one Church, not many',    bs: 'Si Cristo nagtukod og usa, dili daghan' },
+  { mark: 'holy',      text: 'Founded by Jesus, who is holy',          bs: 'Gitukod ni Hesus, ang Balaan' },
+  { mark: 'holy',      text: 'Teaches the way of holiness',            bs: 'Nagtudlo sa dalan sa pagkabalaan' },
+  { mark: 'holy',      text: 'Has produced many saints',               bs: 'Nakahimo og daghang mga santos' },
+  { mark: 'catholic',  text: 'For all people in every nation',         bs: 'Alang sa tanan sa matag nasud' },
+  { mark: 'catholic',  text: 'Universal — meaning "for everyone"',     bs: 'Universal — alang sa tanan' },
+  { mark: 'catholic',  text: 'Found all over the world',               bs: 'Makita sa tibuuk kalibutan' },
+  { mark: 'apostolic', text: 'Goes back to the Apostles',              bs: 'Nag-gikan sa mga Apostoles' },
+  { mark: 'apostolic', text: 'The Pope succeeds St. Peter',            bs: 'Ang Santo Papa misunod kang San Pedro' },
+  { mark: 'apostolic', text: 'Bishops succeed the Apostles',           bs: 'Ang mga Obispo misunod sa mga Apostoles' }
+];
+
+const MARKS_INFO = {
+  one:       { emoji: '☝️', name: 'ONE',       nameBs: 'Usa',       color: '#ec4899' },
+  holy:      { emoji: '✨', name: 'HOLY',      nameBs: 'Balaan',    color: '#fbbf24' },
+  catholic:  { emoji: '🌍', name: 'CATHOLIC',  nameBs: 'Katoliko',  color: '#0ea5e9' },
+  apostolic: { emoji: '📜', name: 'APOSTOLIC', nameBs: 'Apostoliko', color: '#9333ea' }
+};
+
+let marksState = null;
+
+function startMarksSorter() {
+  stopMp3Music();
+  const statements = shuffle(MARKS_STATEMENTS).slice(0, 8);
+  marksState = {
+    statements,
+    currentIdx: 0,
+    score: 0,
+    answers: [],
+    startTime: Date.now()
+  };
+  renderMarksSorter();
+}
+
+function renderMarksSorter() {
+  const s = marksState;
+  if (!s) return;
+  if (s.currentIdx >= s.statements.length) {
+    // COMPLETE
+    const total = s.statements.length;
+    const percent = Math.round((s.score / total) * 100);
+    const points = percent === 100 ? 50 : percent >= 75 ? 30 : percent >= 50 ? 15 : 5;
+    renderMiniGameComplete({
+      icon: '🏆',
+      title: 'Four Marks Complete!',
+      score: s.score,
+      total,
+      percent,
+      points,
+      message: `${s.score} out of ${total} sorted correctly`,
+      restartFn: 'startMarksSorter'
+    });
+    return;
+  }
+
+  const stmt = s.statements[s.currentIdx];
+  const progress = Math.round((s.currentIdx / s.statements.length) * 100);
+
+  const buttonsHtml = ['one', 'holy', 'catholic', 'apostolic'].map(mark => {
+    const info = MARKS_INFO[mark];
+    return `
+      <button onclick="marksAnswer('${mark}')" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 12px; background: linear-gradient(135deg, #fff, ${info.color}22); border: 3px solid ${info.color}; border-radius: 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 4px 0 ${info.color}; transition: all 0.2s;">
+        <span style="font-size: 2rem;">${info.emoji}</span>
+        <span style="font-weight: 700; color: ${info.color}; font-size: 1rem;">${info.name}</span>
+        <span style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.78rem;">${info.nameBs}</span>
+      </button>
+    `;
+  }).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMarksSorter();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">🏆 Four Marks Sorter</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">${s.currentIdx + 1}/${s.statements.length}</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 3px solid var(--pastel-pink); border-radius: 18px; padding: 22px 18px; margin: 18px 0; text-align: center;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.1rem; line-height: 1.4; margin-bottom: 8px;">${escapeHtml(stmt.text)}</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.88rem; line-height: 1.4;">${escapeHtml(stmt.bs)}</div>
+      </div>
+
+      <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); text-align: center; margin-bottom: 12px;">Which Mark of the Church?</div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        ${buttonsHtml}
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+      </div>
+    </div>
+  `);
+}
+
+function marksAnswer(chosen) {
+  const s = marksState;
+  if (!s) return;
+  const stmt = s.statements[s.currentIdx];
+  const correct = chosen === stmt.mark;
+
+  if (correct) {
+    s.score++;
+    playCorrectSound();
+  } else {
+    playWrongSound();
+  }
+
+  s.answers.push({ chosen, correct: stmt.mark, isCorrect: correct });
+
+  // Show feedback briefly, then next
+  const info = MARKS_INFO[stmt.mark];
+  const feedbackHtml = `
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; background: ${correct ? '#d1fae5' : '#fee2e2'}; border: 4px solid ${correct ? '#10b981' : '#dc2626'}; border-radius: 20px; padding: 20px 28px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.3); font-family: 'Quicksand', sans-serif;">
+      <div style="font-size: 3rem; margin-bottom: 6px;">${correct ? '✅' : '❌'}</div>
+      <div style="font-weight: 700; color: ${correct ? '#047857' : '#b91c1c'}; font-size: 1.1rem;">${correct ? 'Correct!' : 'Not quite!'}</div>
+      <div style="font-size: 0.9rem; color: var(--plum-deep); margin-top: 4px;">Answer: ${info.emoji} <strong>${info.name}</strong></div>
+    </div>
+  `;
+  const fb = document.createElement('div');
+  fb.innerHTML = feedbackHtml;
+  document.body.appendChild(fb);
+  setTimeout(() => {
+    fb.remove();
+    s.currentIdx++;
+    renderMarksSorter();
+  }, 1400);
+}
+
+// ============================================
+// GAME 4: SOCIETY MATCH (unlocks Lesson 4)
+// Match parts of the Church as a Perfect Society
+// ============================================
+const SOCIETY_PAIRS = [
+  { left: 'Founder',           right: 'Jesus Christ' },
+  { left: 'Goal',              right: 'Save souls' },
+  { left: 'Members',           right: 'All baptized Catholics' },
+  { left: 'Authority',         right: 'The Pope and Bishops' },
+  { left: 'Means of Grace',    right: 'The Sacraments' },
+  { left: 'Teaching',          right: 'Sacred Scripture & Tradition' },
+  { left: 'Visible Head',      right: 'The Pope' },
+  { left: 'Invisible Head',    right: 'Jesus Christ' },
+  { left: 'Founded On',        right: 'St. Peter, the Rock' }
+];
+
+let societyState = null;
+
+function startSocietyMatch() {
+  stopMp3Music();
+  const pairs = shuffle(SOCIETY_PAIRS).slice(0, 6);
+  societyState = {
+    pairs,
+    leftColumn: shuffle(pairs.map((p, i) => ({ id: i, text: p.left }))),
+    rightColumn: shuffle(pairs.map((p, i) => ({ id: i, text: p.right }))),
+    selectedLeft: null,
+    selectedRight: null,
+    matched: new Set(),
+    moves: 0
+  };
+  renderSocietyMatch();
+}
+
+function renderSocietyMatch() {
+  const s = societyState;
+  if (!s) return;
+
+  const leftHtml = s.leftColumn.map(item => {
+    const isMatched = s.matched.has(item.id);
+    const isSelected = s.selectedLeft && s.selectedLeft.id === item.id;
+    const cls = isMatched ? 'wm-matched' : isSelected ? 'wm-selected' : '';
+    return `<button class="wm-card ${cls}" ${isMatched ? 'disabled' : ''} onclick="socSelectLeft(${item.id})">${escapeHtml(item.text)}</button>`;
+  }).join('');
+
+  const rightHtml = s.rightColumn.map(item => {
+    const isMatched = s.matched.has(item.id);
+    const isSelected = s.selectedRight && s.selectedRight.id === item.id;
+    const cls = isMatched ? 'wm-matched' : isSelected ? 'wm-selected wm-right' : 'wm-right';
+    return `<button class="wm-card ${cls}" ${isMatched ? 'disabled' : ''} onclick="socSelectRight(${item.id})">${escapeHtml(item.text)}</button>`;
+  }).join('');
+
+  const progress = Math.round((s.matched.size / s.pairs.length) * 100);
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderSocietyMatch();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">🛡️ Society Match</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700;">Matched: ${s.matched.size}/${s.pairs.length}</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div style="background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-sky-light)); border: 2px dashed var(--pastel-lavender-deep); border-radius: 14px; padding: 10px 14px; margin: 12px 0; text-align: center; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; color: var(--pastel-lavender-darker); font-weight: 700;">
+        Match each part of the Church to its description
+      </div>
+
+      <div class="wm-grid">
+        <div class="wm-column">
+          <div class="wm-header">Part</div>
+          ${leftHtml}
+        </div>
+        <div class="wm-column">
+          <div class="wm-header">Description</div>
+          ${rightHtml}
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+      </div>
+    </div>
+  `);
+}
+
+function socSelectLeft(id) {
+  const s = societyState;
+  if (!s || s.matched.has(id)) return;
+  playTapSound();
+  s.selectedLeft = s.leftColumn.find(x => x.id === id);
+  if (s.selectedRight) socCheckMatch();
+  else renderSocietyMatch();
+}
+
+function socSelectRight(id) {
+  const s = societyState;
+  if (!s || s.matched.has(id)) return;
+  playTapSound();
+  s.selectedRight = s.rightColumn.find(x => x.id === id);
+  if (s.selectedLeft) socCheckMatch();
+  else renderSocietyMatch();
+}
+
+function socCheckMatch() {
+  const s = societyState;
+  s.moves++;
+  if (s.selectedLeft.id === s.selectedRight.id) {
+    s.matched.add(s.selectedLeft.id);
+    playCorrectSound();
+    s.selectedLeft = null;
+    s.selectedRight = null;
+    renderSocietyMatch();
+
+    if (s.matched.size >= s.pairs.length) {
+      setTimeout(() => {
+        const points = 30 + Math.max(0, (s.pairs.length * 2 - s.moves)) * 5;
+        renderMiniGameComplete({
+          icon: '🛡️',
+          title: 'Society Match Complete!',
+          score: s.pairs.length,
+          total: s.pairs.length,
+          percent: 100,
+          points,
+          message: `Moves: ${s.moves}`,
+          restartFn: 'startSocietyMatch'
+        });
+      }, 800);
+    }
+  } else {
+    playWrongSound();
+    setTimeout(() => {
+      s.selectedLeft = null;
+      s.selectedRight = null;
+      renderSocietyMatch();
+    }, 700);
+  }
+}
+
+// ============================================
+// GAME 5: FILL THE BLANK (unlocks Lesson 5)
+// Tap the right word to complete the sentence
+// ============================================
+const FILL_BLANK_QUESTIONS = [
+  { sentence: 'The Pope is the visible head of the ___', answer: 'Church', distractors: ['World', 'Government', 'School'] },
+  { sentence: 'Jesus Christ founded the ___ Church', answer: 'Catholic', distractors: ['Protestant', 'Jewish', 'Modern'] },
+  { sentence: 'The Holy ___ guides the Church', answer: 'Spirit', distractors: ['Bible', 'Saint', 'Angel'] },
+  { sentence: 'Catholics believe in ___ God', answer: 'one', distractors: ['two', 'many', 'no'] },
+  { sentence: 'St. ___ was the first Pope', answer: 'Peter', distractors: ['Paul', 'John', 'Mark'] },
+  { sentence: 'The Church teaches with ___ from God', answer: 'authority', distractors: ['guesses', 'opinions', 'fear'] },
+  { sentence: 'The Bible is the ___ of God', answer: 'Word', distractors: ['Book', 'Story', 'Letter'] },
+  { sentence: 'Mary is the ___ of God', answer: 'Mother', distractors: ['Sister', 'Friend', 'Servant'] },
+  { sentence: 'We pray to be with God in ___', answer: 'Heaven', distractors: ['School', 'Church', 'Home'] },
+  { sentence: 'A ___ is a holy person who is in Heaven', answer: 'Saint', distractors: ['Angel', 'Priest', 'Pope'] }
+];
+
+let fillBlankState = null;
+
+function startFillBlank() {
+  stopMp3Music();
+  const questions = shuffle(FILL_BLANK_QUESTIONS).slice(0, 7);
+  fillBlankState = {
+    questions,
+    currentIdx: 0,
+    score: 0
+  };
+  renderFillBlank();
+}
+
+function renderFillBlank() {
+  const s = fillBlankState;
+  if (!s) return;
+  if (s.currentIdx >= s.questions.length) {
+    const total = s.questions.length;
+    const percent = Math.round((s.score / total) * 100);
+    const points = percent === 100 ? 50 : percent >= 75 ? 30 : percent >= 50 ? 15 : 5;
+    renderMiniGameComplete({
+      icon: '🧩',
+      title: 'Fill the Blank Complete!',
+      score: s.score,
+      total,
+      percent,
+      points,
+      message: `${s.score} of ${total} correct`,
+      restartFn: 'startFillBlank'
+    });
+    return;
+  }
+
+  const q = s.questions[s.currentIdx];
+  const choices = shuffle([q.answer, ...q.distractors]);
+  const progress = Math.round((s.currentIdx / s.questions.length) * 100);
+
+  // Display sentence with blank
+  const displaySentence = q.sentence.replace('___', '<span style="display: inline-block; min-width: 80px; border-bottom: 3px solid var(--pastel-pink-deep); padding: 0 8px; color: var(--pastel-pink-darker); font-style: italic;">______</span>');
+
+  const choicesHtml = choices.map(c => `
+    <button onclick="fbAnswer('${escapeHtml(c).replace(/'/g, "\\'")}')" class="choice" style="text-align: center; font-size: 1rem;">${escapeHtml(c)}</button>
+  `).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderFillBlank();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">🧩 Fill the Blank</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700;">${s.currentIdx + 1}/${s.questions.length}</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 3px solid var(--pastel-lavender-deep); border-radius: 18px; padding: 26px 18px; margin: 18px 0; text-align: center;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.15rem; line-height: 1.6;">${displaySentence}</div>
+      </div>
+
+      <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); text-align: center; margin-bottom: 12px;">Tap the missing word:</div>
+
+      <div class="choices">${choicesHtml}</div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+      </div>
+    </div>
+  `);
+}
+
+function fbAnswer(chosen) {
+  const s = fillBlankState;
+  const q = s.questions[s.currentIdx];
+  const correct = chosen === q.answer;
+  if (correct) {
+    s.score++;
+    playCorrectSound();
+  } else {
+    playWrongSound();
+  }
+  // Show feedback
+  const fb = document.createElement('div');
+  fb.innerHTML = `
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; background: ${correct ? '#d1fae5' : '#fee2e2'}; border: 4px solid ${correct ? '#10b981' : '#dc2626'}; border-radius: 20px; padding: 20px 28px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.3); font-family: 'Quicksand', sans-serif;">
+      <div style="font-size: 3rem; margin-bottom: 6px;">${correct ? '✅' : '❌'}</div>
+      <div style="font-weight: 700; color: ${correct ? '#047857' : '#b91c1c'}; font-size: 1.1rem;">${correct ? 'Correct!' : 'Not quite!'}</div>
+      <div style="font-size: 0.9rem; color: var(--plum-deep); margin-top: 4px;">Answer: <strong>${escapeHtml(q.answer)}</strong></div>
+    </div>
+  `;
+  document.body.appendChild(fb);
+  setTimeout(() => {
+    fb.remove();
+    s.currentIdx++;
+    renderFillBlank();
+  }, 1300);
+}
+
+// ============================================
+// GAME 6: POPE QUIZ (unlocks Lesson 6)
+// Quick quiz on Pope and Infallibility
+// ============================================
+const POPE_QUIZ_QUESTIONS = [
+  { q: 'Who was the first Pope?', choices: ['St. Peter', 'St. Paul', 'St. John', 'St. Mark'], correct: 0 },
+  { q: 'Where does the Pope live?', choices: ['Vatican City', 'Jerusalem', 'Manila', 'Lourdes'], correct: 0 },
+  { q: 'When the Pope teaches infallibly, he speaks...', choices: ['Ex Cathedra', 'In private', 'On TV', 'In Bisaya'], correct: 0 },
+  { q: 'Infallibility means the Pope cannot...', choices: ['Make errors in faith and morals', 'Make any mistake ever', 'Sin', 'Get sick'], correct: 0 },
+  { q: 'The Pope is also called...', choices: ['Holy Father', 'Bishop', 'Saint', 'Apostle'], correct: 0 },
+  { q: 'Who gives the Pope his authority?', choices: ['Jesus Christ', 'The people', 'Bishops', 'Cardinals'], correct: 0 },
+  { q: 'The Pope succeeds...', choices: ['St. Peter', 'St. Paul', 'Jesus', 'St. Joseph'], correct: 0 }
+];
+
+let popeQuizState = null;
+
+function startPopeQuiz() {
+  stopMp3Music();
+  const questions = shuffle(POPE_QUIZ_QUESTIONS).slice(0, 5);
+  // Shuffle choices within each question
+  const prepared = questions.map(q => {
+    const correctText = q.choices[q.correct];
+    const shuffledChoices = shuffle(q.choices);
+    return {
+      q: q.q,
+      choices: shuffledChoices,
+      correct: shuffledChoices.indexOf(correctText)
+    };
+  });
+  popeQuizState = {
+    questions: prepared,
+    currentIdx: 0,
+    score: 0
+  };
+  renderPopeQuiz();
+}
+
+function renderPopeQuiz() {
+  const s = popeQuizState;
+  if (!s) return;
+  if (s.currentIdx >= s.questions.length) {
+    const total = s.questions.length;
+    const percent = Math.round((s.score / total) * 100);
+    const points = percent === 100 ? 50 : percent >= 75 ? 30 : percent >= 50 ? 15 : 5;
+    renderMiniGameComplete({
+      icon: '👑',
+      title: 'Pope Quiz Complete!',
+      score: s.score,
+      total,
+      percent,
+      points,
+      message: `${s.score} of ${total} correct`,
+      restartFn: 'startPopeQuiz'
+    });
+    return;
+  }
+
+  const q = s.questions[s.currentIdx];
+  const progress = Math.round((s.currentIdx / s.questions.length) * 100);
+  const letters = ['A', 'B', 'C', 'D'];
+
+  const choicesHtml = q.choices.map((c, i) => `
+    <button onclick="popeAnswer(${i})" class="choice"><span class="letter">${letters[i]}</span><span class="text">${escapeHtml(c)}</span></button>
+  `).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderPopeQuiz();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">👑 Pope Quiz</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700;">${s.currentIdx + 1}/${s.questions.length}</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div class="question">${escapeHtml(q.q)}</div>
+      <div class="choices">${choicesHtml}</div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+      </div>
+    </div>
+  `);
+}
+
+function popeAnswer(idx) {
+  const s = popeQuizState;
+  const q = s.questions[s.currentIdx];
+  const correct = idx === q.correct;
+  if (correct) {
+    s.score++;
+    playCorrectSound();
+  } else {
+    playWrongSound();
+  }
+  const fb = document.createElement('div');
+  fb.innerHTML = `
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; background: ${correct ? '#d1fae5' : '#fee2e2'}; border: 4px solid ${correct ? '#10b981' : '#dc2626'}; border-radius: 20px; padding: 20px 28px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.3); font-family: 'Quicksand', sans-serif;">
+      <div style="font-size: 3rem; margin-bottom: 6px;">${correct ? '✅' : '❌'}</div>
+      <div style="font-weight: 700; color: ${correct ? '#047857' : '#b91c1c'}; font-size: 1.1rem;">${correct ? 'Correct!' : 'Not quite!'}</div>
+      <div style="font-size: 0.9rem; color: var(--plum-deep); margin-top: 4px;">Answer: <strong>${escapeHtml(q.choices[q.correct])}</strong></div>
+    </div>
+  `;
+  document.body.appendChild(fb);
+  setTimeout(() => {
+    fb.remove();
+    s.currentIdx++;
+    renderPopeQuiz();
+  }, 1300);
+}
+
+// ============================================
+// GAME 7: PRAYER BUILDER (unlocks Lesson 7)
+// Tap words in order to build a prayer
+// ============================================
+const PRAYERS = [
+  {
+    name: 'Hail Mary',
+    nameBs: 'Maghimaya Ka Maria',
+    words: ['Hail', 'Mary,', 'full', 'of', 'grace,', 'the', 'Lord', 'is', 'with', 'thee.']
+  },
+  {
+    name: 'Glory Be',
+    nameBs: 'Himaya sa Amahan',
+    words: ['Glory', 'be', 'to', 'the', 'Father,', 'and', 'to', 'the', 'Son,', 'and', 'to', 'the', 'Holy', 'Spirit.']
+  },
+  {
+    name: 'Sign of the Cross',
+    nameBs: 'Timaan sa Krus',
+    words: ['In', 'the', 'name', 'of', 'the', 'Father,', 'and', 'of', 'the', 'Son,', 'and', 'of', 'the', 'Holy', 'Spirit.', 'Amen.']
+  },
+  {
+    name: 'Our Father (start)',
+    nameBs: 'Amahan Namo (sinugdanan)',
+    words: ['Our', 'Father,', 'who', 'art', 'in', 'heaven,', 'hallowed', 'be', 'thy', 'name.']
+  }
+];
+
+let prayerState = null;
+
+function startPrayerBuilder() {
+  stopMp3Music();
+  const prayer = PRAYERS[Math.floor(Math.random() * PRAYERS.length)];
+  prayerState = {
+    prayer,
+    correctOrder: prayer.words.slice(),
+    shuffledWords: shuffle(prayer.words.slice()).map((w, i) => ({ id: i, text: w, used: false })),
+    builtSentence: [],
+    mistakes: 0
+  };
+  renderPrayerBuilder();
+}
+
+function renderPrayerBuilder() {
+  const s = prayerState;
+  if (!s) return;
+
+  const wordsHtml = s.shuffledWords.map(w => {
+    if (w.used) {
+      return `<button class="pb-word pb-used" disabled>${escapeHtml(w.text)}</button>`;
+    }
+    return `<button class="pb-word" onclick="pbTapWord(${w.id})">${escapeHtml(w.text)}</button>`;
+  }).join(' ');
+
+  const builtHtml = s.builtSentence.length > 0
+    ? s.builtSentence.map(w => `<span class="pb-built-word">${escapeHtml(w)}</span>`).join(' ')
+    : '<span style="font-style: italic; color: var(--pastel-lavender-darker);">Tap words below to build the prayer...</span>';
+
+  const progress = Math.round((s.builtSentence.length / s.correctOrder.length) * 100);
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderPrayerBuilder();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">🙏 Prayer Builder</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700;">Mistakes: ${s.mistakes}</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 3px solid var(--pastel-pink); border-radius: 18px; padding: 16px; margin: 14px 0; text-align: center;">
+        <div style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.4rem;">${escapeHtml(s.prayer.name)}</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.85rem;">${escapeHtml(s.prayer.nameBs)}</div>
+      </div>
+
+      <div style="background: linear-gradient(135deg, var(--pastel-lavender-light), #fff); border: 3px dashed var(--pastel-lavender-deep); border-radius: 18px; padding: 18px; margin: 14px 0; min-height: 80px; line-height: 2; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.05rem;">
+        ${builtHtml}
+      </div>
+
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-sky-light)); border: 2px dashed var(--pastel-sky); border-radius: 14px; padding: 14px; margin: 14px 0; line-height: 2.4; text-align: center;">
+        ${wordsHtml}
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+        <button class="btn" onclick="startPrayerBuilder()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-sky-light) 100%); border-color: var(--pastel-sky); color: var(--plum-deep);">🔄 New Prayer</button>
+      </div>
+    </div>
+  `);
+}
+
+function pbTapWord(wordId) {
+  const s = prayerState;
+  if (!s) return;
+  const word = s.shuffledWords.find(w => w.id === wordId);
+  if (!word || word.used) return;
+
+  const expectedNext = s.correctOrder[s.builtSentence.length];
+
+  if (word.text === expectedNext) {
+    // CORRECT word in order
+    word.used = true;
+    s.builtSentence.push(word.text);
+    playTapSound();
+    renderPrayerBuilder();
+
+    if (s.builtSentence.length >= s.correctOrder.length) {
+      // COMPLETE
+      setTimeout(() => {
+        const total = s.correctOrder.length;
+        const percent = s.mistakes === 0 ? 100 : Math.max(50, 100 - s.mistakes * 10);
+        const points = percent === 100 ? 50 : percent >= 75 ? 30 : 15;
+        renderMiniGameComplete({
+          icon: '🙏',
+          title: 'Prayer Built!',
+          score: total - s.mistakes,
+          total,
+          percent,
+          points,
+          message: `${s.prayer.name} • Mistakes: ${s.mistakes}`,
+          restartFn: 'startPrayerBuilder'
+        });
+      }, 600);
+    }
+  } else {
+    // WRONG word
+    s.mistakes++;
+    playWrongSound();
+    // Brief shake feedback (just re-render with visual hint)
+    renderPrayerBuilder();
+  }
+}
+
+// ============================================
+// GAME 8: OT TIMELINE (unlocks Lesson 8)
+// Put 6 Old Testament events in chronological order
+// ============================================
+const OT_EVENTS = [
+  { order: 1,  name: 'Creation',                   bs: 'Paghimo sa Kalibutan',     emoji: '🌍' },
+  { order: 2,  name: 'Adam and Eve',               bs: 'Si Adan ug Eva',           emoji: '🍎' },
+  { order: 3,  name: "Noah's Ark and the Flood",   bs: 'Arka ni Noe',              emoji: '🛟' },
+  { order: 4,  name: 'Tower of Babel',             bs: 'Tore sa Babel',            emoji: '🗼' },
+  { order: 5,  name: 'Abraham',                    bs: 'Si Abraham',               emoji: '⭐' },
+  { order: 6,  name: 'Moses and the Exodus',       bs: 'Si Moises ug ang Exodo',   emoji: '🐑' },
+  { order: 7,  name: 'Ten Commandments',           bs: 'Napulo ka Sugo',           emoji: '📜' },
+  { order: 8,  name: 'King David',                 bs: 'Hari David',               emoji: '👑' },
+  { order: 9,  name: 'Prophets',                   bs: 'Mga Propeta',              emoji: '🔥' },
+  { order: 10, name: 'Birth of Jesus',             bs: 'Pagkatawo ni Hesus',       emoji: '👶' }
+];
+
+let otState = null;
+
+function startOtTimeline() {
+  stopMp3Music();
+  // Pick 6 random events, then shuffle them for the player to sort
+  const selected = shuffle(OT_EVENTS.slice()).slice(0, 6).sort((a, b) => a.order - b.order);
+  otState = {
+    correctOrder: selected,
+    shuffled: shuffle(selected.slice()).map((e, idx) => ({ ...e, currentIdx: idx })),
+    placed: [],
+    mistakes: 0
+  };
+  renderOtTimeline();
+}
+
+function renderOtTimeline() {
+  const s = otState;
+  if (!s) return;
+
+  const remaining = s.shuffled.filter(e => !s.placed.find(p => p.order === e.order));
+
+  const placedHtml = s.placed.length > 0
+    ? s.placed.map((e, i) => `
+        <div style="display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #fff, var(--pastel-mint, #a7f3d0)); border: 2px solid var(--pastel-mint-deep, #10b981); border-radius: 14px; padding: 10px 14px; margin: 6px 0;">
+          <span style="font-family: 'Pacifico', cursive; color: var(--pastel-mint-deep, #047857); font-size: 1.4rem; min-width: 32px;">${i + 1}.</span>
+          <span style="font-size: 1.6rem;">${e.emoji}</span>
+          <span style="flex: 1; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep);">${escapeHtml(e.name)}</span>
+        </div>
+      `).join('')
+    : '<div style="font-style: italic; color: var(--pastel-lavender-darker); text-align: center; padding: 20px;">Tap events below in chronological order ⬇</div>';
+
+  const remainingHtml = remaining.map(e => `
+    <button onclick="otTapEvent(${e.order})" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 3px solid var(--pastel-pink); border-radius: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 3px 0 var(--pastel-pink); width: 100%; text-align: left; margin: 6px 0;">
+      <span style="font-size: 1.6rem;">${e.emoji}</span>
+      <div style="flex: 1;">
+        <div style="font-weight: 700; color: var(--plum-deep);">${escapeHtml(e.name)}</div>
+        <div style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.78rem;">${escapeHtml(e.bs)}</div>
+      </div>
+    </button>
+  `).join('');
+
+  const progress = Math.round((s.placed.length / s.correctOrder.length) * 100);
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderOtTimeline();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="quiz-screen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-family: 'Pacifico', cursive; font-size: 1.4rem; color: var(--pastel-pink-darker);">🌳 OT Timeline</div>
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700;">Mistakes: ${s.mistakes}</div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+
+      <div style="background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-sky-light)); border: 2px dashed var(--pastel-lavender-deep); border-radius: 14px; padding: 10px 14px; margin: 12px 0; text-align: center; font-family: 'Quicksand', sans-serif; font-size: 0.88rem; color: var(--pastel-lavender-darker); font-weight: 700;">
+        Tap events in chronological order (oldest first)
+      </div>
+
+      <div style="margin: 14px 0;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); margin-bottom: 6px;">📜 Timeline:</div>
+        ${placedHtml}
+      </div>
+
+      ${remaining.length > 0 ? `
+        <div style="margin: 14px 0;">
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); margin-bottom: 6px;">⬇ Pick what comes next:</div>
+          ${remainingHtml}
+        </div>
+      ` : ''}
+
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="exitToMiniGamesHub()">← Quit</button>
+      </div>
+    </div>
+  `);
+}
+
+function otTapEvent(orderNum) {
+  const s = otState;
+  if (!s) return;
+  const event = s.shuffled.find(e => e.order === orderNum);
+  if (!event || s.placed.find(p => p.order === orderNum)) return;
+
+  // Determine the next expected event in correct order
+  const nextExpected = s.correctOrder[s.placed.length];
+
+  if (event.order === nextExpected.order) {
+    // CORRECT
+    s.placed.push(event);
+    playCorrectSound();
+    renderOtTimeline();
+
+    if (s.placed.length >= s.correctOrder.length) {
+      setTimeout(() => {
+        const total = s.correctOrder.length;
+        const percent = s.mistakes === 0 ? 100 : Math.max(50, 100 - s.mistakes * 10);
+        const points = percent === 100 ? 50 : percent >= 75 ? 30 : 15;
+        renderMiniGameComplete({
+          icon: '🌳',
+          title: 'Timeline Complete!',
+          score: total - s.mistakes,
+          total,
+          percent,
+          points,
+          message: `Mistakes: ${s.mistakes}`,
+          restartFn: 'startOtTimeline'
+        });
+      }, 600);
+    }
+  } else {
+    // WRONG
+    s.mistakes++;
+    playWrongSound();
+    renderOtTimeline();
+  }
 }
 
 // ============================================
