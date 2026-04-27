@@ -4269,8 +4269,14 @@ let completedChallenges = {}; // shortcut to current student's challenges
 // Migrate old data structure to new one (challenges + stats + badges)
 function migrateStudent(s) {
   // Old: { 1: {score, total, code, ...}, 2: {...} }  -- lesson IDs as keys
-  // New: { challenges: {1: {...}}, stats: {totalPoints, bestStreak, practiceCount, lessonsPracticed: []}, badges: [] }
-  if (s.challenges) return s; // already new format
+  // New: { challenges: {1: {...}}, stats: {totalPoints, bestStreak, practiceCount, lessonsPracticed: []}, badges: [], maryGarden: {...} }
+  if (s.challenges) {
+    // Already new format — but ensure maryGarden exists for upgraded students
+    if (!s.maryGarden) {
+      s.maryGarden = { stickersEarned: [], titlesVisited: [] };
+    }
+    return s;
+  }
   const challenges = {};
   for (const key of Object.keys(s)) {
     if (!isNaN(parseInt(key))) {
@@ -4291,7 +4297,8 @@ function migrateStudent(s) {
       lessonsPracticed: [],
       lessonsPerfectedInPractice: []
     },
-    badges: []
+    badges: [],
+    maryGarden: { stickersEarned: [], titlesVisited: [] }
   };
 }
 
@@ -4474,6 +4481,18 @@ function renderTeacherSettings() {
           ` : ''}
         </div>
 
+        <div class="prayer-section" style="padding: 20px 18px; margin-top: 14px; background: linear-gradient(135deg, #fff, #fef3c7); border-color: #fbbf24;">
+          <label style="display: block; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; margin-bottom: 8px; font-size: 1rem;">
+            🔐 Manage Students (Teacher Only):
+          </label>
+          <p style="font-family: 'Quicksand', sans-serif; font-weight: 500; font-style: italic; color: var(--plum-deep); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4;">
+            Remove student names from this device. Password protected so kids cannot delete their own progress to cheat.
+          </p>
+          <button onclick="openManageStudents()" style="width: 100%; background: linear-gradient(180deg, #fff 0%, #fde68a 100%); border: 2px solid #fbbf24; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 16px; border-radius: 14px; cursor: pointer; font-size: 0.92rem; box-shadow: 0 3px 0 #fbbf24;">
+            🔐 Open Manage Students
+          </button>
+        </div>
+
         <div class="prayer-buttons" style="margin-top: 20px;">
           <button class="btn btn-secondary" onclick="renderHome()">
             ← Cancel
@@ -4490,6 +4509,113 @@ function renderTeacherSettings() {
     const input = document.getElementById('teacher-name-edit');
     if (input) input.focus();
   }, 100);
+}
+
+// Password gate for Manage Students
+function openManageStudents() {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal" style="border-color: #fbbf24; max-width: 400px;">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">🔐</div>
+      <h3 style="color: #d97706; font-family: 'Pacifico', cursive; font-size: 1.5rem;">Teacher Password</h3>
+      <p style="margin: 8px 0; font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem;">
+        Enter your password to manage student names.
+      </p>
+      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.82rem; margin-bottom: 12px;">
+        Kids cannot guess this — only you should know it.
+      </p>
+      <input type="password" id="teacher-pw" placeholder="Enter password..." style="width: 100%; padding: 12px; border: 3px solid #fbbf24; border-radius: 14px; font-family: 'Quicksand', sans-serif; font-size: 1rem; box-sizing: border-box; margin-bottom: 14px;" />
+      <p style="font-size: 0.78rem; color: var(--pastel-lavender-darker); margin-bottom: 14px; font-style: italic;">
+        Default password: <strong>teacher2026</strong> — change me in the code if you want!
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-secondary" id="pw-cancel">Cancel</button>
+        <button class="btn" id="pw-confirm" style="background: linear-gradient(180deg, #fff 0%, #fde68a 100%); border-color: #fbbf24; color: #92400e; box-shadow: 0 4px 0 #fbbf24;">Unlock</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+  const input = backdrop.querySelector('#teacher-pw');
+  setTimeout(() => input.focus(), 100);
+
+  const tryUnlock = () => {
+    const pw = input.value.trim();
+    // CHANGE THIS PASSWORD if you want to make it harder to guess
+    const TEACHER_PASSWORD = 'teacher2026';
+    if (pw === TEACHER_PASSWORD) {
+      backdrop.remove();
+      renderManageStudents();
+    } else {
+      // Shake input to indicate wrong password
+      input.style.borderColor = '#dc2626';
+      input.style.background = '#fee2e2';
+      input.value = '';
+      input.placeholder = 'Wrong password — try again';
+      setTimeout(() => {
+        input.style.borderColor = '#fbbf24';
+        input.style.background = '';
+        input.placeholder = 'Enter password...';
+      }, 1500);
+    }
+  };
+
+  backdrop.querySelector('#pw-cancel').onclick = () => backdrop.remove();
+  backdrop.querySelector('#pw-confirm').onclick = tryUnlock;
+  input.addEventListener('keypress', (e) => { if (e.key === 'Enter') tryUnlock(); });
+  backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
+}
+
+// Show all students with delete buttons (after password unlock)
+function renderManageStudents() {
+  const kids = getStudentList();
+  const devId = getDeviceId();
+
+  const studentsHtml = kids.length > 0 ? kids.map(name => {
+    const safe = escapeHtml(name).replace(/'/g, "\\'");
+    const student = allStudents[name];
+    const challengesCount = student && student.challenges ? Object.keys(student.challenges).length : 0;
+    const totalPoints = student && student.stats ? (student.stats.totalPoints || 0) : 0;
+    return `
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 2px solid var(--pastel-pink); border-radius: 14px; padding: 12px; margin: 8px 0;">
+        <div style="flex: 1;">
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.05rem;">👤 ${escapeHtml(name)}</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin-top: 2px;">
+            ${challengesCount} challenge${challengesCount === 1 ? '' : 's'} • ${totalPoints} pts
+          </div>
+        </div>
+        <button onclick="confirmDeleteStudent('${safe}')" style="background: linear-gradient(180deg, #fff 0%, #fecaca 100%); border: 2px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 var(--pastel-pink-deep);">
+          🗑️ Remove
+        </button>
+      </div>
+    `;
+  }).join('') : `<p style="text-align: center; color: var(--pastel-lavender-darker); font-style: italic; padding: 20px;">No students on this device yet.</p>`;
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderManageStudents();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="prayer-screen">
+      <div class="prayer-card" style="max-width: 520px;">
+        <div class="prayer-icon">🔐</div>
+        <h1 class="prayer-title">Manage Students</h1>
+        <p class="prayer-subtitle">Teacher Only</p>
+
+        <div style="background: linear-gradient(135deg, var(--pastel-sky-light), #fff); border: 2px dashed var(--pastel-sky); border-radius: 14px; padding: 12px 16px; margin: 16px 0; font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); text-align: center;">
+          <strong>📱 This Device ID:</strong> <span style="font-family: 'Courier New', monospace; font-weight: 700; color: #d97706; font-size: 1rem;">${devId}</span><br>
+          <span style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.78rem;">All reward codes from this device contain "${devId}" — useful for spotting duplicate names from same phone.</span>
+        </div>
+
+        <div style="margin: 20px 0;">
+          ${studentsHtml}
+        </div>
+
+        <div class="prayer-buttons" style="margin-top: 20px;">
+          <button class="btn btn-secondary" onclick="renderHome()">
+            ← Done
+          </button>
+        </div>
+      </div>
+    </div>
+  `);
 }
 
 function saveTeacherEdit() {
@@ -4549,18 +4675,44 @@ function getTier(percent) {
   return { name: 'KEEP TRYING', emoji: '📖', class: 'tier-bronze', reward: 'No reward yet — practice and try again!' };
 }
 
+// Get or create a unique device fingerprint stored permanently
+// Used to detect when same kid creates multiple names on the same phone
+function getDeviceId() {
+  try {
+    let id = localStorage.getItem('catechism_device_id');
+    if (!id) {
+      // Generate 4-character random ID (e.g., "A3F7", "B9K2")
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no confusing chars (no 0/O, 1/I)
+      id = '';
+      for (let i = 0; i < 4; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+      }
+      localStorage.setItem('catechism_device_id', id);
+    }
+    return id;
+  } catch (e) {
+    return 'XXXX';
+  }
+}
+
 function generateCode(lessonId, score, total, name) {
   const initials = (name || 'XX').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'XX';
-  const random = Math.floor(1000 + Math.random() * 9000);
+  const random = Math.floor(100 + Math.random() * 900); // 3-digit random
   const percent = Math.round((score / total) * 100);
   const tier = percent === 100 ? 'PERFECT' : percent >= 90 ? 'GOLD' : percent >= 75 ? 'SILVER' : 'TRY';
-  // Date stamp: YYMMDD format (e.g., 260427 = April 27, 2026) — helps teacher spot duplicate claims
+  // Date+Time stamp: YYMMDD-HHMM (e.g., 260426-1545 = April 26, 2026 at 3:45 PM)
+  // Helps teacher spot duplicate claims and exact timing
   const now = new Date();
   const yy = String(now.getFullYear()).slice(2);
   const mm = String(now.getMonth() + 1).padStart(2, '0');
   const dd = String(now.getDate()).padStart(2, '0');
+  const hh = String(now.getHours()).padStart(2, '0');
+  const min = String(now.getMinutes()).padStart(2, '0');
   const dateStamp = `${yy}${mm}${dd}`;
-  return `${initials}-L${lessonId}-${score}of${total}-${tier}-${dateStamp}-${random}`;
+  const timeStamp = `${hh}${min}`;
+  // Device fingerprint helps detect same kid using multiple names on same phone
+  const devId = getDeviceId();
+  return `${initials}-L${lessonId}-${score}of${total}-${tier}-${dateStamp}-${timeStamp}-${devId}-${random}`;
 }
 
 function escapeHtml(s) {
@@ -4760,7 +4912,149 @@ const CREST_SVG = `
 </div>
 `;
 
+// ============================================
+// 🏠 CATEGORY PICKER (NEW HOME)
+// Lands here after picking student name
+// ============================================
 function renderHome() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  // Resume background music
+  if (ambientEnabled && soundsEnabled && firstInteractionDone) startAmbientPad();
+
+  state.studentName = activeStudent;
+  const student = getCurrentStudent();
+  const stats = student.stats || { totalPoints: 0 };
+  const totalPoints = stats.totalPoints || 0;
+  const completedCount = Object.keys(student.challenges || {}).length;
+
+  // Mary Garden progress
+  const garden = student.maryGarden || { stickersEarned: [] };
+  const stickerCount = (garden.stickersEarned || []).length;
+  const stickerProgress = MARY_TITLES ? MARY_TITLES.map(t => {
+    const earned = garden.stickersEarned.includes(t.id);
+    return earned ? t.sticker : '❔';
+  }).join('') : '';
+
+  // Catechism Quest progress bar
+  const totalLessons = LESSONS ? LESSONS.length : 8;
+  const lessonProgressBar = (() => {
+    const pct = Math.round((completedCount / totalLessons) * 100);
+    return `<div style="background: rgba(255,255,255,0.5); border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0;">
+      <div style="background: linear-gradient(90deg, var(--pastel-pink), var(--pastel-lavender-deep)); height: 100%; width: ${pct}%; border-radius: 999px;"></div>
+    </div>`;
+  })();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
+
+    <div class="home">
+      ${CREST_SVG}
+      <h1 class="title">Catechism Quest</h1>
+      <p class="subtitle">~ A Sunday Class Adventure ~</p>
+      <div style="text-align: center;">
+        <span class="teacher-banner">📖 ${escapeHtml(teacherName)}'s Class</span>
+      </div>
+
+      <div class="divider">
+        <span class="divider-icon">✦</span>
+        <span class="divider-icon">✠</span>
+        <span class="divider-icon">✦</span>
+      </div>
+
+      <!-- Welcome card -->
+      <div class="welcome-card">
+        <span class="corner tl">✦</span>
+        <span class="corner tr">✦</span>
+        <span class="corner bl">✦</span>
+        <span class="corner br">✦</span>
+        <p style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 600;">Welcome back,</p>
+        <p style="font-family: 'Pacifico', cursive; font-size: 2.6rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep), var(--pastel-sky-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));">${escapeHtml(activeStudent)}! 🌟</p>
+        ${totalPoints > 0 ? `<p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem; margin: 4px 0;">✨ ${totalPoints} Holy Points</p>` : ''}
+        <button class="btn btn-secondary btn-small" onclick="renderWhoIsPlaying()">↺ Not me — switch kid</button>
+      </div>
+
+      <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.7rem; margin: 22px 0 4px; text-align: center;">Choose Your Adventure</h2>
+      <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem; text-align: center; margin-bottom: 18px;">~ Pilia ang imong adventure ~</p>
+
+      <!-- Category 1: Catechism Quest — Camp Preparedness -->
+      <button onclick="renderCatechismQuestHome()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 4px solid var(--pastel-pink-deep); border-radius: 24px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 6px 0 var(--pastel-pink-deep), 0 0 30px rgba(236, 72, 153, 0.2); text-align: left; position: relative;">
+        <div style="position: absolute; top: 12px; right: 16px; font-size: 1.4rem;">⚔️</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+          <div style="font-size: 3.5rem;">📿</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.5rem; line-height: 1.1;">Catechism Quest</div>
+            <div style="font-family: 'Pacifico', cursive; color: var(--pastel-lavender-darker); font-size: 1.15rem; line-height: 1.1;">— Camp Preparedness</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1rem; margin-top: 2px;">~ Pangandam para sa Camp ~</div>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.85); border-radius: 14px; padding: 10px 12px; margin-top: 8px;">
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); font-weight: 700;">8 Lessons • Mini-Games • Reward Codes</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); font-style: italic; margin-top: 2px;">For ages 11-13</div>
+          ${lessonProgressBar}
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.82rem; color: var(--plum-deep); font-weight: 700; margin-top: 2px;">📚 Progress: ${completedCount} of ${totalLessons} lessons</div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <span style="display: inline-block; background: linear-gradient(180deg, var(--pastel-pink), var(--pastel-pink-deep)); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 22px; border-radius: 14px; font-size: 0.92rem; box-shadow: 0 3px 0 var(--pastel-pink-darker);">${completedCount > 0 ? '▶ Continue' : '▶ Start'}</span>
+        </div>
+      </button>
+
+      <!-- Category 2: Mama Mary's Garden -->
+      <button onclick="renderMaryGardenHome()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #dbeafe 50%, #fce7f3); border: 4px solid #93c5fd; border-radius: 24px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 6px 0 #60a5fa, 0 0 30px rgba(147, 197, 253, 0.3); text-align: left; position: relative;">
+        <div style="position: absolute; top: 12px; right: 16px; font-size: 1.4rem;">🌹</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+          <div style="font-size: 3.5rem;">💙</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.5rem; line-height: 1.1;">Mama Mary's Garden</div>
+            <div style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.05rem; margin-top: 2px;">~ Para sa mga Bunso ~</div>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.85); border-radius: 14px; padding: 10px 12px; margin-top: 8px;">
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); font-weight: 700;">6 Apparitions • Stickers • Saints • Rosary</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); font-style: italic; margin-top: 2px;">For ages 5-10 • Family use</div>
+          <div style="background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 6px 10px; margin: 6px 0; line-height: 1.5; font-size: 1.2rem; text-align: center;">${stickerProgress}</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.82rem; color: var(--plum-deep); font-weight: 700;">🌹 Garden: ${stickerCount} of 6 stickers</div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <span style="display: inline-block; background: linear-gradient(180deg, #dbeafe, #60a5fa); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 22px; border-radius: 14px; font-size: 0.92rem; box-shadow: 0 3px 0 #1e40af;">${stickerCount > 0 ? '▶ Continue' : '▶ Enter Garden'}</span>
+        </div>
+      </button>
+
+      <!-- Category 3: Catechism for All Ages — Sneak Peek -->
+      <div style="display: block; width: 100%; background: linear-gradient(135deg, #f9fafb, #fef3c7 80%); border: 4px dashed #d97706; border-radius: 24px; padding: 22px 18px; margin: 12px 0; font-family: 'Quicksand', sans-serif; text-align: left; position: relative; opacity: 0.85;">
+        <div style="position: absolute; top: 10px; right: 14px; background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; letter-spacing: 0.1em; box-shadow: 0 2px 4px rgba(217, 119, 6, 0.3);">✨ SNEAK PEEK</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px; margin-top: 6px;">
+          <div style="font-size: 3.5rem;">📚</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.5rem; line-height: 1.1;">Catechism for All Ages</div>
+            <div style="font-family: 'Caveat', cursive; color: #d97706; font-size: 1.05rem; margin-top: 2px;">~ Para sa tanan ~</div>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.7); border-radius: 14px; padding: 12px; margin-top: 8px;">
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.92rem; color: var(--plum-deep); line-height: 1.5; margin: 0 0 8px;">
+            A complete Catholic catechism for every age and every level — from little kids to grownups! 🙏
+          </p>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: #92400e; font-weight: 700;">📅 Coming soon — Watch this space!</div>
+          <div style="font-family: 'Caveat', cursive; color: #d97706; font-size: 1rem; margin-top: 4px;">~ Pa-andam pa kini! ~</div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <span style="display: inline-block; background: rgba(254, 243, 199, 0.7); border: 2px dashed #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 22px; border-radius: 14px; font-size: 0.92rem;">🔒 Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="text-align: center; margin-top: 24px; padding: 18px 12px; background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-pink-light)); border-radius: 16px;">
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem; margin: 0;">~ May Jesus, Mary and Joseph be with you ~ 🙏</p>
+      </div>
+    </div>
+  `);
+}
+
+// ============================================
+// 📿 CATECHISM QUEST HOME (Camp Preparedness)
+// ============================================
+function renderCatechismQuestHome() {
   if (!activeStudent) return renderWhoIsPlaying();
 
   // Resume ambient pad on home (only if first interaction has happened)
@@ -4862,9 +5156,14 @@ function renderHome() {
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
     <div class="home">
+      <div style="text-align: center; margin-bottom: 14px;">
+        <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-pink-light) 100%); border: 3px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 var(--pastel-pink-deep);">
+          🏠 ← All Categories
+        </button>
+      </div>
       ${CREST_SVG}
       <h1 class="title">Catechism Quest</h1>
-      <p class="subtitle">~ A Sunday Class Adventure ~</p>
+      <p class="subtitle">~ Camp Preparedness ~</p>
       <div style="text-align: center;">
         <span class="teacher-banner">📖 ${escapeHtml(teacherName)}'s Class</span>
       </div>
@@ -4947,10 +5246,7 @@ function renderWhoIsPlaying() {
     <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;">
       ${kids.map(name => {
         const safe = escapeHtml(name).replace(/'/g, "\\'");
-        return `<div style="position: relative; display: inline-block;">
-          <button class="kid-btn" onclick="pickStudent('${safe}')" style="padding-right: 32px;">👤 ${escapeHtml(name)}</button>
-          <button onclick="event.stopPropagation(); confirmDeleteStudent('${safe}')" title="Remove this name" style="position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; background: var(--pastel-pink-deep, #ec4899); color: #fff; font-size: 0.78rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">✕</button>
-        </div>`;
+        return `<button class="kid-btn" onclick="pickStudent('${safe}')">👤 ${escapeHtml(name)}</button>`;
       }).join('')}
     </div>
     <p class="muted small" style="margin: 12px 0;">— or —</p>
@@ -5052,8 +5348,8 @@ function deleteStudent(name) {
       completedChallenges = {};
       try { localStorage.removeItem('catechism_active'); } catch (e) {}
     }
-    // Re-render the picker
-    renderWhoIsPlaying();
+    // Re-render the manage screen (since this is teacher-only now)
+    renderManageStudents();
   } catch (e) {
     showModal('❌ Error', 'Could not remove: ' + e.message);
   }
@@ -5150,7 +5446,7 @@ function renderModeSelect() {
   render(`
     <div class="mode-screen">
       <div style="text-align: left;">
-        <button class="btn btn-secondary btn-small" onclick="renderHome()">← Back to Lessons</button>
+        <button class="btn btn-secondary btn-small" onclick="renderCatechismQuestHome()">← Back to Lessons</button>
       </div>
       <div style="font-size: 4rem; margin: 12px 0;">${lesson.icon}</div>
       <h1 class="title" style="font-size: 1.8rem; margin: 8px 0;">Lesson ${lesson.id}</h1>
@@ -5372,7 +5668,7 @@ function confirmQuitQuiz() {
     state.currentMode = null;
     state.shuffledQuestions = [];
     state.answers = [];
-    renderHome();
+    renderCatechismQuestHome();
   };
   backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
 }
@@ -5828,7 +6124,7 @@ function renderResults() {
       ${reviewHtml}
 
       <div style="margin-top: 25px;">
-        <button class="btn" onclick="renderHome()">🏠 All Lessons</button>
+        <button class="btn" onclick="renderCatechismQuestHome()">🏠 All Lessons</button>
         ${state.currentMode === 'practice' ? `<button class="btn btn-secondary" onclick="startQuiz('practice')">🔄 Practice Again</button>` : ''}
       </div>
     </div>
@@ -6251,7 +6547,7 @@ function renderMiniGamesHub() {
       </div>
 
       <div style="text-align: center; margin-top: 20px;">
-        <button class="btn btn-secondary" onclick="renderHome()">← Back to Lessons</button>
+        <button class="btn btn-secondary" onclick="renderCatechismQuestHome()">← Back to Lessons</button>
       </div>
     </div>
   `);
@@ -7478,6 +7774,1223 @@ function otTapEvent(orderNum) {
     playWrongSound();
     renderOtTimeline();
   }
+}
+
+// ============================================
+// 🌹 MAMA MARY'S GARDEN
+// For little ones ages 5-10 — stories of Our Lady's apparitions
+// ============================================
+
+const MARY_TITLES = [
+  {
+    id: 'guadalupe',
+    name: 'Our Lady of Guadalupe',
+    nameBs: 'Nuestra Señora sa Guadalupe',
+    emoji: '🌹',
+    bgColor: '#fce7f3',
+    accentColor: '#be185d',
+    location: 'Mexico, 1531',
+    locationBs: 'Mexico, sa tuig 1531',
+    sticker: '🌹',
+    storyEasy: {
+      en: 'A long time ago, Mama Mary appeared to a poor man named Juan Diego. He saw her on a hill in Mexico. She was beautiful! She asked Juan to tell the bishop to build a church there.',
+      bs: 'Dugay na kaayo, mipakita si Mama Mary kang Juan Diego, usa ka pobre nga lalaki. Nakita niya kini sa bukid sa Mexico. Maanyag siya! Gisugo siya ni Mama Mary sa pagsulti sa obispo nga magtukod og simbahan didto.'
+    },
+    storyMedium: {
+      en: "Juan Diego was a poor Aztec man in Mexico. One December morning in 1531, he saw a beautiful Lady on Tepeyac Hill. She glowed like the sun! She said, 'I am the Mother of God. Build a church here for me.' But the bishop didn't believe Juan. So Mary made roses bloom in winter on Juan's tilma (cloak). When Juan opened his tilma to show the bishop the roses, a beautiful image of Mary appeared on the cloth! That tilma is still there today, 500 years later.",
+      bs: 'Si Juan Diego usa ka pobre nga Aztec sa Mexico. Usa ka buntag sa Disyembre 1531, nakakita siya og maanyag nga Babaye sa Bukid sa Tepeyac. Nagsidlak siya sama sa adlaw! Miingon siya, "Ako ang Inahan sa Diyos. Pagtukod og simbahan dinhi para nako." Apan wala motoo ang obispo kang Juan. Busa gipabuhi ni Maria ang mga rosas panahon sa tingtugnaw sa kupo ni Juan. Pag-abli ni Juan sa iyang kupo aron ipakita ang mga rosas, mitumaw ang maanyag nga hulagway ni Maria sa panapton! Anaa pa ang kupo karon, 500 ka tuig na ang miagi.'
+    },
+    storyHard: {
+      en: "On December 9, 1531, Mary appeared to St. Juan Diego at Tepeyac Hill near Mexico City. She spoke in his native language (Nahuatl) and asked for a church to be built. Bishop Zumárraga doubted, asking for a sign. On December 12, Mary filled Juan's tilma with Castilian roses (impossible in winter Mexico) and miraculously imprinted her image on the cloth. The image shows Mary as a pregnant indigenous woman, surrounded by sun rays, standing on a moon, with stars on her mantle. The image converted millions of native peoples to Catholicism. The tilma, made of fragile cactus fiber, should have decayed in 20 years — but 500 years later, it remains perfectly preserved at the Basilica of Guadalupe.",
+      bs: 'Niadtong Disyembre 9, 1531, mipakita si Maria kang San Juan Diego sa Bukid sa Tepeyac duol sa Mexico City. Nagsulti siya sa pinulongan ni Juan (Nahuatl) ug nagpangayo og simbahan. Nagduda si Obispo Zumárraga ug nangayo og timaan. Sa Disyembre 12, gipuno ni Maria ang kupo ni Juan og mga rosas (imposible sa tingtugnaw) ug milagrosong gilarawan ang iyang dagway sa panapton. Ang hulagway nagpakita kang Maria isip mabdos nga lumad nga babaye, gilibutan sa silaw sa adlaw, nagtindog sa bulan, ug adunay mga bituon sa iyang manto. Ang hulagway ang nagpa-Katoliko sa milyon ka mga lumad. Ang kupo, hinimo sa hugaw nga lanot, kuntang magkadunot sa 20 ka tuig — apan 500 ka tuig na, hingpit pa kining gitipigan sa Basilica sa Guadalupe.'
+    },
+    facts: [
+      '👨‍🌾 She appeared to a poor man named St. Juan Diego',
+      '🌹 Roses bloomed in winter as a sign',
+      '🇲🇽 Patron of Mexico and the Americas',
+      '📅 Feast Day: December 12'
+    ]
+  },
+  {
+    id: 'lourdes',
+    name: 'Our Lady of Lourdes',
+    nameBs: 'Nuestra Señora sa Lourdes',
+    emoji: '⛰️',
+    bgColor: '#dbeafe',
+    accentColor: '#1e40af',
+    location: 'France, 1858',
+    locationBs: 'France, sa tuig 1858',
+    sticker: '💧',
+    storyEasy: {
+      en: 'A little girl named Bernadette was poor and sick. One day she saw a beautiful Lady in a cave. The Lady was Mama Mary! Mary showed her a special spring of water. Sick people who drink it get better!',
+      bs: 'Si Bernadette usa ka gamay nga babaye nga pobre ug masakiton. Usa ka adlaw, nakakita siya og maanyag nga Babaye sa langub. Si Mama Mary diay! Gipakita ni Maria kaniya ang espesyal nga tubod sa tubig. Ang masakiton nga mo-inom niini, mauli-an!'
+    },
+    storyMedium: {
+      en: "Bernadette Soubirous was 14 years old, very poor and sickly. On February 11, 1858, while gathering firewood near a cave called Massabielle in Lourdes, France, she saw a beautiful Lady dressed in white with a blue sash. The Lady appeared to Bernadette 18 times. She told Bernadette, 'I am the Immaculate Conception.' Mary asked her to dig in the ground, and a spring of water came out. To this day, the water at Lourdes has healed thousands of sick people — many miracles approved by the Church!",
+      bs: 'Si Bernadette Soubirous 14 anyos, pobre kaayo ug masakiton. Niadtong Pebrero 11, 1858, samtang nangahoy duol sa langub nga gitawag og Massabielle sa Lourdes, France, nakakita siya og maanyag nga Babaye nga nagsapot og puti uban sa asul nga bakos. Mipakita ang Babaye kang Bernadette og 18 ka beses. Miingon siya, "Ako ang Imaculada Konsepsyon." Gisugo siya ni Maria nga magkalot, ug mitumaw ang tubod sa tubig. Hangtod karon, ang tubig sa Lourdes nakatabang og libo-libong masakiton — daghang milagro nga giila sa Simbahan!'
+    },
+    storyHard: {
+      en: "Bernadette Soubirous was a frail 14-year-old asthmatic girl from a desperately poor family in Lourdes, France. From February 11 to July 16, 1858, the Blessed Virgin Mary appeared to her 18 times in the grotto of Massabielle. On March 25 (the Feast of the Annunciation), Mary identified herself: 'I am the Immaculate Conception' — confirming the dogma Pope Pius IX had defined just 4 years earlier in 1854. Mary asked Bernadette to dig at the grotto floor; a miraculous spring emerged that still flows today, producing 32,000 gallons daily. Over 7,000 healings have been reported, with 70 officially declared miraculous by the Church after rigorous investigation. Lourdes is now one of the most visited Marian shrines in the world.",
+      bs: 'Si Bernadette Soubirous usa ka 14 anyos nga huyang ug hangak nga batang babaye gikan sa hilabihan ka pobre nga pamilya sa Lourdes, France. Gikan Pebrero 11 hangtod Hulyo 16, 1858, mipakita ang Bulahang Birhen Maria kaniya og 18 ka beses sa langub sa Massabielle. Niadtong Marso 25 (Piyesta sa Annunciasyon), nagpaila si Maria: "Ako ang Imaculada Konsepsyon" — nagpamatuod sa dogma nga gimando ni Papa Pio IX upat ka tuig una sa 1854. Gisugo si Bernadette nga magkalot sa salog sa langub; mitumaw ang milagrosong tubod nga nag-agas pa hangtod karon, 32,000 ka galon kada adlaw. Kapin sa 7,000 ka pag-ayo ang nataho, ug 70 ang opisyal nga giila isip milagrosa sa Simbahan human sa hugot nga pagsusi. Ang Lourdes karon usa sa labing gibisita nga Marian shrine sa kalibutan.'
+    },
+    facts: [
+      '👧 She appeared to St. Bernadette, age 14',
+      '💧 A spring of healing water appeared',
+      '🇫🇷 Located in Lourdes, France',
+      '📅 Feast Day: February 11'
+    ]
+  },
+  {
+    id: 'fatima',
+    name: 'Our Lady of Fatima',
+    nameBs: 'Nuestra Señora sa Fatima',
+    emoji: '☀️',
+    bgColor: '#fef3c7',
+    accentColor: '#d97706',
+    location: 'Portugal, 1917',
+    locationBs: 'Portugal, sa tuig 1917',
+    sticker: '☀️',
+    storyEasy: {
+      en: 'Three little kids — Lucia, Francisco, and Jacinta — were watching sheep. Suddenly they saw a beautiful Lady in the sky! It was Mama Mary. She told them to pray the rosary every day. Many people came to see, and the sun danced in the sky!',
+      bs: 'Tulo ka mga bata — si Lucia, Francisco, ug Jacinta — nagbantay og mga karnero. Kalit lang silay nakakita og maanyag nga Babaye sa langit! Si Mama Mary diay! Gisugo silang manag-rosaryo matag adlaw. Daghang tawo ang miabot, ug ang adlaw misayaw sa langit!'
+    },
+    storyMedium: {
+      en: "In Fatima, Portugal, three shepherd children — Lucia (10), Francisco (9), and Jacinta (7) — saw a beautiful Lady appear above an oak tree on May 13, 1917. She returned on the 13th of every month for six months. Mary asked them to pray the rosary daily for peace, since the world was at war. On October 13, 1917, in front of 70,000 people, the sun spun and danced in the sky — the famous 'Miracle of the Sun.' This miracle was even reported in newspapers! Mary gave the children three secrets and asked everyone to make sacrifices for sinners.",
+      bs: 'Sa Fatima, Portugal, tulo ka mga magbalantay og karnero — si Lucia (10), Francisco (9), ug Jacinta (7) — nakakita og maanyag nga Babaye nga mipakita ibabaw sa kahoy nga oak niadtong Mayo 13, 1917. Mibalik siya kada ika-13 sa buwan sulod sa unom ka buwan. Gisugo silang manag-rosaryo matag adlaw para sa kalinaw, kay nakigubat ang kalibutan. Niadtong Oktubre 13, 1917, sa atubangan sa 70,000 ka tawo, ang adlaw nagtuyok ug misayaw sa langit — ang bantugan nga "Milagro sa Adlaw." Nataho pa kini sa mga mantalaan! Gihatagan ni Maria ang mga bata og tulo ka sekreto ug nangayo nga maghimo og sakripisyo para sa mga makasasala.'
+    },
+    storyHard: {
+      en: "From May to October 1917, the Blessed Virgin Mary appeared six times to three shepherd children at Cova da Iria in Fatima, Portugal. The visionaries — Lucia dos Santos and her cousins Francisco and Jacinta Marto — were taught the rosary, shown a vision of hell, and given the famous 'Three Secrets of Fatima.' Mary requested the consecration of Russia to her Immaculate Heart and the practice of First Saturdays devotion. On October 13, before 70,000 witnesses (including atheist journalists), the predicted miracle occurred: the sun appeared to spin, throw colored rays, and plunge toward the earth — the 'Miracle of the Sun.' Even wet clothes dried instantly. Francisco and Jacinta died young from the 1918 flu pandemic, as Mary had foretold. Both were canonized as saints. Sister Lucia became a Carmelite nun and lived to age 97. The Fatima messages emphasize prayer, penance, and the rosary.",
+      bs: 'Gikan Mayo hangtod Oktubre 1917, mipakita ang Bulahang Birhen Maria og unom ka beses sa tulo ka magbalantay og karnero sa Cova da Iria sa Fatima, Portugal. Ang mga nakakita — si Lucia dos Santos ug iyang mga ig-agaw nga si Francisco ug Jacinta Marto — gitudloan sa rosaryo, gipakita-an og panan-aw sa impyerno, ug gihatagan sa bantugang "Tulo ka Sekreto sa Fatima." Gipangayo ni Maria ang konsagrasyon sa Russia sa iyang Imakulada nga Kasingkasing ug ang debosyon sa unang mga Sabado. Niadtong Oktubre 13, sa atubangan sa 70,000 ka saksi (lakip ang mga atheist nga journalist), nahitabo ang gitagna nga milagro: ang adlaw nagtuyok, milabay og mga kolor sa silaw, ug mibulhot padulong sa yuta — ang "Milagro sa Adlaw." Bisan ang basa nga mga sapot namala dayon. Sila Francisco ug Jacinta namatay og bata pa tungod sa 1918 nga flu pandemic, sumala sa gitagna ni Maria. Pareho silang gicanonize isip mga santos. Si Sister Lucia nahimong Carmelite nga madre ug nabuhi hangtod 97 anyos. Ang mensahe sa Fatima nagpasiugda sa pag-ampo, panimuyo, ug rosaryo.'
+    },
+    facts: [
+      '👫👧 She appeared to 3 children: Lucia, Francisco, Jacinta',
+      '☀️ The Miracle of the Sun on October 13, 1917',
+      '📿 She asked everyone to pray the rosary',
+      '📅 Feast Day: May 13'
+    ]
+  },
+  {
+    id: 'carmel',
+    name: 'Our Lady of Mt. Carmel',
+    nameBs: 'Nuestra Señora sa Bukid sa Carmelo',
+    emoji: '🤎',
+    bgColor: '#fef3c7',
+    accentColor: '#92400e',
+    location: 'England, 1251',
+    locationBs: 'England, sa tuig 1251',
+    sticker: '🤎',
+    storyEasy: {
+      en: "Long, long ago, Mama Mary gave a special gift to St. Simon Stock — a brown cloth called the scapular. She promised: anyone who wears it with love will be saved! Many Catholics wear the brown scapular today.",
+      bs: "Dugay na kaayo, mihatag si Mama Mary og espesyal nga regalo kang San Simon Stock — usa ka kape nga panapton nga gitawag og scapular. Misaad siya: si bisan kinsa nga magsul-ob niini uban sa gugma maluwas! Daghang Katoliko ang nagsul-ob og brown scapular karon."
+    },
+    storyMedium: {
+      en: "On July 16, 1251, the Blessed Virgin Mary appeared to St. Simon Stock, a Carmelite priest in England. She held a brown scapular (a small cloth worn over the shoulders) and said: 'Take this Scapular. Whoever dies wearing it shall not suffer eternal fire.' This is called the 'Brown Scapular' or 'Scapular of Our Lady of Mt. Carmel.' Many saints wore it. The scapular is a sign of devotion to Mary — but you must wear it with faith and love, not as a magic charm.",
+      bs: "Niadtong Hulyo 16, 1251, mipakita ang Bulahang Birhen Maria kang San Simon Stock, usa ka Carmelite nga pari sa England. Naghupot siya og brown scapular (gamay nga panapton nga gisul-ob sa abaga) ug miingon: 'Dawata kining Scapular. Si bisan kinsa nga mamatay nga nagsul-ob niini dili mag-antos sa walay kataposang kalayo.' Gitawag kini og 'Brown Scapular.' Daghang santos ang nagsul-ob niini. Ang scapular timaan sa debosyon kang Maria — apan kinahanglan mong magsul-ob niini uban sa pagtoo ug gugma, dili isip salamangka."
+    },
+    storyHard: {
+      en: "The Carmelite Order traces its origin to Mt. Carmel in the Holy Land, where the prophet Elijah saw a small cloud bring rain (1 Kings 18:44) — interpreted as a foreshadowing of Mary. On July 16, 1251, the Blessed Virgin appeared to St. Simon Stock, English prior of the Carmelites, who was praying for help against persecution. She presented him with the brown scapular and made the famous promise: 'This shall be the privilege for you and for all Carmelites: whoever dies wearing this shall not suffer eternal fire.' Pope John XXII later confirmed the additional 'Sabbatine Privilege' — that Mary would deliver scapular wearers from purgatory on the first Saturday after death, if they fulfill three conditions: wear it faithfully, observe chastity according to one's state, and pray daily. The Brown Scapular is one of the most cherished sacramentals of the Church and a profound act of consecration to Mary.",
+      bs: "Ang Carmelite Order natukod sa Bukid sa Carmelo sa Holy Land, diin nakakita si propeta Elias og gamay nga panganod nga nagdala og ulan (1 Hari 18:44) — gihubad isip pasiuna ni Maria. Niadtong Hulyo 16, 1251, mipakita ang Bulahang Birhen kang San Simon Stock, English prior sa mga Carmelite, samtang nag-ampo siya batok sa paglutos. Gihatag niya kaniya ang brown scapular ug gihimo ang bantugang saad: 'Mahimong privilehiyo ninyo: si bisan kinsa nga mamatay nga nagsul-ob niini dili mag-antos sa walay kataposang kalayo.' Gipamatud-an pa ni Papa John XXII ang dugang 'Sabbatine Privilege' — nga si Maria moluwas sa nagsul-ob og scapular gikan sa purgatoryo sa unang Sabado human sa kamatayon, kon tumanon ang tulo ka kondisyon: magsul-ob nga matinud-anon, magbantay sa kaputli, ug mag-ampo matag adlaw. Ang Brown Scapular usa sa labing pinangga nga sacramentals sa Simbahan."
+    },
+    facts: [
+      '👨‍🦳 Given to St. Simon Stock in 1251',
+      '🤎 The brown scapular is a sign of devotion',
+      '⛰️ Named after Mt. Carmel in the Holy Land',
+      '📅 Feast Day: July 16'
+    ]
+  },
+  {
+    id: 'medal',
+    name: 'Our Lady of the Miraculous Medal',
+    nameBs: 'Nuestra Señora sa Milagrosong Medalya',
+    emoji: '🎖️',
+    bgColor: '#e0e7ff',
+    accentColor: '#4338ca',
+    location: 'France, 1830',
+    locationBs: 'France, sa tuig 1830',
+    sticker: '✨',
+    storyEasy: {
+      en: "A young nun named Catherine saw Mama Mary in her chapel. Mary showed her a beautiful medal and said, 'Make this medal! Anyone who wears it will get many graces from me.' Many people who wore the medal had miracles!",
+      bs: "Usa ka batan-ong madre nga si Catherine nakakita kang Mama Mary sa ilang kapilya. Gipakita ni Maria ang maanyag nga medalya ug miingon, 'Buhata kining medalya! Si bisan kinsa nga magsul-ob niini makadawat og daghang grasya gikan nako.' Daghang tawo nga nagsul-ob sa medalya nakaangkon og milagro!"
+    },
+    storyMedium: {
+      en: "St. Catherine Labouré was a 24-year-old novice nun in Paris, France. On November 27, 1830, while praying in the chapel, she saw the Blessed Virgin Mary standing on a globe with rays of light coming from her hands. Around her was an oval frame with the words: 'O Mary, conceived without sin, pray for us who have recourse to thee.' Mary said, 'Have a medal made on this model. All who wear it will receive great graces.' The medal was made and called the 'Miraculous Medal' because so many miracles happened to those who wore it. Today, millions of Catholics wear this beautiful medal.",
+      bs: "Si Santa Catherine Labouré usa ka 24 anyos nga madre sa Paris, France. Niadtong Nobyembre 27, 1830, samtang nag-ampo siya sa kapilya, nakakita siya sa Bulahang Birhen Maria nga nagtindog sa globo uban sa silaw nga nag-agay gikan sa iyang mga kamot. Sa iyang palibot adunay oval nga frame uban sa mga pulong: 'O Maria, gipanamkon nga walay sala, iampo mo kami nga modangop kanimo.' Miingon si Maria, 'Pagpabuhat og medalya sumala niining sumbanan. Ang tanan nga magsul-ob niini makadawat og dagkong grasya.' Gibuhat ang medalya ug gitawag og 'Milagrosong Medalya' tungod sa kadaghan sa milagro nga nahitabo. Karon, milyon ka mga Katoliko ang nagsul-ob niining maanyag nga medalya."
+    },
+    storyHard: {
+      en: "St. Catherine Labouré entered the Daughters of Charity in Paris in 1830. On July 18 of that year, the Virgin Mary appeared to her in the convent chapel — the first of three apparitions. On November 27, 1830, Mary appeared standing on a globe, crushing a serpent's head, with brilliant rays streaming from her hands (Mary explained these rays represent graces she gives to those who ask). The vision then turned, showing the famous reverse design: a cross atop the letter M, with the Sacred and Immaculate Hearts below, surrounded by 12 stars. Mary instructed Catherine: 'Have a medal struck after this model. Persons who wear it will receive great graces.' The medal was struck in 1832, and within years, millions had been distributed. Countless miracles, conversions, and healings were attributed to it — earning its title 'Miraculous Medal.' Catherine remained anonymous until her death in 1876. She was canonized in 1947. The medal remains one of the most popular Catholic devotionals worldwide.",
+      bs: "Si Santa Catherine Labouré misulod sa Daughters of Charity sa Paris niadtong 1830. Niadtong Hulyo 18 sa maong tuig, mipakita ang Birhen Maria kaniya sa kapilya sa kombento — ang una sa tulo ka pagpakita. Niadtong Nobyembre 27, 1830, mipakita si Maria nga nagtindog sa globo, nagdugmok sa ulo sa bitin, uban sa hayag nga silaw gikan sa iyang mga kamot (gipasabot ni Maria nga ang silaw nagrepresentar sa grasya nga iyang gihatag sa mga mangayo). Mibalit-ad ang panan-awon, nagpakita sa bantugang lubat: krus ibabaw sa letra M, uban sa Sagrado ug Imakulada nga Kasingkasing sa ubos, gilibutan sa 12 ka bituon. Gisugo ni Maria si Catherine: 'Pagpabuhat og medalya sumala niini. Ang nagsul-ob makadawat og dagkong grasya.' Gibuhat ang medalya niadtong 1832, ug sulod sa pipila ka tuig, milyon na ang naapod-apod. Daghang milagro, kombersyon, ug pag-ayo ang gipasangil niini — busa gitawag og 'Milagrosong Medalya.' Nagpabilin nga anonimo si Catherine hangtod sa iyang kamatayon niadtong 1876. Gicanonize siya niadtong 1947."
+    },
+    facts: [
+      '👩‍⚕️ Given to St. Catherine Labouré, a young nun',
+      '🎖️ The medal has Mary on one side, M+cross on the other',
+      '✨ Millions of miracles for those who wear it',
+      '📅 Feast Day: November 27'
+    ]
+  },
+  {
+    id: 'perpetual',
+    name: 'Our Lady of Perpetual Help',
+    nameBs: 'Nuestra Señora sa Walay Kataposang Tabang',
+    emoji: '💕',
+    bgColor: '#fce7f3',
+    accentColor: '#9d174d',
+    location: 'Greece, very ancient',
+    locationBs: 'Greece, dugay na kaayo',
+    sticker: '💕',
+    storyEasy: {
+      en: "There is a very old picture of Mama Mary holding baby Jesus. Two angels show Jesus the cross and nails — the bad things that will happen. Baby Jesus is scared and runs to Mama Mary! Mary holds his little hand. She helps us when we are scared too!",
+      bs: "Adunay daan kaayo nga hulagway ni Mama Mary nga nagkugos sa bata nga si Hesus. Duha ka anghel ang nagpakita kang Hesus sa krus ug mga lansang — ang mga dautang butang nga mahitabo. Nahadlok ang bata nga si Hesus ug midagan ngadto kang Mama Mary! Gigunitan ni Mama Mary ang gamay niyang kamot. Tabangan ta niya kon mahadlok pud ta!"
+    },
+    storyMedium: {
+      en: "Our Lady of Perpetual Help is a famous Byzantine icon (a holy painting) over 600 years old. It shows Mama Mary holding baby Jesus. Two angels appear above — the Archangels Michael and Gabriel — holding the cross, nails, and lance that will hurt Jesus when he grows up. Baby Jesus has run to his mother in fear, even losing his sandal! Mary's eyes look directly at us, asking us to come to her for help. Pope Pius IX entrusted this picture to the Redemptorist priests in 1866 to spread devotion. Today, every Wednesday in many Filipino churches is dedicated to Our Lady of Perpetual Help!",
+      bs: "Ang Nuestra Señora sa Walay Kataposang Tabang usa ka bantugang Byzantine icon (balaan nga hulagway) nga kapin sa 600 ka tuig na. Nagpakita kini kang Mama Mary nga nagkugos sa bata nga si Hesus. Duha ka anghel ang mipakita ibabaw — sila Arkanghel Miguel ug Gabriel — naghupot sa krus, mga lansang, ug bangkaw nga maoy makasakit kang Hesus kon dako na siya. Midagan ang bata nga si Hesus ngadto sa iyang inahan tungod sa kahadlok, nawala pa gani ang iyang sandalyas! Direkta nga nagtan-aw ang mga mata ni Maria kanato, nagdapit nga moduol kita kaniya alang sa tabang. Gitugyan ni Papa Pio IX ang hulagway ngadto sa mga Redemptorist nga pari niadtong 1866 aron sa pagpakaylap sa debosyon. Karon, matag Miyerkules sa daghang Pilipinhong simbahan gigahin alang sa Nuestra Señora sa Walay Kataposang Tabang!"
+    },
+    storyHard: {
+      en: "The icon of Our Lady of Perpetual Help (Greek: Theotokos tou Akathistou) is a Byzantine-style painting in tempera on a walnut panel, approximately 54x42 cm. It originated in Crete around the 14th century. The icon was brought to Rome in 1499. Pope Pius IX entrusted it to the Redemptorist Congregation in 1866 with the mandate: 'Make her known throughout the world.' The image is rich in symbolism: the angels (Michael with the lance and reed, Gabriel with the cross and nails) foreshadow the Passion. The Christ Child grasps Mary's right hand with both of his, as if running to her in fear. His sandal dangles loose, indicating his rushed flight. Mary does not look at her Son but directly at the viewer with serious, compassionate eyes — calling all to refuge in her. The Greek inscriptions identify the figures: MR-ΘY (Mother of God), IC-XC (Jesus Christ), OAM (Archangel Michael), OAΓ (Archangel Gabriel). The novena and devotion to Our Lady of Perpetual Help spread worldwide, especially flourishing in the Philippines where it became a national devotion.",
+      bs: "Ang icon sa Nuestra Señora sa Walay Kataposang Tabang usa ka Byzantine-style nga painting sa tempera sa walnut panel, mga 54x42 cm. Naggikan kini sa Crete mga ika-14 nga siglo. Gidala ang icon sa Roma niadtong 1499. Gitugyan kini ni Papa Pio IX sa Redemptorist Congregation niadtong 1866 uban sa mando: 'Ipaila siya sa tibuok kalibutan.' Adunay mga simbolo ang hulagway: ang mga anghel (si Miguel uban sa bangkaw ug ulpot, si Gabriel uban sa krus ug mga lansang) nagpasiuna sa Pasyon. Gigunitan sa Bata nga Kristo ang tuong kamot ni Maria sa iyang duha ka kamot, samag midagan padulong kaniya tungod sa kahadlok. Nagbitay ang iyang sandalyas, timaan sa iyang dali nga pagdagan. Wala motan-aw si Maria sa iyang Anak kondili direkta sa mga tumatan-aw uban sa seryoso ug maluloy-on nga mga mata — nagdapit sa tanan nga modangop kaniya. Ang Greek nga mga inskripsyon nagpaila sa mga numero. Mikaylap ang novena ug debosyon sa tibuok kalibutan, ug nahimong nasudnong debosyon sa Pilipinas."
+    },
+    facts: [
+      '🖼️ A 600-year-old Byzantine icon',
+      '👼 Two angels show Jesus the cross and nails',
+      '🇵🇭 Wednesday devotion is HUGE in the Philippines',
+      '📅 Feast Day: June 27'
+    ]
+  }
+];
+
+const DIFFICULTY_LEVELS = [
+  { id: 'easy',   name: 'Bunso',     emoji: '🌱', desc: 'Ages 5-7',   ageBs: '5-7 anyos',  color: '#fce7f3' },
+  { id: 'medium', name: 'Manghud',   emoji: '🌷', desc: 'Ages 7-9',   ageBs: '7-9 anyos',  color: '#dbeafe' },
+  { id: 'hard',   name: 'Magulang',  emoji: '⭐', desc: 'Ages 8-10',  ageBs: '8-10 anyos', color: '#fef3c7' }
+];
+
+let maryGardenState = {
+  difficulty: null,
+  currentTitle: null
+};
+
+// Initialize Mary Garden data on student
+function initMaryGardenData(student) {
+  if (!student.maryGarden) {
+    student.maryGarden = {
+      stickersEarned: [],
+      titlesVisited: []
+    };
+  }
+  return student.maryGarden;
+}
+
+// Home — pick difficulty
+function renderMaryGardenHome() {
+  if (!activeStudent) return renderWhoIsPlaying();
+  const student = getCurrentStudent();
+  const garden = initMaryGardenData(student);
+  saveAllStudents();
+
+  const stickerCount = garden.stickersEarned.length;
+  const totalStickers = MARY_TITLES.length;
+
+  const stickersDisplay = MARY_TITLES.map(t => {
+    const earned = garden.stickersEarned.includes(t.id);
+    return earned
+      ? `<span style="font-size: 2rem; margin: 0 4px;" title="${escapeHtml(t.name)}">${t.sticker}</span>`
+      : `<span style="font-size: 2rem; margin: 0 4px; opacity: 0.2; filter: grayscale(1);" title="Not yet earned">❔</span>`;
+  }).join('');
+
+  const difficultyCards = DIFFICULTY_LEVELS.map(d => `
+    <button onclick="pickMaryDifficulty('${d.id}')" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, ${d.color}); border: 4px solid ${d.color === '#fce7f3' ? '#ec4899' : d.color === '#dbeafe' ? '#3b82f6' : '#f59e0b'}; border-radius: 22px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 ${d.color === '#fce7f3' ? '#ec4899' : d.color === '#dbeafe' ? '#3b82f6' : '#f59e0b'}; transition: all 0.2s;">
+      <div style="font-size: 3rem; margin-bottom: 6px;">${d.emoji}</div>
+      <div style="font-family: 'Pacifico', cursive; color: #1e3a8a; font-size: 1.7rem; margin-bottom: 4px;">${d.name}</div>
+      <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1rem; margin-bottom: 2px;">${d.desc}</div>
+      <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1rem;">${d.ageBs}</div>
+    </button>
+  `).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMaryGardenHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 50%, #fce7f3 100%); border-radius: 22px; padding: 24px 16px;">
+      <div style="text-align: center; margin-bottom: 14px;">
+        <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border: 3px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 #1e40af;">
+          🏠 ← All Categories
+        </button>
+      </div>
+
+      <div style="text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 4px;">🌹 💙 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 2.4rem; text-shadow: 2px 2px 0 #fff; margin: 6px 0;">Mama Mary's Garden</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.4rem;">~ Tanan kabahin ni Mama Mary ~</p>
+      </div>
+
+      <!-- Sticker collection -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #fbbf24; border-radius: 18px; padding: 16px; margin: 18px 0; text-align: center; box-shadow: 0 4px 0 #f59e0b;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #92400e; font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 6px;">⭐ MY STICKER GARDEN ⭐</div>
+        <div style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.4rem; margin-bottom: 8px;">${stickerCount} of ${totalStickers}</div>
+        <div style="line-height: 2.2;">${stickersDisplay}</div>
+      </div>
+
+      <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.6rem; text-align: center; margin: 20px 0 8px;">Choose Your Level</h2>
+      <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.15rem; margin-bottom: 12px;">~ Pilia ang imong lebel ~</p>
+
+      ${difficultyCards}
+
+      <!-- Three special learning sections -->
+      <div style="margin: 24px 0 12px;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.5rem; text-align: center;">✨ Special Lessons ✨</h2>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.1rem; margin-bottom: 12px;">~ Espesyal nga mga Leksyon ~</p>
+      </div>
+
+      <button onclick="renderWhyLoveMary()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fce7f3); border: 4px solid #ec4899; border-radius: 22px; padding: 18px; margin: 10px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #ec4899; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">💕</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem; line-height: 1.1;">Why We Love Mama Mary</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Nganong gimahal nato si Mama Mary ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Discover why she is our Mother in Heaven</div>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="renderHolyRosary()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #ede9fe); border: 4px solid #7c3aed; border-radius: 22px; padding: 18px; margin: 10px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #7c3aed; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">📿</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.4rem; line-height: 1.1;">The Holy Rosary</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Ang Balaang Rosaryo ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Why we pray it & the 15 Promises of Mary</div>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="renderSaintsOfMary()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 10px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #d97706; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">👑</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; line-height: 1.1;">Saints Who Loved Mary</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Santos nga nahigugma kang Maria ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">St. Louis de Montfort, St. Alphonsus, & more</div>
+          </div>
+        </div>
+      </button>
+    </div>
+  `);
+}
+
+function pickMaryDifficulty(difficultyId) {
+  maryGardenState.difficulty = difficultyId;
+  renderMaryTitleList();
+}
+
+// Play Ate MJ's recorded narration of a Mary story
+// Looks for files like mary-guadalupe-medium-bs.m4a in the same folder as index.html
+let maryStoryAudio = null;
+let maryStoryAudioPlaying = null; // tracks which clip is playing
+
+function playMaryStoryAudio(titleId, difficulty, lang) {
+  const btnId = `mary-audio-btn-${titleId}-${difficulty}-${lang}`;
+  const btn = document.getElementById(btnId);
+
+  // If something is already playing, stop it first
+  if (maryStoryAudio && !maryStoryAudio.paused) {
+    maryStoryAudio.pause();
+    maryStoryAudio.currentTime = 0;
+    // Reset previous button label
+    if (maryStoryAudioPlaying) {
+      const prevBtn = document.getElementById(maryStoryAudioPlaying);
+      if (prevBtn) prevBtn.innerHTML = '🔊 Listen';
+    }
+    // If user tapped the SAME button, just stop and exit
+    if (maryStoryAudioPlaying === btnId) {
+      maryStoryAudioPlaying = null;
+      return;
+    }
+  }
+
+  // Pause background music while listening to story
+  stopMp3Music();
+
+  // Try to load the audio file (try .m4a, .mp3, .wav extensions)
+  const filename = `mary-${titleId}-${difficulty}-${lang}`;
+  const extensions = ['m4a', 'mp3', 'wav'];
+
+  let extIdx = 0;
+  function tryNext() {
+    if (extIdx >= extensions.length) {
+      // No file found in any format
+      showAudioComingSoon();
+      // Resume background music since story didn't play
+      if (ambientEnabled && soundsEnabled && firstInteractionDone) playMp3Music();
+      return;
+    }
+    const path = `${filename}.${extensions[extIdx]}`;
+    maryStoryAudio = new Audio(path);
+    maryStoryAudio.volume = 1.0;
+
+    maryStoryAudio.addEventListener('error', () => {
+      extIdx++;
+      tryNext();
+    }, { once: true });
+
+    maryStoryAudio.addEventListener('canplay', () => {
+      // File loaded — actually play it
+      maryStoryAudioPlaying = btnId;
+      if (btn) btn.innerHTML = '⏸ Stop';
+      maryStoryAudio.play().catch(err => {
+        console.log('Audio play failed:', err);
+        showAudioComingSoon();
+        if (btn) btn.innerHTML = '🔊 Listen';
+        maryStoryAudioPlaying = null;
+        if (ambientEnabled && soundsEnabled && firstInteractionDone) playMp3Music();
+      });
+    }, { once: true });
+
+    maryStoryAudio.addEventListener('ended', () => {
+      if (btn) btn.innerHTML = '🔊 Listen';
+      maryStoryAudioPlaying = null;
+      // Resume background music after story ends
+      if (ambientEnabled && soundsEnabled && firstInteractionDone) playMp3Music();
+    }, { once: true });
+  }
+  tryNext();
+}
+
+function showAudioComingSoon() {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal" style="border-color: #ec4899; max-width: 380px;">
+      <div style="font-size: 3rem; margin-bottom: 8px;">🎙️ ✨</div>
+      <h3 style="color: #be185d; font-family: 'Pacifico', cursive; font-size: 1.5rem;">Voice Story Coming Soon!</h3>
+      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.92rem; margin: 8px 0 12px;">
+        Ate ${escapeHtml((teacherName || 'MJ').split(' ')[0])} is preparing a special voice recording of this story for you!
+      </p>
+      <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.2rem; margin: 12px 0;">
+        ~ Pa-andam pa kini! Mubalik ra kini nga clip soon ~
+      </p>
+      <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.88rem; margin-top: 14px;">
+        For now, please read the story together with your parents! 💕
+      </p>
+      <button class="btn" onclick="document.querySelector('.modal-backdrop').remove();" style="margin-top: 14px;">OK</button>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+  backdrop.onclick = (e) => { if (e.target === backdrop) backdrop.remove(); };
+}
+
+// ============================================
+// 💕 WHY WE LOVE MAMA MARY
+// Traditional Catholic teaching on Mary's role
+// ============================================
+function renderWhyLoveMary() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderWhyLoveMary();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryGardenHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #ec4899; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px; box-shadow: 0 3px 0 #ec4899;">← Back to Garden</button>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">💕 🌹 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 2rem; margin: 8px 0; text-shadow: 1px 1px 0 #fff;">Why We Love Mama Mary</h1>
+        <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.3rem;">~ Nganong gimahal nato si Mama Mary ~</p>
+      </div>
+
+      <!-- Reason 1: She is the Mother of God -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #ec4899;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 8px;">
+          <div style="font-size: 2.5rem;">👶</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem; margin: 0; line-height: 1.1;">She is the Mother of God</h2>
+            <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin: 2px 0 0;">Siya ang Inahan sa Diyos</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem;">
+          When the Angel Gabriel came to Mary, she said "Yes" — and Jesus, the Son of God, came into her womb. Because Jesus is God, and Mary is His true Mother, we call her <strong>Theotokos</strong> (God-bearer) and <strong>Mother of God</strong>. The Council of Ephesus (431 AD) defined this as the truth.
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.9rem; line-height: 1.5; margin-top: 8px;">
+          ~ Pag-abot sa Anghel Gabriel kang Maria, miingon siya og "Oo" — ug si Hesus, ang Anak sa Diyos, miabot sa iyang sabakan. Tungod kay si Hesus Diyos, ug si Maria ang iyang tinuud nga Inahan, gitawag nato siya og <strong>Inahan sa Diyos</strong>. ~
+        </p>
+      </div>
+
+      <!-- Reason 2: She is OUR Mother -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #7c3aed;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 8px;">
+          <div style="font-size: 2.5rem;">💖</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.4rem; margin: 0; line-height: 1.1;">She is OUR Mother Too</h2>
+            <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin: 2px 0 0;">Siya pud ang ATONG Inahan</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem;">
+          On the Cross, just before He died, Jesus said to St. John: <em>"Behold thy Mother"</em> (John 19:27). At that moment, Jesus gave Mary to ALL of us as our spiritual Mother. Every Christian — every kid, every grownup — has Mary as our Mother in Heaven who loves us!
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #7c3aed; padding: 10px 14px; margin-top: 10px; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.15rem; margin: 0; line-height: 1.4;">
+            "Behold thy Mother." — Jesus on the Cross
+          </p>
+        </div>
+      </div>
+
+      <!-- Reason 3: Immaculate Conception -->
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 3px solid #2563eb; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #2563eb;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 8px;">
+          <div style="font-size: 2.5rem;">✨</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.4rem; margin: 0; line-height: 1.1;">She Never Had Any Sin</h2>
+            <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin: 2px 0 0;">Walay sala nga gipanamkon</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem;">
+          God prepared a perfect Mother for His Son. From the very first moment of her life — even before she was born — Mary was preserved from <strong>all sin</strong>, including original sin. This is called the <strong>Immaculate Conception</strong>. Pope Pius IX defined this dogma in 1854. Mary herself confirmed it at Lourdes in 1858 saying: <em>"I am the Immaculate Conception."</em>
+        </p>
+      </div>
+
+      <!-- Reason 4: She is Queen of Heaven -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #d97706;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 8px;">
+          <div style="font-size: 2.5rem;">👑</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; margin: 0; line-height: 1.1;">She is the Queen of Heaven</h2>
+            <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin: 2px 0 0;">Reyna sa Langit</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem;">
+          When Mary's life on earth was finished, God did not let her body see decay. He took her body and soul up to Heaven (<strong>The Assumption</strong>). There, Jesus crowned His Mother as <strong>Queen of Heaven and Earth</strong>. From Heaven, she watches over all her children with great love.
+        </p>
+      </div>
+
+      <!-- Reason 5: She always brings us to Jesus -->
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #10b981;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 8px;">
+          <div style="font-size: 2.5rem;">✝️</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem; margin: 0; line-height: 1.1;">She Always Brings Us to Jesus</h2>
+            <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin: 2px 0 0;">Magdala kanato kang Hesus</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem;">
+          Mary never wants attention for herself. She always points to Jesus. At the wedding of Cana, she said the most important words ever spoken about Jesus: <em>"Do whatever He tells you"</em> (John 2:5). When we love Mary, we love Jesus more — because she is the shortest path to her Son.
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #10b981; padding: 10px 14px; margin-top: 10px; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #047857; font-size: 1.15rem; margin: 0; line-height: 1.4;">
+            "To Jesus through Mary." — St. Louis de Montfort
+          </p>
+        </div>
+      </div>
+
+      <!-- Memorare prayer -->
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 3px dashed var(--pastel-lavender-deep); border-radius: 20px; padding: 18px; margin: 14px 0;">
+        <h3 style="font-family: 'Pacifico', cursive; color: #6d28d9; text-align: center; font-size: 1.4rem; margin-bottom: 8px;">🙏 The Memorare</h3>
+        <p style="font-family: 'Caveat', cursive; text-align: center; color: var(--pastel-lavender-darker); font-size: 1.1rem; margin-bottom: 10px;">~ A prayer of St. Bernard of Clairvaux ~</p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.7; font-size: 0.95rem; text-align: center; font-style: italic;">
+          Remember, O most gracious Virgin Mary, that never was it known that anyone who fled to thy protection, implored thy help, or sought thy intercession, was left unaided. Inspired with this confidence, I fly unto thee, O Virgin of virgins, my Mother. To thee do I come, before thee I stand, sinful and sorrowful. O Mother of the Word Incarnate, despise not my petitions, but in thy mercy, hear and answer me. Amen.
+        </p>
+      </div>
+
+      <button onclick="renderMaryGardenHome()" style="width: 100%; background: linear-gradient(180deg, #fce7f3 0%, #ec4899 100%); color: #fff; border: 3px solid #be185d; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #be185d; margin: 14px 0;">
+        🌹 Back to Mary's Garden
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// 📿 THE HOLY ROSARY
+// Why we pray it + 15 Promises + Mysteries
+// ============================================
+function renderHolyRosary() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderHolyRosary();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryGardenHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #7c3aed; color: #6d28d9; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px; box-shadow: 0 3px 0 #7c3aed;">← Back to Garden</button>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">📿 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 2rem; margin: 8px 0; text-shadow: 1px 1px 0 #fff;">The Holy Rosary</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Ang Balaang Rosaryo ~</p>
+      </div>
+
+      <!-- The Story -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #7c3aed;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.5rem; margin: 0 0 8px;">📖 The Story of the Rosary</h2>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem; margin-bottom: 8px;">
+          In the year 1208, when many people were forgetting God, the Blessed Virgin Mary appeared to <strong>St. Dominic</strong>. She gave him a special gift — a string of prayer beads called the <strong>Rosary</strong>. She taught him to pray it, and to teach others, so that the world would be saved.
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem; margin-bottom: 8px;">
+          The Rosary is a powerful prayer. We meditate on the life of Jesus and Mary while saying Hail Marys. <strong>Pope St. Pius V</strong> called all of Christendom to pray the Rosary before the great Battle of Lepanto in 1571 — and Christians won against impossible odds.
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); line-height: 1.5; font-size: 0.9rem;">
+          ~ Sa tuig 1208, mipakita si Maria kang San Dominic ug gihatag niya ang Rosaryo. Gitudloan siya nga mag-ampo niini, ug magtudlo sa uban. ~
+        </p>
+      </div>
+
+      <!-- Why We Pray -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #ec4899;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem; margin: 0 0 10px;">❤️ Why We Pray It</h2>
+        <ul style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.7; font-size: 0.96rem; margin: 0; padding-left: 22px;">
+          <li><strong>It pleases Mama Mary</strong> — she asked us to pray it at Lourdes and Fatima</li>
+          <li><strong>It defeats sin and the devil</strong> — Satan flees at the sound of the Hail Mary</li>
+          <li><strong>It teaches us about Jesus</strong> — through the Mysteries of His life</li>
+          <li><strong>It brings peace</strong> — to families, to nations, to our own hearts</li>
+          <li><strong>It saves souls</strong> — both ours and others we pray for</li>
+        </ul>
+      </div>
+
+      <!-- The 15 Promises -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #d97706;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.5rem; margin: 0 0 4px;">👑 The 15 Promises of Mary</h2>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem; margin-bottom: 12px;">~ Given to St. Dominic and Bl. Alan de la Roche ~</p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.5; font-size: 0.9rem; margin-bottom: 10px; font-style: italic;">
+          Mary made these 15 promises to all who pray the Rosary devoutly:
+        </p>
+        <ol style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.92rem; margin: 0; padding-left: 22px;">
+          <li>Whoever shall faithfully serve me by the recitation of the Rosary shall receive special graces.</li>
+          <li>I promise my special protection and the greatest graces to all those who shall recite the Rosary.</li>
+          <li>The Rosary shall be a powerful armor against hell.</li>
+          <li>The Rosary will cause virtue and good works to flourish.</li>
+          <li>The soul which recommends itself to me by the recitation of the Rosary shall not perish.</li>
+          <li>Whoever shall recite the Rosary devoutly shall never be conquered by misfortune.</li>
+          <li>Those who have a true devotion to the Rosary shall not die without the Sacraments of the Church.</li>
+          <li>Those who recite my Rosary shall find during their life and at their death the light of God.</li>
+          <li>I shall deliver from purgatory those who have been devoted to the Rosary.</li>
+          <li>The faithful children of the Rosary shall merit a high degree of glory in Heaven.</li>
+          <li>You shall obtain all you ask of me by the recitation of the Rosary.</li>
+          <li>All those who propagate the Holy Rosary shall be aided by me in their necessities.</li>
+          <li>I have obtained from my Divine Son that all the advocates of the Rosary shall have for intercessors the entire celestial court during their life and at the hour of death.</li>
+          <li>All who recite the Rosary are my sons and daughters, and brothers and sisters of my Only Son Jesus Christ.</li>
+          <li>Devotion to my Rosary is a great sign of predestination.</li>
+        </ol>
+      </div>
+
+      <!-- The Mysteries -->
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 3px solid #2563eb; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #2563eb;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.5rem; margin: 0 0 12px;">🌟 The 15 Mysteries</h2>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin-bottom: 10px;">~ Traditional 15 Mysteries (pre-1965) ~</p>
+
+        <div style="background: rgba(255,255,255,0.85); border-radius: 14px; padding: 12px; margin: 8px 0;">
+          <h3 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.15rem; margin: 0 0 6px;">😊 Joyful Mysteries (Mon, Thu)</h3>
+          <ol style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.88rem; line-height: 1.5; margin: 0; padding-left: 18px;">
+            <li>The Annunciation</li>
+            <li>The Visitation</li>
+            <li>The Nativity</li>
+            <li>The Presentation</li>
+            <li>The Finding in the Temple</li>
+          </ol>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.85); border-radius: 14px; padding: 12px; margin: 8px 0;">
+          <h3 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.15rem; margin: 0 0 6px;">😢 Sorrowful Mysteries (Tue, Fri)</h3>
+          <ol style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.88rem; line-height: 1.5; margin: 0; padding-left: 18px;">
+            <li>The Agony in the Garden</li>
+            <li>The Scourging at the Pillar</li>
+            <li>The Crowning with Thorns</li>
+            <li>The Carrying of the Cross</li>
+            <li>The Crucifixion</li>
+          </ol>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.85); border-radius: 14px; padding: 12px; margin: 8px 0;">
+          <h3 style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.15rem; margin: 0 0 6px;">✨ Glorious Mysteries (Wed, Sat, Sun)</h3>
+          <ol style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.88rem; line-height: 1.5; margin: 0; padding-left: 18px;">
+            <li>The Resurrection</li>
+            <li>The Ascension</li>
+            <li>The Descent of the Holy Spirit</li>
+            <li>The Assumption of Mary</li>
+            <li>The Coronation of Mary as Queen</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Padre Pio quote -->
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 3px dashed #7c3aed; border-radius: 20px; padding: 18px; margin: 14px 0; text-align: center;">
+        <div style="font-size: 2.5rem;">🤲</div>
+        <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.25rem; line-height: 1.5; margin: 8px 0;">
+          "The Rosary is the weapon for these times."
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.85rem; margin: 0; font-weight: 700;">— St. Padre Pio</p>
+      </div>
+
+      <button onclick="renderMaryGardenHome()" style="width: 100%; background: linear-gradient(180deg, #ede9fe 0%, #7c3aed 100%); color: #fff; border: 3px solid #6d28d9; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #6d28d9; margin: 14px 0;">
+        🌹 Back to Mary's Garden
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// 👑 SAINTS WHO LOVED MARY
+// St. Louis de Montfort, St. Alphonsus, St. Bernard, etc.
+// ============================================
+function renderSaintsOfMary() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderSaintsOfMary();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryGardenHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px; box-shadow: 0 3px 0 #d97706;">← Back to Garden</button>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">👑 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 2rem; margin: 8px 0; text-shadow: 1px 1px 0 #fff;">Saints Who Loved Mary</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Mga Santos nga nahigugma kang Mama Mary ~</p>
+      </div>
+
+      <!-- St. Louis de Montfort -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #d97706;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 10px;">
+          <div style="font-size: 2.5rem;">📜</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; margin: 0; line-height: 1.1;">St. Louis de Montfort</h2>
+            <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.85rem; margin: 2px 0 0;">1673–1716 • France • The Great Marian Saint</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.96rem; margin-bottom: 8px;">
+          St. Louis-Marie Grignion de Montfort wrote the most important Marian book ever written: <strong><em>True Devotion to Mary</em></strong>. He taught the world about <strong>Total Consecration to Jesus through Mary</strong> — giving everything we are and have to Jesus through her hands.
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.96rem; margin-bottom: 10px;">
+          He taught: Mary is the <strong>shortest, easiest, and surest way</strong> to Jesus. By belonging completely to her, we belong completely to her Son.
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #d97706; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #92400e; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "We never give more honor to Jesus than when we honor His Mother."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Louis de Montfort, True Devotion to Mary</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #d97706; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #92400e; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "If you put all the love of all mothers into one heart, it still would not equal the love of the Heart of Mary for her children."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Louis de Montfort</p>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.88rem; line-height: 1.5; margin-top: 8px;">
+          ~ Si San Louis de Montfort ang nagtudlo sa kalibutan sa <strong>Total nga Konsagrasyon kang Hesus pinaagi kang Maria</strong>. Si Maria mao ang pinakamubo nga dalan padulong kang Hesus. ~
+        </p>
+      </div>
+
+      <!-- St. Alphonsus Liguori -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #ec4899;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 10px;">
+          <div style="font-size: 2.5rem;">📚</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem; margin: 0; line-height: 1.1;">St. Alphonsus Liguori</h2>
+            <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.85rem; margin: 2px 0 0;">1696–1787 • Italy • Doctor of the Church</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.96rem; margin-bottom: 8px;">
+          St. Alphonsus wrote <strong><em>The Glories of Mary</em></strong>, a beautiful book filled with stories of Mary's love and power. He gathered the writings of countless saints to show how Mary helps every soul who comes to her.
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #ec4899; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "He who is devoted to the Blessed Virgin will certainly be saved."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Alphonsus Liguori, The Glories of Mary</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #ec4899; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "Mary is the gate of Paradise."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Alphonsus Liguori</p>
+        </div>
+      </div>
+
+      <!-- St. Bernard of Clairvaux -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #7c3aed;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 10px;">
+          <div style="font-size: 2.5rem;">📖</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.4rem; margin: 0; line-height: 1.1;">St. Bernard of Clairvaux</h2>
+            <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.85rem; margin: 2px 0 0;">1090–1153 • France • Mellifluous Doctor</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.96rem; margin-bottom: 8px;">
+          St. Bernard preached so beautifully about Mary that he was called the <strong>"Mellifluous Doctor"</strong> (sweeter than honey). He wrote the famous <strong>Memorare</strong> prayer.
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #7c3aed; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "In dangers, in difficulties, in doubts — think of Mary, call upon Mary."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Bernard of Clairvaux</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #7c3aed; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "Let us seek grace, and seek it through Mary."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Bernard of Clairvaux</p>
+        </div>
+      </div>
+
+      <!-- St. Maximilian Kolbe -->
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 3px solid #2563eb; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #2563eb;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 10px;">
+          <div style="font-size: 2.5rem;">🛐</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.4rem; margin: 0; line-height: 1.1;">St. Maximilian Kolbe</h2>
+            <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.85rem; margin: 2px 0 0;">1894–1941 • Poland • Martyr of Charity</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.96rem; margin-bottom: 8px;">
+          St. Maximilian gave his life completely to <strong>Mary the Immaculata</strong>. He founded the <strong>Knights of the Immaculate</strong> (Militia Immaculatae). When the Nazis put him in Auschwitz, he gave his life to save another prisoner — dying on the eve of the Assumption.
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #2563eb; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #1e40af; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "Never be afraid of loving the Blessed Virgin too much. You can never love her more than Jesus did."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— St. Maximilian Kolbe</p>
+        </div>
+      </div>
+
+      <!-- Pope St. Pius X -->
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #10b981;">
+        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 10px;">
+          <div style="font-size: 2.5rem;">⛪</div>
+          <div style="flex: 1;">
+            <h2 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem; margin: 0; line-height: 1.1;">Pope St. Pius X</h2>
+            <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.85rem; margin: 2px 0 0;">1835–1914 • Italy • Patron of SSPX</p>
+          </div>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.96rem; margin-bottom: 8px;">
+          Our Society's holy patron, Pope St. Pius X, wrote a beautiful encyclical on Mary called <strong><em>Ad Diem Illum</em></strong> (1904). He taught that <strong>Mary is the Mediatrix of all graces</strong> — every grace from Jesus passes through her hands to us.
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #10b981; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <p style="font-family: 'Caveat', cursive; color: #047857; font-size: 1.15rem; margin: 0 0 4px; line-height: 1.4;">
+            "Mary's love is the love of Christ, but multiplied a thousandfold."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 0;">— Pope St. Pius X</p>
+        </div>
+      </div>
+
+      <!-- St. Anthony Mary Claret -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px dashed #f59e0b; border-radius: 20px; padding: 18px; margin: 14px 0;">
+        <h3 style="font-family: 'Pacifico', cursive; color: #92400e; text-align: center; font-size: 1.3rem;">📿 More Marian Saints to Know</h3>
+        <ul style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.7; font-size: 0.92rem; margin: 0; padding-left: 20px;">
+          <li><strong>St. Dominic</strong> — received the Rosary from Mary</li>
+          <li><strong>Pope St. Pius V</strong> — established Feast of Our Lady of the Rosary</li>
+          <li><strong>St. John Bosco</strong> — devotion to Mary Help of Christians</li>
+          <li><strong>St. Therese of Lisieux</strong> — "Mary is more Mother than Queen"</li>
+          <li><strong>St. Padre Pio</strong> — prayed many Rosaries every day</li>
+          <li><strong>Bl. Bartolo Longo</strong> — apostle of the Pompei Rosary</li>
+          <li><strong>St. Catherine of Siena</strong> — defender of Mary's titles</li>
+        </ul>
+      </div>
+
+      <!-- Total Consecration prayer -->
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 3px solid #7c3aed; border-radius: 20px; padding: 18px; margin: 14px 0; text-align: center;">
+        <div style="font-size: 2.5rem;">🙏</div>
+        <h3 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.4rem; margin: 6px 0;">A Simple Consecration</h3>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem; margin-bottom: 10px;">~ Inspired by St. Louis de Montfort ~</p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; font-style: italic;">
+          O Mary, my dear Mother, I give myself entirely to you. I give you my body and soul, my goods, both interior and exterior, and even the value of all my good actions, past, present, and to come. Take me, all that I am, and give me to your Son, Jesus. Amen.
+        </p>
+      </div>
+
+      <button onclick="renderMaryGardenHome()" style="width: 100%; background: linear-gradient(180deg, #fef3c7 0%, #d97706 100%); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #92400e; margin: 14px 0;">
+        🌹 Back to Mary's Garden
+      </button>
+    </div>
+  `);
+}
+
+// List of 6 Marian titles
+function renderMaryTitleList() {
+  if (!activeStudent) return renderWhoIsPlaying();
+  const student = getCurrentStudent();
+  const garden = initMaryGardenData(student);
+  const diff = DIFFICULTY_LEVELS.find(d => d.id === maryGardenState.difficulty);
+
+  const titleCards = MARY_TITLES.map(t => {
+    const earned = garden.stickersEarned.includes(t.id);
+    return `
+      <button onclick="renderMaryTitleStory('${t.id}')" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, ${t.bgColor}); border: 4px solid ${t.accentColor}; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 ${t.accentColor}; text-align: left; position: relative;">
+        ${earned ? `<div style="position: absolute; top: 10px; right: 14px; font-size: 1.6rem;" title="Sticker earned!">${t.sticker}✨</div>` : ''}
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 6px;">${t.emoji}</div>
+        <div style="font-family: 'Pacifico', cursive; color: ${t.accentColor}; font-size: 1.4rem; text-align: center; line-height: 1.2; margin-bottom: 4px;">${escapeHtml(t.name)}</div>
+        <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; text-align: center; margin-bottom: 8px;">${escapeHtml(t.nameBs)}</div>
+        <div style="background: rgba(255,255,255,0.8); padding: 8px; border-radius: 12px; text-align: center; font-size: 0.85rem; color: var(--plum-deep); font-weight: 700;">📍 ${escapeHtml(t.location)}</div>
+      </button>
+    `;
+  }).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMaryTitleList();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${diff.color} 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryGardenHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #93c5fd; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px; box-shadow: 0 3px 0 #93c5fd;">← Change Level</button>
+
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 2.5rem;">${diff.emoji} 🌹</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.8rem; margin: 4px 0;">Choose a Story</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.2rem;">Lebel: ${diff.name} ${diff.emoji}</p>
+      </div>
+
+      ${titleCards}
+    </div>
+  `);
+}
+
+// Show one Marian title's story
+function renderMaryTitleStory(titleId) {
+  maryGardenState.currentTitle = titleId;
+  const title = MARY_TITLES.find(t => t.id === titleId);
+  if (!title) return renderMaryTitleList();
+
+  const diff = maryGardenState.difficulty;
+  const storyKey = diff === 'easy' ? 'storyEasy' : diff === 'medium' ? 'storyMedium' : 'storyHard';
+  const story = title[storyKey];
+
+  const factsHtml = title.facts.map(f => `<li style="margin: 6px 0; font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.5;">${f}</li>`).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMaryTitleStory('${titleId}');">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${title.bgColor} 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryTitleList()" style="background: rgba(255,255,255,0.85); border: 2px solid ${title.accentColor}; color: ${title.accentColor}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px; box-shadow: 0 3px 0 ${title.accentColor};">← Choose Another Story</button>
+
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 4rem;">${title.emoji}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: ${title.accentColor}; font-size: 1.7rem; line-height: 1.2; margin: 6px 0;">${escapeHtml(title.name)}</h1>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem;">${escapeHtml(title.nameBs)}</p>
+        <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">📍 ${escapeHtml(title.location)}</p>
+      </div>
+
+      <!-- Story (English) -->
+      <div style="background: linear-gradient(135deg, #fff, ${title.bgColor}); border: 3px solid ${title.accentColor}; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 ${title.accentColor};">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${title.accentColor}; font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 8px;">📖 THE STORY</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 1rem;">${escapeHtml(story.en)}</p>
+      </div>
+
+      <!-- Story (Bisaya) -->
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 2px dashed var(--pastel-lavender-deep); border-radius: 16px; padding: 16px; margin: 14px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-lavender-darker); font-size: 0.85rem; letter-spacing: 0.15em;">📖 ANG ASOY (Bisaya)</div>
+          <button onclick="playMaryStoryAudio('${titleId}', '${diff}', 'bs')" id="mary-audio-btn-${titleId}-${diff}-bs" title="Listen to Ate ${escapeHtml((teacherName || 'MJ').split(' ')[0])} read this story" style="background: linear-gradient(180deg, #fff, var(--pastel-pink-light)); border: 2px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 2px 0 var(--pastel-pink-deep);">
+            🔊 Listen
+          </button>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); line-height: 1.6; font-size: 0.95rem;">${escapeHtml(story.bs)}</p>
+      </div>
+
+      <!-- Facts -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #fbbf24; border-radius: 18px; padding: 16px; margin: 14px 0;">
+        <div style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.3rem; margin-bottom: 8px;">✨ Key Facts ✨</div>
+        <ul style="margin: 0; padding-left: 20px;">${factsHtml}</ul>
+      </div>
+
+      <!-- Activity button -->
+      <button onclick="renderMaryActivity('${titleId}')" style="width: 100%; background: linear-gradient(180deg, ${title.bgColor} 0%, ${title.accentColor} 100%); color: #fff; border: 3px solid ${title.accentColor}; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.1rem; box-shadow: 0 5px 0 ${title.accentColor}; margin: 14px 0;">
+        🎮 Play to Earn Sticker ${title.sticker}
+      </button>
+    </div>
+  `);
+}
+
+// Activity for the current title (varies by difficulty)
+function renderMaryActivity(titleId) {
+  const title = MARY_TITLES.find(t => t.id === titleId);
+  const diff = maryGardenState.difficulty;
+  if (!title) return renderMaryTitleList();
+
+  if (diff === 'easy') return renderMaryActivityEasy(title);
+  if (diff === 'medium') return renderMaryActivityMedium(title);
+  return renderMaryActivityHard(title);
+}
+
+// EASY: Tap-to-reveal facts
+function renderMaryActivityEasy(title) {
+  const items = title.facts;
+  const itemsHtml = items.map((fact, i) => `
+    <button onclick="this.style.background='linear-gradient(135deg, #fff, ${title.bgColor})'; this.style.borderColor='${title.accentColor}'; this.querySelector('.fact-front').style.display='none'; this.querySelector('.fact-back').style.display='block'; playCorrectSound(); checkEasyComplete();" data-easy-card class="easy-mary-card" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, ${title.bgColor}); border: 4px solid ${title.accentColor}; border-radius: 22px; padding: 24px 18px; margin: 10px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 ${title.accentColor}; min-height: 90px;">
+      <div class="fact-front" style="font-size: 2.5rem; text-align: center;">❓</div>
+      <div class="fact-back" style="display: none; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.05rem; line-height: 1.5;">${fact}</div>
+    </button>
+  `).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMaryActivityEasy(${JSON.stringify(title.id)});">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${title.bgColor} 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryTitleStory('${title.id}')" style="background: rgba(255,255,255,0.85); border: 2px solid ${title.accentColor}; color: ${title.accentColor}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px;">← Back</button>
+
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🌱 ${title.emoji}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: ${title.accentColor}; font-size: 1.7rem;">Tap to Reveal!</h1>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem;">~ Hapika para makita! ~</p>
+      </div>
+
+      <div style="background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-sky-light)); border: 2px dashed var(--pastel-lavender-deep); border-radius: 14px; padding: 12px; margin: 14px 0; text-align: center; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">
+        Tap each card to learn a fact about ${escapeHtml(title.name)}!
+      </div>
+
+      ${itemsHtml}
+    </div>
+  `);
+}
+
+function checkEasyComplete() {
+  const cards = document.querySelectorAll('[data-easy-card]');
+  let allRevealed = true;
+  cards.forEach(c => {
+    const front = c.querySelector('.fact-front');
+    if (front && front.style.display !== 'none') allRevealed = false;
+  });
+  if (allRevealed && cards.length > 0) {
+    setTimeout(() => awardSticker(maryGardenState.currentTitle, 'easy'), 600);
+  }
+}
+
+// MEDIUM: Match facts to icons (drag-and-match style with taps)
+function renderMaryActivityMedium(title) {
+  const items = title.facts.map((f, i) => ({ id: i, text: f, emoji: ['👤','📍','✨','📅'][i] || '⭐' }));
+  const shuffledIcons = shuffle(items.slice());
+
+  const factsHtml = items.map(item => `
+    <button onclick="medMatchSelectFact(${item.id})" id="med-fact-${item.id}" class="med-mary-fact" style="display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #fff, ${title.bgColor}); border: 3px solid ${title.accentColor}; border-radius: 14px; margin: 6px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.92rem; text-align: left; box-shadow: 0 3px 0 ${title.accentColor};">
+      ${escapeHtml(item.text)}
+    </button>
+  `).join('');
+
+  const iconsHtml = shuffledIcons.map(item => `
+    <button onclick="medMatchSelectIcon(${item.id})" id="med-icon-${item.id}" class="med-mary-icon" style="font-size: 2.4rem; padding: 14px 20px; background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 3px solid var(--pastel-lavender-deep); border-radius: 16px; cursor: pointer; box-shadow: 0 3px 0 var(--pastel-lavender-deep); margin: 4px;">
+      ${item.emoji}
+    </button>
+  `).join('');
+
+  // Initialize matching state
+  window.medMatchState = {
+    titleId: title.id,
+    selectedFact: null,
+    selectedIcon: null,
+    matched: new Set(),
+    items
+  };
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMaryActivityMedium(${JSON.stringify(title.id)});">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${title.bgColor} 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryTitleStory('${title.id}')" style="background: rgba(255,255,255,0.85); border: 2px solid ${title.accentColor}; color: ${title.accentColor}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px;">← Back</button>
+
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🌷 ${title.emoji}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: ${title.accentColor}; font-size: 1.7rem;">Match Fact to Icon!</h1>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem;">~ Tagboa ang fact ug ang icon ~</p>
+      </div>
+
+      <div style="background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-sky-light)); border: 2px dashed var(--pastel-lavender-deep); border-radius: 14px; padding: 12px; margin: 14px 0; text-align: center; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">
+        Tap a fact, then tap the matching icon!
+      </div>
+
+      <div style="margin: 14px 0;">
+        <h3 style="font-family: 'Pacifico', cursive; color: ${title.accentColor}; text-align: center; margin-bottom: 8px;">Facts:</h3>
+        ${factsHtml}
+      </div>
+
+      <div style="margin: 14px 0;">
+        <h3 style="font-family: 'Pacifico', cursive; color: ${title.accentColor}; text-align: center; margin-bottom: 8px;">Icons:</h3>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">${iconsHtml}</div>
+      </div>
+    </div>
+  `);
+}
+
+function medMatchSelectFact(id) {
+  const s = window.medMatchState;
+  if (!s || s.matched.has(id)) return;
+  playTapSound();
+  // Clear previous fact selection
+  document.querySelectorAll('.med-mary-fact').forEach(el => el.style.transform = '');
+  const el = document.getElementById('med-fact-' + id);
+  if (el) el.style.transform = 'scale(1.04)';
+  s.selectedFact = id;
+  if (s.selectedIcon !== null) medMatchCheck();
+}
+
+function medMatchSelectIcon(id) {
+  const s = window.medMatchState;
+  if (!s || s.matched.has(id)) return;
+  playTapSound();
+  document.querySelectorAll('.med-mary-icon').forEach(el => el.style.transform = '');
+  const el = document.getElementById('med-icon-' + id);
+  if (el) el.style.transform = 'scale(1.1)';
+  s.selectedIcon = id;
+  if (s.selectedFact !== null) medMatchCheck();
+}
+
+function medMatchCheck() {
+  const s = window.medMatchState;
+  if (s.selectedFact === s.selectedIcon) {
+    s.matched.add(s.selectedFact);
+    playCorrectSound();
+    const factEl = document.getElementById('med-fact-' + s.selectedFact);
+    const iconEl = document.getElementById('med-icon-' + s.selectedIcon);
+    if (factEl) { factEl.style.opacity = '0.5'; factEl.style.background = '#d1fae5'; factEl.disabled = true; }
+    if (iconEl) { iconEl.style.opacity = '0.5'; iconEl.style.background = '#d1fae5'; iconEl.disabled = true; }
+    s.selectedFact = null;
+    s.selectedIcon = null;
+    if (s.matched.size >= s.items.length) {
+      setTimeout(() => awardSticker(s.titleId, 'medium'), 600);
+    }
+  } else {
+    playWrongSound();
+    setTimeout(() => {
+      document.querySelectorAll('.med-mary-fact, .med-mary-icon').forEach(el => el.style.transform = '');
+      s.selectedFact = null;
+      s.selectedIcon = null;
+    }, 700);
+  }
+}
+
+// HARD: Multiple choice quiz
+function renderMaryActivityHard(title) {
+  // Build 4 questions from facts
+  const questions = [
+    {
+      q: `Where did ${title.name} appear or originate?`,
+      qBs: `Asa mipakita o naggikan ang ${title.nameBs}?`,
+      correct: title.location,
+      distractors: MARY_TITLES.filter(t => t.id !== title.id).map(t => t.location).slice(0, 3)
+    },
+    {
+      q: title.facts[0].replace(/^[^a-zA-Z]*/, '').replace(/^(.*?)(?:[A-Z][a-z]+\s)?(?=[A-Z])/, '').includes('appeared')
+        ? `Who saw ${title.name}?`
+        : `Which of these is true about ${title.name}?`,
+      qBs: '',
+      correct: title.facts[0],
+      distractors: MARY_TITLES.filter(t => t.id !== title.id).map(t => t.facts[0]).slice(0, 3)
+    },
+    {
+      q: `What is the feast day of ${title.name}?`,
+      qBs: '',
+      correct: title.facts.find(f => f.includes('Feast Day')) || title.facts[3],
+      distractors: MARY_TITLES.filter(t => t.id !== title.id).map(t => t.facts.find(f => f.includes('Feast Day')) || t.facts[3]).slice(0, 3)
+    }
+  ];
+
+  // Initialize state
+  window.maryHardState = {
+    titleId: title.id,
+    questions,
+    currentIdx: 0,
+    score: 0
+  };
+  renderMaryHardQuestion();
+}
+
+function renderMaryHardQuestion() {
+  const s = window.maryHardState;
+  if (!s) return;
+  const title = MARY_TITLES.find(t => t.id === s.titleId);
+
+  if (s.currentIdx >= s.questions.length) {
+    // Complete
+    const passed = s.score >= Math.ceil(s.questions.length * 0.66);
+    if (passed) {
+      setTimeout(() => awardSticker(s.titleId, 'hard'), 400);
+    } else {
+      // Did not pass — show retry
+      render(`
+        <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${title.bgColor} 100%); border-radius: 22px; padding: 22px 16px; text-align: center;">
+          <div style="font-size: 3rem;">📖 ✨</div>
+          <h1 style="font-family: 'Pacifico', cursive; color: ${title.accentColor}; font-size: 1.6rem;">Almost there!</h1>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); margin: 14px 0;">Score: ${s.score}/${s.questions.length}</p>
+          <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.3rem;">Read the story again and try once more!</p>
+          <button onclick="renderMaryTitleStory('${s.titleId}')" class="btn" style="margin: 14px 8px;">📖 Read Story</button>
+          <button onclick="renderMaryActivityHard(MARY_TITLES.find(t => t.id === '${s.titleId}'))" class="btn">🔄 Try Again</button>
+        </div>
+      `);
+    }
+    return;
+  }
+
+  const q = s.questions[s.currentIdx];
+  const choices = shuffle([q.correct, ...q.distractors]);
+
+  const choicesHtml = choices.map(c => `
+    <button onclick="answerMaryHard('${escapeHtml(c).replace(/'/g, "\\'")}')" style="display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #fff, ${title.bgColor}); border: 3px solid ${title.accentColor}; border-radius: 14px; margin: 6px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.92rem; text-align: left; box-shadow: 0 3px 0 ${title.accentColor};">
+      ${escapeHtml(c)}
+    </button>
+  `).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${title.bgColor} 100%); border-radius: 22px; padding: 22px 16px;">
+      <button onclick="renderMaryTitleStory('${title.id}')" style="background: rgba(255,255,255,0.85); border: 2px solid ${title.accentColor}; color: ${title.accentColor}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; margin-bottom: 12px;">← Back to Story</button>
+
+      <div style="text-align: center; margin-bottom: 12px;">
+        <div style="font-size: 2.5rem;">⭐ ${title.emoji}</div>
+        <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${title.accentColor};">Question ${s.currentIdx + 1} of ${s.questions.length}</p>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #fff, var(--pastel-lavender-light)); border: 3px solid var(--pastel-lavender-deep); border-radius: 16px; padding: 18px; margin: 14px 0; text-align: center;">
+        <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.05rem; line-height: 1.5;">${escapeHtml(q.q)}</p>
+      </div>
+
+      ${choicesHtml}
+    </div>
+  `);
+}
+
+function answerMaryHard(answer) {
+  const s = window.maryHardState;
+  if (!s) return;
+  const q = s.questions[s.currentIdx];
+  const correct = answer === q.correct;
+  if (correct) {
+    s.score++;
+    playCorrectSound();
+  } else {
+    playWrongSound();
+  }
+  // Quick feedback then next
+  const fb = document.createElement('div');
+  fb.innerHTML = `
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; background: ${correct ? '#d1fae5' : '#fee2e2'}; border: 4px solid ${correct ? '#10b981' : '#dc2626'}; border-radius: 20px; padding: 20px 28px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.3); font-family: 'Quicksand', sans-serif;">
+      <div style="font-size: 3rem; margin-bottom: 6px;">${correct ? '✅' : '❌'}</div>
+      <div style="font-weight: 700; color: ${correct ? '#047857' : '#b91c1c'}; font-size: 1.1rem;">${correct ? 'Correct!' : 'Not quite!'}</div>
+    </div>
+  `;
+  document.body.appendChild(fb);
+  setTimeout(() => {
+    fb.remove();
+    s.currentIdx++;
+    renderMaryHardQuestion();
+  }, 1100);
+}
+
+// Award sticker — same celebration for all difficulties
+function awardSticker(titleId, difficulty) {
+  const student = getCurrentStudent();
+  const garden = initMaryGardenData(student);
+  const title = MARY_TITLES.find(t => t.id === titleId);
+  if (!title) return;
+
+  const wasNew = !garden.stickersEarned.includes(titleId);
+  if (wasNew) {
+    garden.stickersEarned.push(titleId);
+    saveAllStudents();
+  }
+
+  // Celebration
+  shootConfetti(false);
+  setTimeout(() => shootConfetti(false), 200);
+  playApplause(2);
+  setTimeout(() => playPracticePerfectSound(), 400);
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.style.zIndex = '300';
+  backdrop.innerHTML = `
+    <div class="modal" style="border-color: #fbbf24; max-width: 400px; box-shadow: 0 0 50px rgba(251, 191, 36, 0.6);">
+      <div style="font-size: 4.5rem; margin-bottom: 8px;">${title.sticker} ✨</div>
+      <h3 style="color: #d97706; font-family: 'Pacifico', cursive; font-size: 1.8rem;">${wasNew ? 'New Sticker!' : 'Sticker Earned Again!'}</h3>
+      <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.9rem; margin: 4px 0 14px;">~ Bag-ong sticker! ~</p>
+      <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 1.05rem; margin: 12px 0;">
+        You earned the <strong>${escapeHtml(title.name)}</strong> sticker!
+      </p>
+      <p style="font-family: 'Caveat', cursive; color: var(--pastel-pink-darker); font-size: 1.3rem; margin: 12px 0;">~ Maayong buhat! Mama Mary is so proud of you! 💕 ~</p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+        <button class="btn" onclick="document.querySelector('.modal-backdrop').remove(); renderMaryTitleList();" style="background: linear-gradient(180deg, #dbeafe, #60a5fa); color: #fff; border-color: #2563eb;">📖 Choose Another Story</button>
+        <button class="btn btn-secondary" onclick="document.querySelector('.modal-backdrop').remove(); renderMaryGardenHome();">🌹 See My Garden</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
 }
 
 // ============================================
