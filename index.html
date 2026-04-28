@@ -5342,9 +5342,12 @@ function renderCatechismQuestHome() {
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
     <div class="home" style="padding: 8px 10px;">
-      <div style="text-align: center; margin-bottom: 8px;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
         <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-pink-light) 100%); border: 3px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 16px; border-radius: 16px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 0 var(--pastel-pink-deep);">
           🏠 ← All Categories
+        </button>
+        <button onclick="printCategory('quest')" title="Print this guide for parents" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-pink-light) 100%); border: 2px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 7px 12px; border-radius: 14px; cursor: pointer; font-size: 0.82rem; box-shadow: 0 3px 0 var(--pastel-pink-deep);">
+          🖨️
         </button>
       </div>
       <!-- ULTRA-COMPACT horizontal header: crest beside title for desktop -->
@@ -8219,9 +8222,12 @@ function renderMaryGardenHome() {
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderMaryGardenHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <div class="home" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 50%, #fce7f3 100%); border-radius: 22px; padding: 24px 16px;">
-      <div style="text-align: center; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
         <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border: 3px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 #1e40af;">
           🏠 ← All Categories
+        </button>
+        <button onclick="printCategory('mary')" title="Print this guide for parents" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border: 2px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 12px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #1e40af;">
+          🖨️
         </button>
       </div>
 
@@ -9248,9 +9254,12 @@ function renderMassSection() {
     <button class="sound-toggle" onclick="toggleSounds(); renderMassSection();">${soundsEnabled ? "🔊" : "🔇"}</button>
     <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 50%, #fce7f3 100%); border-radius: 22px; padding: 24px 16px;">
 
-      <div style="text-align: center; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
         <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border: 3px solid #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 #d97706;">
           🏠 ← All Categories
+        </button>
+        <button onclick="printCategory('mass')" title="Print this guide for parents" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border: 2px solid #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 12px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #d97706;">
+          🖨️
         </button>
       </div>
 
@@ -9817,6 +9826,343 @@ function awardMassSticker() {
     </div>
   `;
   document.body.appendChild(backdrop);
+}
+
+// ============================================
+// 🖨️ PRINT CATEGORY (For Parents)
+// Generates a clean printable view of an entire category
+// ============================================
+function printCategory(categoryId) {
+  // Get content based on category
+  let title = '';
+  let bodyHtml = '';
+
+  if (categoryId === 'mass') {
+    title = 'The Mass: Then and Now — Family Guide';
+    bodyHtml = buildMassPrintContent();
+  } else if (categoryId === 'mary') {
+    title = "Mama Mary's Garden — Family Guide";
+    bodyHtml = buildMaryPrintContent();
+  } else if (categoryId === 'quest') {
+    title = 'Catechism Quest — Camp Preparedness Family Guide';
+    bodyHtml = buildQuestPrintContent();
+  }
+
+  // Open new window with clean printable version
+  const printWindow = window.open('', '_blank', 'width=800,height=900');
+  if (!printWindow) {
+    alert('Please allow pop-ups to print this guide.');
+    return;
+  }
+
+  printWindow.document.write(`<!DOCTYPE html>
+<html><head><title>${title}</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+body { font-family: Georgia, 'Times New Roman', serif; line-height: 1.6; color: #1f2937; max-width: 7in; margin: 0 auto; padding: 20px; }
+h1 { font-family: 'Trebuchet MS', sans-serif; color: #be185d; border-bottom: 3px double #be185d; padding-bottom: 8px; font-size: 24pt; text-align: center; margin-bottom: 4px; }
+.subtitle { font-style: italic; color: #6d28d9; text-align: center; margin-bottom: 20px; font-size: 12pt; }
+h2 { font-family: 'Trebuchet MS', sans-serif; color: #1e40af; border-bottom: 1px solid #93c5fd; padding-bottom: 4px; margin-top: 24px; font-size: 18pt; }
+h3 { font-family: 'Trebuchet MS', sans-serif; color: #92400e; font-size: 14pt; margin-top: 18px; margin-bottom: 6px; }
+h4 { color: #581c87; font-size: 12pt; margin-top: 12px; margin-bottom: 4px; }
+p { margin: 8px 0; }
+ul { margin: 8px 0; padding-left: 24px; }
+li { margin: 4px 0; }
+.story-block { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px 16px; margin: 12px 0; page-break-inside: avoid; }
+.bisaya { font-style: italic; color: #6d28d9; background: #ede9fe; border-left: 4px solid #7c3aed; padding: 10px 14px; margin: 8px 0; page-break-inside: avoid; }
+.quote { font-style: italic; color: #be185d; border-left: 4px solid #ec4899; padding: 8px 14px; margin: 12px 0; }
+.facts { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 6px; padding: 10px 14px; margin: 8px 0; page-break-inside: avoid; }
+.facts ul { list-style: none; padding-left: 0; }
+.section-break { page-break-before: always; }
+.divider { text-align: center; color: #be185d; margin: 16px 0; }
+.print-header { text-align: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #ec4899; }
+.print-footer { text-align: center; margin-top: 30px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 10pt; color: #666; font-style: italic; }
+.print-instructions { background: #fee2e2; border: 1px solid #f87171; padding: 10px 14px; border-radius: 6px; margin: 0 0 20px; font-size: 10pt; color: #991b1b; }
+@media print {
+  .no-print { display: none !important; }
+  .print-instructions { display: none; }
+  body { padding: 0; }
+}
+.print-button { background: #be185d; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14pt; font-weight: bold; cursor: pointer; margin: 10px 5px; }
+.print-button:hover { background: #9d174d; }
+</style></head><body>
+<div class="no-print" style="text-align: center; margin-bottom: 20px;">
+  <button class="print-button" onclick="window.print()">🖨️ Print This Guide</button>
+  <button class="print-button" onclick="window.close()" style="background: #6b7280;">✕ Close</button>
+</div>
+<div class="print-instructions no-print">
+  <strong>📖 Family Guide — For Printing</strong><br>
+  This is a printable version of the lesson. Click the "🖨️ Print" button above, or use Ctrl+P (Cmd+P on Mac) to print at home.
+  Tip: Choose "Print backgrounds" in your browser's print options for a more colorful result, or print without backgrounds for a cleaner workbook style.
+</div>
+<div class="print-header">
+  <h1>${title}</h1>
+  <p class="subtitle">~ Catechism Quest · A Sunday Class Adventure ~</p>
+</div>
+${bodyHtml}
+<div class="print-footer">
+  May Jesus, Mary, and Joseph be with your family! 🙏<br>
+  Ad Jesum per Mariam — To Jesus through Mary
+</div>
+</body></html>`);
+  printWindow.document.close();
+}
+
+function buildMassPrintContent() {
+  let html = `
+    <h2>📖 What This Guide Teaches</h2>
+    <p>This guide explains why there are <strong>two ways</strong> to celebrate Holy Mass today — the <strong>Old Mass</strong> (Traditional Latin Mass) and the <strong>New Mass</strong> (Novus Ordo). It includes lessons for three different age groups so the whole family can read together.</p>
+
+    <h2 class="section-break">🌱 For Bunso (Ages 5-7) — Simple Lesson</h2>
+
+    <h3>⛪ What is the Mass?</h3>
+    <p>The Holy Mass is when Jesus comes down to us! 💕 The priest changes bread and wine into Jesus's Body and Blood. It is the most special prayer in the whole world!</p>
+    <div class="bisaya">~ Ang Banal nga Misa mao ang pag-anhi ni Hesus kanato! Ang pari mag-usab sa pan ug bino nga mahimong Lawas ug Dugo ni Hesus. ~</div>
+
+    <h3>🕰️ Two Ways</h3>
+    <p>Today there are <strong>two ways</strong> to do Mass:</p>
+    <ul>
+      <li><strong>📜 The Old Mass</strong> (Karaan) — In Latin 🙏</li>
+      <li><strong>📖 The New Mass</strong> (Bag-o) — In English 🗣️</li>
+    </ul>
+
+    <h3>💕 Our Family Loves the Old Mass!</h3>
+    <p>The Old Mass is what <strong>all the saints prayed</strong> long ago. 👼 It's like a special gift from heaven that never changes. We love it because:</p>
+    <ul style="list-style: none; padding-left: 12px;">
+      <li>🤫 It is very quiet and holy</li>
+      <li>🙏 We kneel a lot to show love</li>
+      <li>👼 The saints prayed it</li>
+      <li>📜 It uses the special Latin words</li>
+      <li>💫 Jesus is the most important — not us</li>
+    </ul>
+
+    <h3>🤲 How I Act at Mass</h3>
+    <ul style="list-style: none; padding-left: 12px;">
+      <li>🤐 I am very quiet — Jesus is here!</li>
+      <li>🙇 I kneel when others kneel</li>
+      <li>🙏 I make the sign of the cross</li>
+      <li>👀 I watch the priest carefully</li>
+      <li>💕 I tell Jesus I love Him</li>
+    </ul>
+
+    <h2 class="section-break">🌷 For Manghud (Ages 7-9) — Clear Differences</h2>
+
+    <h3>📜 A Little History</h3>
+    <p>For more than <strong>1,500 years</strong>, all Catholics in the world prayed the same Holy Mass. It was in <strong>Latin</strong> — a beautiful, holy language. All the saints prayed it: <strong>St. Padre Pio, St. Therese, St. Maximilian Kolbe, St. Pius X</strong> — they all said the same Mass.</p>
+    <p>Then in the <strong>1960s</strong>, a big meeting called <strong>Vatican II</strong> happened. After that, a <strong>new way</strong> of doing Mass was made. This is called the <strong>"Novus Ordo"</strong> (which means "New Order").</p>
+    <p>Some Catholics kept praying the <strong>Old Mass</strong> (that's us!). Others use the <strong>New Mass</strong>. Both groups are still Catholics — but our family treasures the Old Mass.</p>
+
+    <h3>🔍 How Are They Different?</h3>
+    <table style="width:100%; border-collapse: collapse; margin: 12px 0; font-size: 11pt;">
+      <tr style="background: #fef3c7;"><th style="border: 1px solid #d97706; padding: 8px; text-align: left;">Aspect</th><th style="border: 1px solid #d97706; padding: 8px;">📜 OLD MASS</th><th style="border: 1px solid #d97706; padding: 8px;">📖 NEW MASS</th></tr>
+      <tr><td style="border: 1px solid #ccc; padding: 6px; font-weight: bold;">Language</td><td style="border: 1px solid #ccc; padding: 6px;">Latin (sacred, never changes)</td><td style="border: 1px solid #ccc; padding: 6px;">English / local language</td></tr>
+      <tr><td style="border: 1px solid #ccc; padding: 6px; font-weight: bold;">Priest faces</td><td style="border: 1px solid #ccc; padding: 6px;">Toward God (ad orientem)</td><td style="border: 1px solid #ccc; padding: 6px;">Toward the people</td></tr>
+      <tr><td style="border: 1px solid #ccc; padding: 6px; font-weight: bold;">Communion</td><td style="border: 1px solid #ccc; padding: 6px;">Kneeling, on the tongue</td><td style="border: 1px solid #ccc; padding: 6px;">Often standing, in the hand</td></tr>
+      <tr><td style="border: 1px solid #ccc; padding: 6px; font-weight: bold;">Music</td><td style="border: 1px solid #ccc; padding: 6px;">Gregorian chant</td><td style="border: 1px solid #ccc; padding: 6px;">Sometimes modern songs</td></tr>
+      <tr><td style="border: 1px solid #ccc; padding: 6px; font-weight: bold;">Silence</td><td style="border: 1px solid #ccc; padding: 6px;">Lots of holy silence 🤫</td><td style="border: 1px solid #ccc; padding: 6px;">More talking and activity</td></tr>
+      <tr><td style="border: 1px solid #ccc; padding: 6px; font-weight: bold;">Altar</td><td style="border: 1px solid #ccc; padding: 6px;">High altar, tabernacle in center</td><td style="border: 1px solid #ccc; padding: 6px;">A table, tabernacle often to side</td></tr>
+    </table>
+
+    <h3>💕 Why is the Old Mass Special?</h3>
+    <ul>
+      <li><strong>It's the same Mass St. Padre Pio prayed</strong> — with tears!</li>
+      <li><strong>It uses Latin</strong> — the Church's holy language</li>
+      <li><strong>The priest faces God, not us</strong> — leading us to Heaven</li>
+      <li><strong>It's full of reverence</strong> — every gesture is sacred</li>
+      <li><strong>It never changes</strong> — kids in the year 600 prayed the same Mass!</li>
+      <li><strong>It made saints</strong> — every saint until 1960s prayed this Mass</li>
+    </ul>
+
+    <div class="quote">
+      "The Mass is the most beautiful thing this side of Heaven."<br>
+      <em>— St. Padre Pio</em>
+    </div>
+
+    <h3>🙏 We Love All Catholics</h3>
+    <p>Catholics who go to the New Mass are still our brothers and sisters in Christ! ❤️ We don't fight with them. We pray that one day, all Catholics will rediscover the beauty of the Old Mass. <strong>Be kind</strong> to your cousins, aunties, and uncles who go to a different Mass. We are <strong>one family</strong> in the Church.</p>
+
+    <h2 class="section-break">⭐ For Magulang (Ages 8-13) — Full History</h2>
+
+    <h3>📜 The Traditional Latin Mass</h3>
+    <p><em>Also called: TLM, Tridentine Mass, Old Mass</em></p>
+    <p>The Traditional Latin Mass was <strong>codified by Pope St. Pius V in 1570</strong> — but its prayers go back to the very early Church, to the time of the Apostles. For nearly <strong>2,000 years</strong>, this is the Mass that Catholics celebrated all over the world.</p>
+    <p>Pope St. Pius V issued the bull <em>Quo Primum</em> declaring this Mass should be used "in perpetuity" — forever. Every saint until the 1960s prayed this Mass: St. Thomas Aquinas, St. Francis of Assisi, St. Therese of Lisieux, St. Padre Pio, and millions of martyrs gave their lives clinging to it.</p>
+
+    <h3>📖 The Novus Ordo Mass</h3>
+    <p><em>Also called: New Mass, Mass of Paul VI, NO</em></p>
+    <p>After the <strong>Second Vatican Council (1962-1965)</strong>, Pope Paul VI introduced a <strong>new Mass</strong> in 1969. This new Mass made many big changes: the language switched from Latin to local languages, the priest now usually faces the people instead of God, and many sacred prayers and gestures were removed or changed.</p>
+
+    <h3>⚔️ Archbishop Lefebvre & the SSPX</h3>
+    <p>A holy French Archbishop named <strong>Marcel Lefebvre</strong> (1905-1991) saw what was happening to the Mass and the Catholic faith. He wanted to <strong>preserve the Old Mass</strong> and the traditional teachings of the Church. So in <strong>1970</strong>, he founded the <strong>Society of Saint Pius X (SSPX)</strong> — named after the great Pope who fought against modernism.</p>
+    <p>The SSPX trains priests, builds chapels, and offers the Traditional Latin Mass to faithful Catholics around the world. <strong>Your family attends an SSPX chapel</strong> — that's why you go to the Old Mass! 🙏</p>
+
+    <div class="quote">
+      "The Mass is the same yesterday, today, and forever, like Christ Himself."<br>
+      <em>— Archbishop Marcel Lefebvre</em>
+    </div>
+
+    <h3>💎 Why Does Tradition Matter?</h3>
+    <p>Catholic Tradition is <strong>the deposit of faith</strong> handed down from Jesus to the Apostles, and from them to every generation of Catholics. The Old Mass embodies this Tradition perfectly. Every prayer, every gesture, every silence has deep meaning developed over centuries by saints and theologians.</p>
+    <p>When we attend the Old Mass, we are praying <strong>exactly</strong> what St. Thomas Aquinas prayed, what St. Francis prayed, what St. Joan of Arc prayed. <strong>This is our inheritance.</strong> Our duty is to love it, learn it, and pass it on.</p>
+
+    <h3>🙏 Always with Charity</h3>
+    <p>Faithful Catholics differ on the New Mass. Some see it as valid but inferior. Others see deeper problems. As traditional Catholics, we love and defend the Old Mass. But we never speak unkindly of Catholics who attend the Novus Ordo — most go in good faith, doing their best to love God. We pray for the day when <strong>all Catholics will rediscover the treasure of the Old Mass</strong>.</p>
+  `;
+  return html;
+}
+
+function buildMaryPrintContent() {
+  let html = `
+    <h2>📖 About This Guide</h2>
+    <p>This guide tells you about <strong>Mama Mary</strong> — our heavenly Mother — through the special times she has appeared to people throughout history. Each apparition has a story, key facts, and Bisaya translation.</p>
+
+    <h2 class="section-break">💕 Why We Love Mama Mary</h2>
+    <h3>1. Mother of God (Theotokos)</h3>
+    <p>Mary is the Mother of Jesus. Since Jesus is God, Mary is rightly called the <strong>Mother of God</strong>. The Council of Ephesus declared this in 431 AD.</p>
+    <h3>2. Our Mother Too</h3>
+    <p>From the Cross, Jesus said to St. John: <em>"Behold thy Mother."</em> (John 19:27) — giving Mary to all of us as our spiritual Mother.</p>
+    <h3>3. Immaculate Conception</h3>
+    <p>Mary was conceived without original sin — a unique grace from God. Pope Pius IX declared this in 1854, and it was confirmed by Mary herself at Lourdes.</p>
+    <h3>4. Queen of Heaven</h3>
+    <p>After her Assumption (body and soul taken into Heaven), Mary was crowned Queen of Heaven and Earth.</p>
+    <h3>5. Always Brings Us to Jesus</h3>
+    <p>Mary's last recorded words in Scripture are: <em>"Do whatever He tells you."</em> (John 2:5) — she always points us to Jesus.</p>
+
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #be185d; padding: 14px 18px; margin: 16px 0;">
+      <strong>The Memorare</strong><br>
+      Remember, O most gracious Virgin Mary, that never was it known that anyone who fled to thy protection, implored thy help, or sought thine intercession, was left unaided. Inspired with this confidence, I fly unto thee, O Virgin of virgins, my Mother. To thee I come; before thee I stand, sinful and sorrowful. O Mother of the Word Incarnate, despise not my petitions, but in thy mercy hear and answer me. Amen.
+    </div>
+  `;
+
+  // Add all 7 apparitions
+  if (typeof MARY_TITLES !== 'undefined') {
+    html += '<h2 class="section-break">🌹 The Seven Marian Apparitions</h2>';
+    MARY_TITLES.forEach((t, i) => {
+      html += `
+        <div class="story-block" style="page-break-inside: avoid;">
+          <h3>${t.emoji} ${t.name}</h3>
+          <p style="margin: 0 0 8px;"><strong>📍 Location:</strong> ${t.location}</p>
+          <p style="margin: 0 0 8px;"><em>${t.locationBs}</em></p>
+
+          <h4>📖 The Story (English)</h4>
+          <p>${t.storyMedium.en}</p>
+
+          <h4>📖 Ang Asoy (Bisaya)</h4>
+          <div class="bisaya">${t.storyMedium.bs}</div>
+
+          <div class="facts">
+            <strong>✨ Key Facts ✨</strong>
+            <ul>
+              ${t.facts.map(f => `<li>${f}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  html += `
+    <h2 class="section-break">📿 The Holy Rosary</h2>
+    <p>The Holy Rosary was given to <strong>St. Dominic</strong> by Our Lady in 1208 AD as a powerful weapon against heresy. It saved Christendom at the <strong>Battle of Lepanto in 1571</strong>, when Pope St. Pius V ordered all Catholics to pray the Rosary — and the Christian fleet defeated the much larger Ottoman navy.</p>
+
+    <h3>The Traditional 15 Mysteries</h3>
+    <p><strong>🌹 The Joyful Mysteries</strong> (Monday & Thursday)</p>
+    <ul>
+      <li>The Annunciation</li>
+      <li>The Visitation</li>
+      <li>The Nativity</li>
+      <li>The Presentation</li>
+      <li>The Finding in the Temple</li>
+    </ul>
+
+    <p><strong>✝️ The Sorrowful Mysteries</strong> (Tuesday & Friday)</p>
+    <ul>
+      <li>The Agony in the Garden</li>
+      <li>The Scourging at the Pillar</li>
+      <li>The Crowning with Thorns</li>
+      <li>The Carrying of the Cross</li>
+      <li>The Crucifixion</li>
+    </ul>
+
+    <p><strong>👑 The Glorious Mysteries</strong> (Wednesday, Saturday & Sunday)</p>
+    <ul>
+      <li>The Resurrection</li>
+      <li>The Ascension</li>
+      <li>The Descent of the Holy Spirit</li>
+      <li>The Assumption of Mary</li>
+      <li>The Coronation of Mary as Queen of Heaven</li>
+    </ul>
+
+    <div class="quote">
+      "The Rosary is the weapon for these times."<br>
+      <em>— St. Padre Pio</em>
+    </div>
+
+    <h2 class="section-break">👑 Saints Who Loved Mary</h2>
+    <ul>
+      <li><strong>St. Louis de Montfort</strong> (1673-1716) — Wrote <em>True Devotion to Mary</em> and taught Total Consecration</li>
+      <li><strong>St. Alphonsus Liguori</strong> (1696-1787) — Wrote <em>The Glories of Mary</em></li>
+      <li><strong>St. Bernard of Clairvaux</strong> (1090-1153) — Author of the Memorare prayer</li>
+      <li><strong>St. Maximilian Kolbe</strong> (1894-1941) — Founded the Knights of the Immaculate</li>
+      <li><strong>Pope St. Pius X</strong> (SSPX patron) — Wrote <em>Ad Diem Illum</em> in 1904, calling Mary the Mediatrix of all graces</li>
+      <li><strong>St. Dominic, Pope St. Pius V, St. John Bosco, St. Therese, St. Padre Pio</strong> — and many more</li>
+    </ul>
+
+    <div class="quote" style="background: #fef3c7; border-left: 4px solid #d97706; padding: 14px 18px; margin: 16px 0;">
+      <strong>Total Consecration to Mary</strong> (Simple version)<br>
+      O Mary, my Mother, I give myself entirely to you today. I give you my body, my soul, my heart, and all that I am. Lead me to Jesus. Help me to love Him more. Keep me always in your motherly care. Amen.
+    </div>
+  `;
+  return html;
+}
+
+function buildQuestPrintContent() {
+  let html = `
+    <h2>📖 About This Guide</h2>
+    <p>Catechism Quest covers the 8 essential lessons that prepare children for the SSPX Religious Camp. Each lesson teaches a key part of our Catholic faith.</p>
+    <p><em>For the complete interactive version with quizzes and reward codes, please visit the app online.</em></p>
+
+    <h2>📚 The 8 Lessons</h2>
+    <ol>
+      <li><strong>What is the Church?</strong> — The Mystical Body of Christ founded by Jesus</li>
+      <li><strong>The Pope and Roman Church</strong> — The visible head of the Church on earth</li>
+      <li><strong>The Four Marks of the Church</strong> — One, Holy, Catholic, Apostolic</li>
+      <li><strong>The Church is a Perfect Society</strong> — Independent and complete in herself</li>
+      <li><strong>The Church's Teaching Authority</strong> — The Magisterium</li>
+      <li><strong>The Pope's Infallibility</strong> — Cannot teach error in matters of faith and morals</li>
+      <li><strong>Bishops, Faithful & Communion of Saints</strong> — How the Church is organized</li>
+      <li><strong>Old Testament Overview</strong> — God's plan from Creation to Christ</li>
+    </ol>
+
+    <h2>🙏 Prayers Every Catholic Should Know</h2>
+
+    <h3>Sign of the Cross</h3>
+    <p>In the name of the Father, and of the Son, and of the Holy Spirit. Amen.</p>
+
+    <h3>The Lord's Prayer (Our Father)</h3>
+    <p>Our Father, who art in Heaven, hallowed be thy name; thy Kingdom come, thy will be done, on earth as it is in Heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen.</p>
+
+    <h3>Hail Mary</h3>
+    <p>Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.</p>
+
+    <h3>Glory Be</h3>
+    <p>Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.</p>
+
+    <h3>Apostles' Creed</h3>
+    <p>I believe in God, the Father almighty, Creator of Heaven and earth; and in Jesus Christ, His only Son, our Lord; who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died and was buried; He descended into Hell; the third day He arose again from the dead; He ascended into Heaven, sitteth at the right hand of God, the Father almighty; from thence He shall come to judge the living and the dead. I believe in the Holy Spirit, the holy Catholic Church, the Communion of Saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.</p>
+
+    <h3>Act of Contrition</h3>
+    <p>O my God, I am heartily sorry for having offended Thee, and I detest all my sins because of Thy just punishments, but most of all because they offend Thee, my God, who art all good and deserving of all my love. I firmly resolve, with the help of Thy grace, to sin no more and to avoid the near occasions of sin. Amen.</p>
+
+    <h2>📚 The Four Marks of the Church</h2>
+    <ol>
+      <li><strong>One</strong> — One faith, one Lord, one baptism. The Church is united.</li>
+      <li><strong>Holy</strong> — The Church teaches truth and gives sanctifying grace.</li>
+      <li><strong>Catholic</strong> — Universal, for all peoples, all times, all places.</li>
+      <li><strong>Apostolic</strong> — Founded on the Apostles, with succession through the Pope and bishops.</li>
+    </ol>
+  `;
+  return html;
 }
 
 // ============================================
