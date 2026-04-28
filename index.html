@@ -279,6 +279,25 @@ body::after {
   filter: drop-shadow(0 1px 2px var(--shadow));
 }
 
+/* CATEGORY GRID — responsive 2-column on desktop, 1-column mobile */
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (min-width: 760px) {
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .category-grid > button,
+  .category-grid > div {
+    margin: 0 !important;
+  }
+}
+
 /* WELCOME CARD */
 .welcome-card {
   background: linear-gradient(135deg, #fff 0%, var(--pastel-pink-light) 100%);
@@ -4959,34 +4978,30 @@ function renderHome() {
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
 
     <div class="home">
-      ${CREST_SVG}
-      <h1 class="title">Catechism Quest</h1>
-      <p class="subtitle">~ A Sunday Class Adventure ~</p>
+      <!-- Compact header with crest scaled down -->
+      <div style="text-align: center; margin: 0 0 4px;">
+        <div style="display: inline-block; transform: scale(0.5); transform-origin: center bottom; margin-bottom: -30px;">
+          ${CREST_SVG}
+        </div>
+      </div>
+      <h1 class="title" style="font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 2px; line-height: 1.1;">Catechism Quest</h1>
+      <p class="subtitle" style="font-size: 0.95rem; margin: 0 0 8px;">~ A Sunday Class Adventure ~</p>
       <div style="text-align: center;">
-        <span class="teacher-banner">📖 ${escapeHtml(teacherName)}'s Class</span>
+        <span class="teacher-banner" style="font-size: 0.85rem;">📖 ${escapeHtml(teacherName)}'s Class</span>
       </div>
 
-      <div class="divider">
-        <span class="divider-icon">✦</span>
-        <span class="divider-icon">✠</span>
-        <span class="divider-icon">✦</span>
+      <!-- Compact welcome pill (no big card) -->
+      <div style="text-align: center; margin: 14px 0 8px; padding: 10px 16px; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 2px solid var(--pastel-pink); border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; box-shadow: 0 3px 0 var(--pastel-pink); max-width: 540px; margin-left: auto; margin-right: auto;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">Welcome back, <span style="font-family: 'Pacifico', cursive; font-size: 1.3rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">${escapeHtml(activeStudent)}!</span> 🌟</span>
+        ${totalPoints > 0 ? `<span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.85rem; background: #fef3c7; padding: 4px 10px; border-radius: 999px;">✨ ${totalPoints} pts</span>` : ''}
+        <button onclick="renderWhoIsPlaying()" style="background: rgba(255,255,255,0.85); border: 1.5px solid var(--pastel-lavender-deep); color: var(--pastel-lavender-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.78rem;">↺ switch user</button>
       </div>
 
-      <!-- Welcome card -->
-      <div class="welcome-card">
-        <span class="corner tl">✦</span>
-        <span class="corner tr">✦</span>
-        <span class="corner bl">✦</span>
-        <span class="corner br">✦</span>
-        <p style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 600;">Welcome back,</p>
-        <p style="font-family: 'Pacifico', cursive; font-size: 2.6rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep), var(--pastel-sky-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));">${escapeHtml(activeStudent)}! 🌟</p>
-        ${totalPoints > 0 ? `<p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem; margin: 4px 0;">✨ ${totalPoints} Holy Points</p>` : ''}
-        <button class="btn btn-secondary btn-small" onclick="renderWhoIsPlaying()">↺ Not me — switch user</button>
-      </div>
+      <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.4rem; margin: 14px 0 2px; text-align: center;">Choose Your Adventure</h2>
+      <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; text-align: center; margin: 0 0 12px;">~ Pilia ang imong adventure ~</p>
 
-      <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.7rem; margin: 22px 0 4px; text-align: center;">Choose Your Adventure</h2>
-      <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem; text-align: center; margin-bottom: 18px;">~ Pilia ang imong adventure ~</p>
-
+      <!-- Responsive grid: 2 columns on desktop, 1 on mobile for compact layout -->
+      <div class="category-grid">
       <!-- Category 1: The Mass: Then and Now (foundational - Holy Mass first) -->
       <button onclick="renderMassSection()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7 50%, #ede9fe); border: 4px solid #d97706; border-radius: 24px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 6px 0 #92400e, 0 0 30px rgba(217, 119, 6, 0.2); text-align: left; position: relative;">
         <div style="position: absolute; top: 12px; right: 16px; font-size: 1.4rem;">📿</div>
@@ -5071,6 +5086,7 @@ function renderHome() {
           <span style="display: inline-block; background: rgba(254, 243, 199, 0.7); border: 2px dashed #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 22px; border-radius: 14px; font-size: 0.92rem;">🔒 Coming Soon</span>
         </div>
       </div>
+      </div><!-- /category-grid -->
 
       <!-- Footer -->
       <div style="text-align: center; margin-top: 24px; padding: 18px 12px; background: linear-gradient(135deg, var(--pastel-lavender-light), var(--pastel-pink-light)); border-radius: 16px;">
