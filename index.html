@@ -279,6 +279,46 @@ body::after {
   filter: drop-shadow(0 1px 2px var(--shadow));
 }
 
+/* COMPACT HEADER — crest INLINE with title for desktop categories home */
+.compact-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 auto;
+  max-width: 700px;
+  padding: 0;
+}
+.compact-crest {
+  display: inline-block;
+  transform: scale(0.32);
+  transform-origin: center;
+  width: 60px;
+  height: 60px;
+  margin: -55px -30px;
+  flex-shrink: 0;
+}
+.compact-titles {
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+}
+.compact-title {
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  margin: 0 !important;
+  line-height: 1.1 !important;
+}
+.compact-subtitle {
+  font-size: 0.82rem !important;
+  margin: 0 !important;
+  opacity: 0.85;
+}
+@media (max-width: 480px) {
+  .compact-header { flex-direction: column; gap: 0; }
+  .compact-titles { text-align: center; }
+  .compact-crest { margin: -50px 0 -25px; }
+}
+
 /* CATEGORY GRID — responsive 2-column on desktop, 1-column mobile */
 .category-grid {
   display: grid;
@@ -295,6 +335,99 @@ body::after {
   .category-grid > button,
   .category-grid > div {
     margin: 0 !important;
+  }
+}
+
+/* ============================================
+   UNIVERSAL DESKTOP COMPACT OVERRIDES
+   Mobile (< 760px) keeps existing sizes
+   Desktop (>= 760px) gets compact treatment
+   Goal: content visible without scrolling, no oversized headers
+============================================ */
+@media (min-width: 760px) {
+  /* Reduce top padding everywhere */
+  .home {
+    padding: 12px 18px !important;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Cap large emoji rows (those big 4rem emoji headers) */
+  .home > div > div[style*="font-size: 4rem"],
+  .home > div[style*="font-size: 4rem"] {
+    font-size: 2.4rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Big inline emoji-row decorations like 🌹💙✨ or 🕰️⛪📿 */
+  .home div[style*="font-size: 4rem"] {
+    font-size: 2.2rem !important;
+  }
+
+  /* Sub-page Pacifico titles inside .home (the big script titles) */
+  .home h1[style*="font-family: 'Pacifico'"],
+  .home h1[style*="Pacifico"] {
+    font-size: 1.8rem !important;
+    margin: 4px 0 !important;
+    line-height: 1.15 !important;
+  }
+  .home h2[style*="font-family: 'Pacifico'"],
+  .home h2[style*="Pacifico"] {
+    font-size: 1.4rem !important;
+    margin: 8px 0 4px !important;
+  }
+
+  /* Caveat subtitles */
+  .home p[style*="font-family: 'Caveat'"] {
+    font-size: 1.05rem !important;
+  }
+
+  /* "What Will I Learn?" / intro boxes — reduce padding */
+  .home > div[style*="margin: 18px 0"] {
+    margin: 10px 0 !important;
+  }
+
+  /* Difficulty card grid — Bunso / Manghud / Magulang side-by-side */
+  /* These cards have margin: 12px 0 + flex column display by default */
+  .difficulty-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    margin: 12px 0 !important;
+  }
+  .difficulty-grid > button {
+    margin: 0 !important;
+    padding: 16px 12px !important;
+  }
+
+  /* Reduce huge emoji on difficulty cards */
+  .difficulty-grid > button > div[style*="font-size: 3rem"] {
+    font-size: 2rem !important;
+  }
+
+  /* Reduce padding on inner content cards */
+  .home button[style*="padding: 22px 18px"] {
+    padding: 16px 14px !important;
+  }
+
+  /* Section dividers: reduce visual weight */
+  .home > div[style*="margin: 16px 0"] {
+    margin: 10px 0 !important;
+  }
+  .home > div[style*="margin: 14px 0"] {
+    margin: 10px 0 !important;
+  }
+
+  /* Tighten sub-page back buttons */
+  .home > div[style*="text-align: center; margin-bottom: 14px"] {
+    margin-bottom: 8px !important;
+  }
+}
+
+/* On VERY wide desktops, prevent content from sprawling too wide */
+@media (min-width: 1200px) {
+  .home {
+    max-width: 1100px;
   }
 }
 
@@ -4977,28 +5110,25 @@ function renderHome() {
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
 
-    <div class="home">
-      <!-- Compact header with crest scaled down -->
-      <div style="text-align: center; margin: 0 0 4px;">
-        <div style="display: inline-block; transform: scale(0.5); transform-origin: center bottom; margin-bottom: -30px;">
-          ${CREST_SVG}
+    <div class="home" style="padding: 8px 10px;">
+      <!-- ULTRA-COMPACT horizontal header: crest beside title, all on one line on desktop -->
+      <div class="compact-header">
+        <div class="compact-crest">${CREST_SVG}</div>
+        <div class="compact-titles">
+          <h1 class="title compact-title">Catechism Quest</h1>
+          <p class="subtitle compact-subtitle">~ A Sunday Class Adventure ~ · 📖 ${escapeHtml(teacherName)}'s Class</p>
         </div>
       </div>
-      <h1 class="title" style="font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 2px; line-height: 1.1;">Catechism Quest</h1>
-      <p class="subtitle" style="font-size: 0.95rem; margin: 0 0 8px;">~ A Sunday Class Adventure ~</p>
-      <div style="text-align: center;">
-        <span class="teacher-banner" style="font-size: 0.85rem;">📖 ${escapeHtml(teacherName)}'s Class</span>
+
+      <!-- Compact welcome pill -->
+      <div style="text-align: center; margin: 8px auto 6px; padding: 7px 14px; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 2px solid var(--pastel-pink); border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; box-shadow: 0 2px 0 var(--pastel-pink); max-width: 540px; margin-left: auto; margin-right: auto;">
+        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.9rem;">Welcome back, <span style="font-family: 'Pacifico', cursive; font-size: 1.2rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">${escapeHtml(activeStudent)}!</span> 🌟</span>
+        ${totalPoints > 0 ? `<span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.8rem; background: #fef3c7; padding: 3px 9px; border-radius: 999px;">✨ ${totalPoints} pts</span>` : ''}
+        <button onclick="renderWhoIsPlaying()" style="background: rgba(255,255,255,0.85); border: 1.5px solid var(--pastel-lavender-deep); color: var(--pastel-lavender-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 3px 10px; border-radius: 12px; cursor: pointer; font-size: 0.75rem;">↺ switch user</button>
       </div>
 
-      <!-- Compact welcome pill (no big card) -->
-      <div style="text-align: center; margin: 14px 0 8px; padding: 10px 16px; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 2px solid var(--pastel-pink); border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; box-shadow: 0 3px 0 var(--pastel-pink); max-width: 540px; margin-left: auto; margin-right: auto;">
-        <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem;">Welcome back, <span style="font-family: 'Pacifico', cursive; font-size: 1.3rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">${escapeHtml(activeStudent)}!</span> 🌟</span>
-        ${totalPoints > 0 ? `<span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.85rem; background: #fef3c7; padding: 4px 10px; border-radius: 999px;">✨ ${totalPoints} pts</span>` : ''}
-        <button onclick="renderWhoIsPlaying()" style="background: rgba(255,255,255,0.85); border: 1.5px solid var(--pastel-lavender-deep); color: var(--pastel-lavender-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.78rem;">↺ switch user</button>
-      </div>
-
-      <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.4rem; margin: 14px 0 2px; text-align: center;">Choose Your Adventure</h2>
-      <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; text-align: center; margin: 0 0 12px;">~ Pilia ang imong adventure ~</p>
+      <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.25rem; margin: 8px 0 0; text-align: center;">Choose Your Adventure</h2>
+      <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 0.95rem; text-align: center; margin: 0 0 8px;">~ Pilia ang imong adventure ~</p>
 
       <!-- Responsive grid: 2 columns on desktop, 1 on mobile for compact layout -->
       <div class="category-grid">
@@ -5200,22 +5330,19 @@ function renderCatechismQuestHome() {
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
-    <div class="home">
-      <div style="text-align: center; margin-bottom: 14px;">
-        <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-pink-light) 100%); border: 3px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 var(--pastel-pink-deep);">
+    <div class="home" style="padding: 8px 10px;">
+      <div style="text-align: center; margin-bottom: 8px;">
+        <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-pink-light) 100%); border: 3px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 16px; border-radius: 16px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 0 var(--pastel-pink-deep);">
           🏠 ← All Categories
         </button>
       </div>
-      ${CREST_SVG}
-      <h1 class="title">Catechism Quest</h1>
-      <p class="subtitle">~ Camp Preparedness ~</p>
-      <div style="text-align: center;">
-        <span class="teacher-banner">📖 ${escapeHtml(teacherName)}'s Class</span>
-      </div>
-      <div class="divider">
-        <span class="divider-icon">✦</span>
-        <span class="divider-icon">✠</span>
-        <span class="divider-icon">✦</span>
+      <!-- ULTRA-COMPACT horizontal header: crest beside title for desktop -->
+      <div class="compact-header">
+        <div class="compact-crest">${CREST_SVG}</div>
+        <div class="compact-titles">
+          <h1 class="title compact-title">Catechism Quest</h1>
+          <p class="subtitle compact-subtitle">~ Camp Preparedness ~ · 📖 ${escapeHtml(teacherName)}'s Class</p>
+        </div>
       </div>
 
       <div class="welcome-card">
@@ -5300,17 +5427,14 @@ function renderWhoIsPlaying() {
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
-    <div class="home">
-      ${CREST_SVG}
-      <h1 class="title">Catechism Quest</h1>
-      <p class="subtitle">~ A Sunday Class Adventure ~</p>
-      <div style="text-align: center;">
-        <span class="teacher-banner">📖 ${escapeHtml(teacherName)}'s Class</span>
-      </div>
-      <div class="divider">
-        <span class="divider-icon">✦</span>
-        <span class="divider-icon">✠</span>
-        <span class="divider-icon">✦</span>
+    <div class="home" style="padding: 12px 10px;">
+      <!-- Compact horizontal header for welcome page -->
+      <div class="compact-header">
+        <div class="compact-crest">${CREST_SVG}</div>
+        <div class="compact-titles">
+          <h1 class="title compact-title">Catechism Quest</h1>
+          <p class="subtitle compact-subtitle">~ A Sunday Class Adventure ~ · 📖 ${escapeHtml(teacherName)}'s Class</p>
+        </div>
       </div>
 
       <div class="welcome-card">
@@ -8106,7 +8230,9 @@ function renderMaryGardenHome() {
       <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.6rem; text-align: center; margin: 20px 0 8px;">Choose Your Level</h2>
       <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.15rem; margin-bottom: 12px;">~ Pilia ang imong lebel ~</p>
 
-      ${difficultyCards}
+      <div class="difficulty-grid">
+        ${difficultyCards}
+      </div>
 
       <!-- Three special learning sections -->
       <div style="margin: 24px 0 12px;">
@@ -9141,7 +9267,9 @@ function renderMassSection() {
       <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.6rem; text-align: center; margin: 20px 0 8px;">Choose Your Level</h2>
       <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.15rem; margin-bottom: 12px;">~ Pilia ang imong lebel ~</p>
 
-      ${difficultyCards}
+      <div class="difficulty-grid">
+        ${difficultyCards}
+      </div>
     </div>
   `);
 }
