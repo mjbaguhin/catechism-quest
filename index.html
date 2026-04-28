@@ -4346,8 +4346,14 @@ function loadTeacherName() {
     const saved = localStorage.getItem('catechism_teacher_name');
     if (saved && saved.trim()) {
       teacherName = saved.trim();
+    } else {
+      // Default to "Ate MJ" — no teacher setup screen needed for new visitors.
+      // This avoids friction when non-Catholics or curious visitors click the public link.
+      teacherName = 'Ate MJ';
     }
-  } catch (e) {}
+  } catch (e) {
+    teacherName = 'Ate MJ';
+  }
 }
 
 function saveTeacherName(name) {
@@ -4486,13 +4492,13 @@ function renderTeacherSettings() {
 
         <div class="prayer-section" style="padding: 20px 18px; margin-top: 14px; background: linear-gradient(135deg, #fff, #fef3c7); border-color: #fbbf24;">
           <label style="display: block; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; margin-bottom: 8px; font-size: 1rem;">
-            🔐 Manage Students (Teacher Only):
+            🔐 Manage Users (Teacher Only):
           </label>
           <p style="font-family: 'Quicksand', sans-serif; font-weight: 500; font-style: italic; color: var(--plum-deep); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4;">
-            Remove student names from this device. Password protected so kids cannot delete their own progress to cheat.
+            Remove usernames from this device. Password protected so users cannot delete their own progress to cheat.
           </p>
           <button onclick="openManageStudents()" style="width: 100%; background: linear-gradient(180deg, #fff 0%, #fde68a 100%); border: 2px solid #fbbf24; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 16px; border-radius: 14px; cursor: pointer; font-size: 0.92rem; box-shadow: 0 3px 0 #fbbf24;">
-            🔐 Open Manage Students
+            🔐 Open Manage Users
           </button>
         </div>
 
@@ -4523,7 +4529,7 @@ function openManageStudents() {
       <div style="font-size: 2.5rem; margin-bottom: 8px;">🔐</div>
       <h3 style="color: #d97706; font-family: 'Pacifico', cursive; font-size: 1.5rem;">Teacher Password</h3>
       <p style="margin: 8px 0; font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem;">
-        Enter your password to manage student names.
+        Enter your password to manage usernames.
       </p>
       <p style="font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.82rem; margin-bottom: 12px;">
         Kids cannot guess this — only you should know it.
@@ -4592,14 +4598,14 @@ function renderManageStudents() {
         </button>
       </div>
     `;
-  }).join('') : `<p style="text-align: center; color: var(--pastel-lavender-darker); font-style: italic; padding: 20px;">No students on this device yet.</p>`;
+  }).join('') : `<p style="text-align: center; color: var(--pastel-lavender-darker); font-style: italic; padding: 20px;">No users on this device yet.</p>`;
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderManageStudents();">${soundsEnabled ? "🔊" : "🔇"}</button>
     <div class="prayer-screen">
       <div class="prayer-card" style="max-width: 520px;">
         <div class="prayer-icon">🔐</div>
-        <h1 class="prayer-title">Manage Students</h1>
+        <h1 class="prayer-title">Manage Users</h1>
         <p class="prayer-subtitle">Teacher Only</p>
 
         <div style="background: linear-gradient(135deg, var(--pastel-sky-light), #fff); border: 2px dashed var(--pastel-sky); border-radius: 14px; padding: 12px 16px; margin: 16px 0; font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); text-align: center;">
@@ -4975,7 +4981,7 @@ function renderHome() {
         <p style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 600;">Welcome back,</p>
         <p style="font-family: 'Pacifico', cursive; font-size: 2.6rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep), var(--pastel-sky-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));">${escapeHtml(activeStudent)}! 🌟</p>
         ${totalPoints > 0 ? `<p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.95rem; margin: 4px 0;">✨ ${totalPoints} Holy Points</p>` : ''}
-        <button class="btn btn-secondary btn-small" onclick="renderWhoIsPlaying()">↺ Not me — switch kid</button>
+        <button class="btn btn-secondary btn-small" onclick="renderWhoIsPlaying()">↺ Not me — switch user</button>
       </div>
 
       <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.7rem; margin: 22px 0 4px; text-align: center;">Choose Your Adventure</h2>
@@ -5203,7 +5209,7 @@ function renderCatechismQuestHome() {
         <span class="corner br">✦</span>
         <p style="margin-bottom: 6px; font-size: 1.15rem; font-weight: 600;">Welcome back,</p>
         <p style="font-family: 'Pacifico', cursive; font-size: 2.8rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep), var(--pastel-sky-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));">${escapeHtml(activeStudent)}! 🌟</p>
-        <button class="btn btn-secondary btn-small" onclick="renderWhoIsPlaying()">↺ Not me — switch kid</button>
+        <button class="btn btn-secondary btn-small" onclick="renderWhoIsPlaying()">↺ Not me — switch user</button>
       </div>
 
       ${rankBanner}
@@ -5265,7 +5271,7 @@ function renderCatechismQuestHome() {
 function renderWhoIsPlaying() {
   const kids = getStudentList();
   const kidsHtml = kids.length > 0 ? `
-    <h3 style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-pink-darker); font-size: 1.15rem; margin: 18px 0 12px;">Who is playing now?</h3>
+    <h3 style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-pink-darker); font-size: 1.15rem; margin: 18px 0 12px;">Who's here today?</h3>
     <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;">
       ${kids.map(name => {
         const safe = escapeHtml(name).replace(/'/g, "\\'");
@@ -5296,10 +5302,11 @@ function renderWhoIsPlaying() {
         <span class="corner tr">✦</span>
         <span class="corner bl">✦</span>
         <span class="corner br">✦</span>
-        <p style="margin-bottom: 12px; font-size: 1.1rem;">Welcome, brave little soldier of Christ! ⚔️</p>
+        <p style="margin-bottom: 6px; font-size: 1.2rem; font-weight: 700; color: var(--plum-deep);">Welcome! 🙏</p>
+        <p style="margin-bottom: 12px; font-size: 0.95rem; font-style: italic; color: var(--pastel-lavender-darker);">Maayong pag-abot — tanan dinapit dinhi ✨</p>
         ${kidsHtml}
-        <p class="muted small" style="margin-bottom: 10px;">Type your name to start a new game:</p>
-        <input type="text" class="name-input" id="nameInput" value="" placeholder="Your name..." maxlength="20" />
+        <p class="muted small" style="margin-bottom: 10px;">Type your name to begin:</p>
+        <input type="text" class="name-input" id="nameInput" value="" placeholder="Your username..." maxlength="20" />
         <button class="btn" onclick="addNewStudent()">Let's Go! ✨</button>
       </div>
 
@@ -9674,11 +9681,10 @@ loadTeacherName();
 loadSoundPref();
 loadAmbientPref();
 setupFirstInteractionListener();
-if (!teacherName) {
-  renderTeacherSetup();
-} else {
-  renderHome();
-}
+// Always go straight to home — no teacher setup gate to avoid friction
+// for first-time visitors. Teacher name defaults to "Ate MJ" and can be
+// changed later via Settings gear if needed.
+renderHome();
 </script>
 </body>
 </html>
