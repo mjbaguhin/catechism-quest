@@ -2337,6 +2337,147 @@ body::after {
   transform: rotate(45deg) scale(0.95);
 }
 
+.share-button {
+  position: fixed;
+  top: 14px;
+  right: 130px;
+  z-index: 100;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, #fce7f3 100%);
+  border: 3px solid #ec4899;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #ec4899, 0 5px 12px rgba(236, 72, 153, 0.25);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-family: inherit;
+  user-select: none;
+}
+.share-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 0 #ec4899, 0 8px 18px rgba(236, 72, 153, 0.35);
+}
+.share-button:active {
+  transform: scale(0.95);
+}
+
+/* Share modal */
+.share-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+.share-modal {
+  background: linear-gradient(135deg, #fff 0%, #fce7f3 100%);
+  border: 4px solid #ec4899;
+  border-radius: 24px;
+  padding: 22px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(236, 72, 153, 0.4);
+  animation: slideUp 0.3s ease;
+}
+.share-modal h3 {
+  font-family: 'Pacifico', cursive;
+  color: #be185d;
+  font-size: 1.6rem;
+  margin: 0 0 4px;
+}
+.share-modal .subtitle-bs {
+  font-family: 'Caveat', cursive;
+  color: #6d28d9;
+  font-size: 1.15rem;
+  margin: 0 0 16px;
+}
+.share-modal .share-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+.share-modal .share-btn {
+  background: #fff;
+  border: 2.5px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 8px;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--plum-deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+.share-modal .share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.share-modal .share-btn .icon {
+  font-size: 1.6rem;
+}
+.share-modal .fb { border-color: #1877f2; color: #1877f2; }
+.share-modal .messenger { border-color: #00b2ff; color: #00b2ff; }
+.share-modal .whatsapp { border-color: #25d366; color: #25d366; }
+.share-modal .copy { border-color: #6d28d9; color: #6d28d9; }
+.share-modal .close-btn {
+  background: linear-gradient(135deg, #fff, #f3f4f6);
+  border: 2px solid #d1d5db;
+  color: #4b5563;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  padding: 8px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+.share-modal .preview {
+  background: rgba(255,255,255,0.7);
+  border: 1.5px dashed #be185d;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.82rem;
+  color: var(--plum-deep);
+  text-align: left;
+  line-height: 1.5;
+}
+.share-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #10b981;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  z-index: 300;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
 .teacher-banner {
   display: inline-flex;
   align-items: center;
@@ -5118,6 +5259,7 @@ function renderHome() {
   })();
 
   render(`
+    <button class="share-button" onclick="openShareSheet()" title="Share with friends">📤</button>
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
     <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
 
@@ -9826,6 +9968,145 @@ function awardMassSticker() {
     </div>
   `;
   document.body.appendChild(backdrop);
+}
+
+// ============================================
+// 📤 SHARE THE APP
+// Uses native Web Share API on mobile, custom modal on desktop
+// ============================================
+const SHARE_URL = 'https://mjbaguhin.github.io/catechism-quest/';
+const SHARE_TITLE = 'Catechism Quest — A Family Catholic App';
+const SHARE_TEXT = '🤔 Nakahibalo ba mo nga adunay DUHA ka klase sa Misa karong panahuna?\n\nTan-awa kining espesyal nga app para sa mga bata ug ginikanan! 🙏\n\n⛪ Ang Misa: Karaan ug Bag-o\n🌹 Mama Mary\'s Garden\n📿 Pangandam para sa Religious Camp\n\n👇 I-tap dinhi:';
+
+function openShareSheet() {
+  // Try native Web Share API first (works great on mobile)
+  if (navigator.share) {
+    navigator.share({
+      title: SHARE_TITLE,
+      text: SHARE_TEXT,
+      url: SHARE_URL
+    }).catch(err => {
+      // User cancelled or share failed — show fallback modal
+      if (err.name !== 'AbortError') {
+        showShareModal();
+      }
+    });
+  } else {
+    // Desktop or unsupported browser — show custom modal
+    showShareModal();
+  }
+}
+
+function showShareModal() {
+  const fullText = SHARE_TEXT + ' ' + SHARE_URL;
+  const encodedUrl = encodeURIComponent(SHARE_URL);
+  const encodedText = encodeURIComponent(SHARE_TEXT);
+  const encodedFull = encodeURIComponent(fullText);
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'share-modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="share-modal" onclick="event.stopPropagation()">
+      <div style="font-size: 2.5rem; margin-bottom: 4px;">📤 ✨</div>
+      <h3>Share with Friends!</h3>
+      <p class="subtitle-bs">~ Ipa-share sa imong mga higala ~</p>
+
+      <div class="preview">
+        🤔 Nakahibalo ba mo nga adunay DUHA ka klase sa Misa karong panahuna?<br>
+        Tan-awa kining espesyal nga app para sa mga bata ug ginikanan! 🙏
+      </div>
+
+      <div class="share-options">
+        <button class="share-btn fb" onclick="shareToFacebook()">
+          <span class="icon">📘</span>
+          <span>Facebook</span>
+        </button>
+        <button class="share-btn messenger" onclick="shareToMessenger()">
+          <span class="icon">💬</span>
+          <span>Messenger</span>
+        </button>
+        <button class="share-btn whatsapp" onclick="shareToWhatsApp()">
+          <span class="icon">📱</span>
+          <span>WhatsApp</span>
+        </button>
+        <button class="share-btn copy" onclick="copyShareLink()">
+          <span class="icon">📋</span>
+          <span>Copy Link</span>
+        </button>
+      </div>
+
+      <button class="close-btn" onclick="closeShareModal()">Close</button>
+    </div>
+  `;
+  backdrop.onclick = (e) => { if (e.target === backdrop) closeShareModal(); };
+  document.body.appendChild(backdrop);
+}
+
+function closeShareModal() {
+  const m = document.querySelector('.share-modal-backdrop');
+  if (m) m.remove();
+}
+
+function shareToFacebook() {
+  // Facebook share dialog
+  const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}&quote=${encodeURIComponent(SHARE_TEXT)}`;
+  window.open(url, '_blank', 'width=600,height=500');
+}
+
+function shareToMessenger() {
+  // Messenger share — uses m.me link with app id, falls back to copying
+  // Since we don't have a Facebook App ID, we'll copy and direct user to Messenger
+  copyToClipboard(SHARE_TEXT + ' ' + SHARE_URL);
+  showShareToast('Link copied! Open Messenger and paste 📋');
+  // Try opening Messenger app
+  setTimeout(() => {
+    window.open('https://www.messenger.com/', '_blank');
+  }, 500);
+}
+
+function shareToWhatsApp() {
+  const text = encodeURIComponent(SHARE_TEXT + '\n\n' + SHARE_URL);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function copyShareLink() {
+  copyToClipboard(SHARE_TEXT + '\n\n' + SHARE_URL);
+  showShareToast('Link copied! Paste anywhere 📋');
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function showShareToast(msg) {
+  // Remove any existing toast
+  const existing = document.querySelector('.share-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'share-toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.4s ease';
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 400);
+  }, 2400);
 }
 
 // ============================================
