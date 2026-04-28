@@ -344,6 +344,17 @@ body::after {
    Desktop (>= 760px) gets compact treatment
    Goal: content visible without scrolling, no oversized headers
 ============================================ */
+
+/* Remove ugly bullet dots from all lists — emojis ARE the bullets */
+.home ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+}
+.home ul li {
+  padding-left: 4px;
+  margin-bottom: 4px;
+}
+
 @media (min-width: 760px) {
   /* Reduce top padding everywhere */
   .home {
