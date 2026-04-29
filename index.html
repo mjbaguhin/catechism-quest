@@ -4677,7 +4677,7 @@ function renderTeacherSetup() {
 
         <div class="prayer-section" style="text-align: center; padding: 22px 18px;">
           <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px;">
-            Before we begin, please set up the teacher's name.
+            Before we begin, please set up the catechist's name.
           </p>
           <p style="font-family: 'Quicksand', sans-serif; font-weight: 500; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.95rem; line-height: 1.4;">
             Sa wala pa kita magsugod, palihog isulat ang ngalan sa magtutudlo.
@@ -4686,7 +4686,7 @@ function renderTeacherSetup() {
 
         <div style="margin: 22px 0;">
           <label style="display: block; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-pink-darker); margin-bottom: 8px; font-size: 1rem;">
-            Teacher's Name / Ngalan sa Magtutudlo:
+            Catechist's Name / Ngalan sa Magtutudlo:
           </label>
           <input type="text" id="teacher-name-input" placeholder="e.g., Teacher Maria, Sir Pedro, Ate Liza..."
             maxlength="40"
@@ -4721,7 +4721,7 @@ function confirmTeacherName() {
   if (!input) return;
   const name = input.value.trim();
   if (!name) {
-    showModal('⚠️ Name Required', 'Please type the teacher\'s name first. / Palihog isulat ang ngalan sa magtutudlo.');
+    showModal('⚠️ Name Required', 'Please type the catechist\'s name first. / Palihog isulat ang ngalan sa magtutudlo.');
     return;
   }
   if (name.length > 40) {
@@ -4737,12 +4737,12 @@ function renderTeacherSettings() {
     <div class="prayer-screen">
       <div class="prayer-card" style="max-width: 520px;">
         <div class="prayer-icon">⚙️</div>
-        <h1 class="prayer-title">Teacher Settings</h1>
+        <h1 class="prayer-title">Catechist Settings</h1>
         <p class="prayer-subtitle">Mga Setting sa Magtutudlo</p>
 
         <div class="prayer-section" style="padding: 22px 18px;">
           <label style="display: block; font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pastel-pink-darker); margin-bottom: 8px; font-size: 1rem;">
-            Teacher's Name / Ngalan sa Magtutudlo:
+            Catechist's Name / Ngalan sa Magtutudlo:
           </label>
           <input type="text" id="teacher-name-edit" value="${escapeHtml(teacherName)}"
             maxlength="40"
@@ -4796,7 +4796,7 @@ function renderTeacherSettings() {
 
         <div class="prayer-section" style="padding: 20px 18px; margin-top: 14px; background: linear-gradient(135deg, #fff, #fef3c7); border-color: #fbbf24;">
           <label style="display: block; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; margin-bottom: 8px; font-size: 1rem;">
-            🔐 Manage Users (Teacher Only):
+            🔐 Manage Users (Catechist Only):
           </label>
           <p style="font-family: 'Quicksand', sans-serif; font-weight: 500; font-style: italic; color: var(--plum-deep); font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4;">
             Remove usernames from this device. Password protected so users cannot delete their own progress to cheat.
@@ -4831,7 +4831,7 @@ function openManageStudents() {
   backdrop.innerHTML = `
     <div class="modal" style="border-color: #fbbf24; max-width: 400px;">
       <div style="font-size: 2.5rem; margin-bottom: 8px;">🔐</div>
-      <h3 style="color: #d97706; font-family: 'Pacifico', cursive; font-size: 1.5rem;">Teacher Password</h3>
+      <h3 style="color: #d97706; font-family: 'Pacifico', cursive; font-size: 1.5rem;">Catechist Password</h3>
       <p style="margin: 8px 0; font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem;">
         Enter your password to manage usernames.
       </p>
@@ -4910,7 +4910,7 @@ function renderManageStudents() {
       <div class="prayer-card" style="max-width: 520px;">
         <div class="prayer-icon">🔐</div>
         <h1 class="prayer-title">Manage Users</h1>
-        <p class="prayer-subtitle">Teacher Only</p>
+        <p class="prayer-subtitle">Catechist Only</p>
 
         <div style="background: linear-gradient(135deg, var(--pastel-sky-light), #fff); border: 2px dashed var(--pastel-sky); border-radius: 14px; padding: 12px 16px; margin: 16px 0; font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); text-align: center;">
           <strong>📱 This Device ID:</strong> <span style="font-family: 'Courier New', monospace; font-weight: 700; color: #d97706; font-size: 1rem;">${devId}</span><br>
@@ -4936,7 +4936,7 @@ function saveTeacherEdit() {
   if (!input) return;
   const name = input.value.trim();
   if (!name) {
-    showModal('⚠️ Name Required', 'Please type the teacher\'s name. / Palihog isulat ang ngalan sa magtutudlo.');
+    showModal('⚠️ Name Required', 'Please type the catechist\'s name. / Palihog isulat ang ngalan sa magtutudlo.');
     return;
   }
   if (name.length > 40) {
@@ -4967,6 +4967,14 @@ function getStudentList() {
 
 function getCurrentStudent() {
   return allStudents[activeStudent];
+}
+
+// Auto-create a "Guest" student so everything works without forcing the user to type a name.
+// The username prompt is now only shown inside Camp Preparedness (for reward codes).
+function ensureGuestStudent() {
+  if (!activeStudent) {
+    setActiveStudent('Guest');
+  }
 }
 
 // ============================================
@@ -5230,7 +5238,7 @@ const CREST_SVG = `
 // Lands here after picking student name
 // ============================================
 function renderHome() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   // Resume background music
   if (ambientEnabled && soundsEnabled && firstInteractionDone) startAmbientPad();
@@ -5261,7 +5269,7 @@ function renderHome() {
   render(`
     <button class="share-button" onclick="openShareSheet()" title="Share with friends">📤</button>
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
-    <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
+    <button class="settings-gear" onclick="renderTeacherSettings()" title="Catechist Settings">⚙️</button>
 
     <div class="home" style="padding: 8px 10px;">
       <!-- ULTRA-COMPACT horizontal header: crest beside title, all on one line on desktop -->
@@ -5273,12 +5281,14 @@ function renderHome() {
         </div>
       </div>
 
-      <!-- Compact welcome pill -->
+      <!-- Compact welcome pill (only shown for named students, not Guest) -->
+      ${activeStudent && activeStudent !== 'Guest' ? `
       <div style="text-align: center; margin: 8px auto 6px; padding: 7px 14px; background: linear-gradient(135deg, #fff, var(--pastel-pink-light)); border: 2px solid var(--pastel-pink); border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; box-shadow: 0 2px 0 var(--pastel-pink); max-width: 540px; margin-left: auto; margin-right: auto;">
         <span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--plum-deep); font-size: 0.9rem;">Welcome back, <span style="font-family: 'Pacifico', cursive; font-size: 1.2rem; background: linear-gradient(135deg, var(--pastel-pink-deep), var(--pastel-lavender-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">${escapeHtml(activeStudent)}!</span> 🌟</span>
         ${totalPoints > 0 ? `<span style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #d97706; font-size: 0.8rem; background: #fef3c7; padding: 3px 9px; border-radius: 999px;">✨ ${totalPoints} pts</span>` : ''}
         <button onclick="renderWhoIsPlaying()" style="background: rgba(255,255,255,0.85); border: 1.5px solid var(--pastel-lavender-deep); color: var(--pastel-lavender-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 3px 10px; border-radius: 12px; cursor: pointer; font-size: 0.75rem;">↺ switch user</button>
       </div>
+      ` : ''}
 
       <h2 style="font-family: 'Pacifico', cursive; color: var(--pastel-pink-darker); font-size: 1.25rem; margin: 8px 0 0; text-align: center;">Choose Your Adventure</h2>
       <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 0.95rem; text-align: center; margin: 0 0 8px;">~ Pilia ang imong adventure ~</p>
@@ -5418,7 +5428,9 @@ function renderHome() {
 // 📿 CATECHISM QUEST HOME (Camp Preparedness)
 // ============================================
 function renderCatechismQuestHome() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  // Camp Preparedness needs a real name (for reward codes)
+  // If they're a Guest (auto-created) or have no name, prompt them now
+  if (!activeStudent || activeStudent === 'Guest') return renderWhoIsPlaying();
 
   // Resume ambient pad on home (only if first interaction has happened)
   if (ambientEnabled && soundsEnabled && firstInteractionDone) startAmbientPad();
@@ -5517,7 +5529,7 @@ function renderCatechismQuestHome() {
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
-    <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
+    <button class="settings-gear" onclick="renderTeacherSettings()" title="Catechist Settings">⚙️</button>
     <div class="home" style="padding: 8px 10px;">
       <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
         <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, var(--pastel-pink-light) 100%); border: 3px solid var(--pastel-pink-deep); color: var(--pastel-pink-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 16px; border-radius: 16px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 0 var(--pastel-pink-deep);">
@@ -5617,7 +5629,7 @@ function renderWhoIsPlaying() {
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderHome();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
-    <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
+    <button class="settings-gear" onclick="renderTeacherSettings()" title="Catechist Settings">⚙️</button>
     <div class="home" style="padding: 12px 10px;">
       <!-- Compact horizontal header for welcome page -->
       <div class="compact-header">
@@ -5633,12 +5645,15 @@ function renderWhoIsPlaying() {
         <span class="corner tr">✦</span>
         <span class="corner bl">✦</span>
         <span class="corner br">✦</span>
-        <p style="margin-bottom: 6px; font-size: 1.2rem; font-weight: 700; color: var(--plum-deep);">Welcome! 🙏</p>
-        <p style="margin-bottom: 12px; font-size: 0.95rem; font-style: italic; color: var(--pastel-lavender-darker);">Maayong pag-abot — tanan dinapit dinhi ✨</p>
+        <div style="font-size: 2.5rem; margin-bottom: 4px;">⚔️ 📿</div>
+        <p style="margin-bottom: 6px; font-size: 1.2rem; font-weight: 700; color: var(--plum-deep);">Camp Preparedness</p>
+        <p style="margin-bottom: 4px; font-size: 0.95rem; font-style: italic; color: var(--pastel-lavender-darker);">~ Pangandam para sa Camp ~</p>
+        <p style="margin: 12px 0 8px; font-size: 0.88rem; color: var(--plum-deep); line-height: 1.5;">📝 We need your name so you can earn <strong>reward codes</strong> from Ate ${escapeHtml((teacherName || 'MJ').split(' ')[0])} when you complete lessons!</p>
         ${kidsHtml}
         <p class="muted small" style="margin-bottom: 10px;">Type your name to begin:</p>
-        <input type="text" class="name-input" id="nameInput" value="" placeholder="Your username..." maxlength="20" />
+        <input type="text" class="name-input" id="nameInput" value="" placeholder="Your name..." maxlength="20" />
         <button class="btn" onclick="addNewStudent()">Let's Go! ✨</button>
+        <button onclick="renderHome()" style="margin-top: 10px; background: rgba(255,255,255,0.85); border: 2px solid var(--pastel-lavender-deep); color: var(--pastel-lavender-darker); font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 16px; border-radius: 14px; cursor: pointer; font-size: 0.85rem;">← Back to All Categories</button>
       </div>
 
       <div class="divider">
@@ -5662,7 +5677,9 @@ function renderWhoIsPlaying() {
 function pickStudent(name) {
   setActiveStudent(name);
   if (ambientEnabled) startAmbientPad();
-  renderHome();
+  // After picking a student, send them to Camp Preparedness
+  // (since the username prompt is only shown when entering Camp Prep)
+  renderCatechismQuestHome();
 }
 
 // Confirm + delete a student name (and all their progress)
@@ -5731,11 +5748,13 @@ function addNewStudent() {
     setActiveStudent(name);
   }
   if (ambientEnabled) startAmbientPad();
-  renderHome();
+  // After adding/setting a student, send them into Camp Preparedness
+  // (since the username prompt is only shown when entering Camp Prep)
+  renderCatechismQuestHome();
 }
 
 function openLesson(lessonId) {
-  if (!activeStudent) { renderWhoIsPlaying(); return; }
+  if (!activeStudent || activeStudent === 'Guest') { renderWhoIsPlaying(); return; }
   state.currentLesson = LESSONS.find(l => l.id === lessonId);
   renderModeSelect();
 }
@@ -6890,7 +6909,7 @@ function renderMiniGamesHub() {
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderMiniGamesHub();" title="Toggle Sounds">${soundsEnabled ? "🔊" : "🔇"}</button>
-    <button class="settings-gear" onclick="renderTeacherSettings()" title="Teacher Settings">⚙️</button>
+    <button class="settings-gear" onclick="renderTeacherSettings()" title="Catechist Settings">⚙️</button>
     <div class="home">
       <h1 class="title" style="font-size: 2rem;">🎮 Mini-Games</h1>
       <p class="subtitle">~ Sweet Rewards for Perfect Practice ~</p>
@@ -8372,7 +8391,7 @@ function initMaryGardenData(student) {
 
 // Home — apparitions-first layout, level switcher inline
 function renderMaryGardenHome() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const student = getCurrentStudent();
   const garden = initMaryGardenData(student);
   saveAllStudents();
@@ -8537,7 +8556,7 @@ function renderMaryTitle(titleId) {
 
 // Apparitions list page — opens from the single "7 Apparitions" button on Mary's Garden home
 function renderApparitionsList() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const student = getCurrentStudent();
   const garden = initMaryGardenData(student);
   saveAllStudents();
@@ -8707,7 +8726,7 @@ function showAudioComingSoon() {
 // Traditional Catholic teaching on Mary's role
 // ============================================
 function renderWhyLoveMary() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderWhyLoveMary();">${soundsEnabled ? "🔊" : "🔇"}</button>
@@ -8824,7 +8843,7 @@ function renderWhyLoveMary() {
 // Why we pray it + 15 Promises + Mysteries
 // ============================================
 function renderHolyRosary() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderHolyRosary();">${soundsEnabled ? "🔊" : "🔇"}</button>
@@ -8949,7 +8968,7 @@ function renderHolyRosary() {
 // St. Louis de Montfort, St. Alphonsus, St. Bernard, etc.
 // ============================================
 function renderSaintsOfMary() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderSaintsOfMary();">${soundsEnabled ? "🔊" : "🔇"}</button>
@@ -9336,7 +9355,7 @@ function renderSaintsOfMary() {
 
 // List of 6 Marian titles
 function renderMaryTitleList() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const student = getCurrentStudent();
   const garden = initMaryGardenData(student);
   const diff = DIFFICULTY_LEVELS.find(d => d.id === maryGardenState.difficulty);
@@ -9759,7 +9778,7 @@ function initMassData(student) {
 
 // Mass Section Home
 function renderMassSection() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const student = getCurrentStudent();
   const massData = initMassData(student);
   saveAllStudents();
@@ -9872,7 +9891,7 @@ function pickMassDifficulty(difficultyId) {
 
 // Main lesson — adapts content to difficulty
 function renderMassLesson() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const diff = massState.difficulty;
   if (!diff) return renderMassSection();
 
@@ -10367,7 +10386,7 @@ function answerMassHard(idx) {
 // Latin · English · Bisaya — for traditional formation
 // ============================================
 function renderLatinPrayers() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   const prayers = [
     {
@@ -12098,7 +12117,7 @@ const BIBLE_STORIES = [
 let bibleStoriesState = { selectedStory: null };
 
 function renderBibleStories() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const oldTestament = BIBLE_STORIES.filter(s => s.testament === 'Old');
   const newTestament = BIBLE_STORIES.filter(s => s.testament === 'New');
 
@@ -12158,7 +12177,7 @@ function renderBibleStories() {
 }
 
 function renderBibleStory(storyId) {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const s = BIBLE_STORIES.find(x => x.id === storyId);
   if (!s) return renderBibleStories();
 
@@ -12459,7 +12478,7 @@ const TEN_COMMANDMENTS = [
 ];
 
 function renderTenCommandments() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   const commandmentsHtml = TEN_COMMANDMENTS.map(c => `
     <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #92400e;">
@@ -12563,7 +12582,7 @@ function renderTenCommandments() {
 // Step-by-step for kids
 // ============================================
 function renderConfessionGuide() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderConfessionGuide();">${soundsEnabled ? "🔊" : "🔇"}</button>
@@ -13138,7 +13157,7 @@ const PROPHECIES = [
 ];
 
 function renderProphecies() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   const cardHtml = PROPHECIES.map(p => {
     const approvalBadge = {
@@ -13274,7 +13293,7 @@ function setProphecyMode(mode) {
 }
 
 function renderProphecyTimeline() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   // TIMELINE EVENTS — chronological, with honest status
   // Status: 'fulfilled' | 'happening' | 'pending' | 'disputed'
@@ -13747,7 +13766,7 @@ function getProphecyTimelineData() {
 }
 
 function renderProphecy(prophecyId) {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const p = PROPHECIES.find(x => x.id === prophecyId);
   if (!p) return renderProphecies();
 
@@ -13880,7 +13899,7 @@ function renderProphecy(prophecyId) {
 // TOTAL CONSECRATION TO MARY (St. Louis de Montfort)
 // ============================================
 function renderTotalConsecration() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderTotalConsecration();">${soundsEnabled ? "🔊" : "🔇"}</button>
@@ -14160,7 +14179,7 @@ const LIFE_OF_MARY_CHAPTERS = [
 ];
 
 function renderLifeOfMary() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   const chaptersHtml = LIFE_OF_MARY_CHAPTERS.map(c => `
     <button onclick="renderLifeOfMaryChapter('${c.id}')" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #dbeafe); border: 3px solid #2563eb; border-radius: 16px; padding: 12px 14px; margin: 8px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 3px 0 #1e40af; text-align: left;">
@@ -14229,7 +14248,7 @@ function renderLifeOfMary() {
 }
 
 function renderLifeOfMaryChapter(chapterId) {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const chapter = LIFE_OF_MARY_CHAPTERS.find(c => c.id === chapterId);
   if (!chapter) return renderLifeOfMary();
 
@@ -14282,7 +14301,7 @@ let maryGameState = { current: null, score: 0, lives: 3, currentQuestion: 0 };
 
 // ---- GAMES HUB ----
 function renderMaryGames() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   render(`
     <button class="sound-toggle" onclick="toggleSounds(); renderMaryGames();">${soundsEnabled ? "🔊" : "🔇"}</button>
@@ -15474,7 +15493,7 @@ CATECHISM_SECTIONS.push({
 let catechismState = { current: null };
 
 function renderCatechism() {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
 
   const pillars = [
     { id: 'foundation', label: '🌟 Foundation', desc: 'God, Man, and the Church' },
@@ -15555,7 +15574,7 @@ function renderCatechism() {
 }
 
 function renderCatechismSection(sectionId) {
-  if (!activeStudent) return renderWhoIsPlaying();
+  ensureGuestStudent();
   const s = CATECHISM_SECTIONS.find(x => x.id === sectionId);
   if (!s) return renderCatechism();
 
