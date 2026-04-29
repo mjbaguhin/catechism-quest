@@ -9847,6 +9847,19 @@ function renderMassSection() {
         </p>
       </div>
 
+      <!-- 🎮 MASS GAMES -->
+      <button onclick="renderMassGames()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7 30%, #ede9fe 70%); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 14px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e, 0 0 25px rgba(217, 119, 6, 0.3); text-align: left; position: relative;">
+        <div style="position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 14px; border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.1em; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: rotate(8deg);">✨ FUN ✨</div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3.5rem;">🎮</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.5rem; line-height: 1.1;">Mass Games for Kids</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Dula bahin sa Misa ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">🧠 Latin Match · 🎯 Trivia · ⚖️ T/F · 🧩 Latin Fill · 🎡 Wheel</div>
+          </div>
+        </div>
+      </button>
+
       <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.6rem; text-align: center; margin: 20px 0 8px;">Choose Your Level</h2>
       <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.15rem; margin-bottom: 12px;">~ Pilia ang imong lebel ~</p>
 
@@ -12180,6 +12193,19 @@ function renderBibleStories() {
           The Bible is God's true story, told over thousands of years. Here you'll find <strong>14 essential stories</strong> — 7 from the <strong>Old Testament</strong> (before Jesus) and 7 from the <strong>New Testament</strong> (the life of Jesus). Each story includes English and Bisaya, with a lesson at the end!
         </p>
       </div>
+
+      <!-- 🎮 BIBLE GAMES -->
+      <button onclick="renderBibleGames()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7 30%, #d1fae5 60%, #dbeafe); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 14px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e, 0 0 25px rgba(217, 119, 6, 0.3); text-align: left; position: relative;">
+        <div style="position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 14px; border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.1em; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: rotate(8deg);">✨ FUN ✨</div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3.5rem;">🎮</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.5rem; line-height: 1.1;">Bible Games for Kids</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Dula bahin sa Bibliya ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">🧠 Match · 🎯 Quiz · 🧩 Fill-In · ⚖️ Sort · 🎡 Trivia</div>
+          </div>
+        </div>
+      </button>
 
       <!-- Old Testament -->
       <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.5rem; text-align: center; margin: 18px 0 4px;">📜 Old Testament</h2>
@@ -15618,6 +15644,1539 @@ function spinRosaryWheel() {
 
 
 // ============================================
+// 📖 BIBLE STORY GAMES FOR KIDS
+// 5 games: Story Match, Character Quiz, Scene Fill-In, OT/NT Sort, Trivia
+// ============================================
+
+// ---- BIBLE GAMES HUB ----
+function renderBibleGames() {
+  ensureGuestStudent();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderBibleGames();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 30%, #d1fae5 60%, #dbeafe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBibleStories()" style="background: rgba(255,255,255,0.85); border: 2px solid #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #d97706;">← Bible Stories</button>
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #2563eb;">🏠 Home</button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">🎮 📖 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 2rem; margin: 6px 0; text-shadow: 2px 2px 0 #fff; line-height: 1.1;">Bible Games for Kids</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Mga Dula bahin sa Bibliya ~</p>
+      </div>
+
+      <button onclick="startBibleMatch()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">🧠</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem;">Bible Memory Match</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Pares-Pares ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Match each story with its Testament!</div>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="startBibleCharacters()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #d1fae5); border: 4px solid #10b981; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #047857; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">🎯</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem;">Who Did What?</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Kinsa ang nagbuhat? ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Bible character quiz — 20 questions!</div>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="startBibleSceneFill()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #ede9fe); border: 4px solid #7c3aed; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #5b21b6; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">🧩</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.4rem;">Famous Bible Words</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Sulati ang mga Pulong ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Fill in famous Bible quotes!</div>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="startBibleSort()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fce7f3); border: 4px solid #ec4899; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #be185d; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">⚖️</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem;">Old or New Testament?</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Daan o Bag-ong Tugon? ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Sort the Bible stories!</div>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="startBibleTrivia()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #dbeafe); border: 4px solid #2563eb; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #1e40af; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3rem;">🎡</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.4rem;">Bible Trivia</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Pangutana sa Bibliya ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">25 fun Bible questions!</div>
+          </div>
+        </div>
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 1: BIBLE MEMORY MATCH
+// ============================================
+let bibleMatchState = { cards: [], flipped: [], matched: [], moves: 0, locked: false };
+
+function startBibleMatch() {
+  const pairs = [
+    { id: 'creation', emoji: '🌍', label: 'Creation', color: '#10b981' },
+    { id: 'noah', emoji: '🚢', label: 'Noah\'s Ark', color: '#0ea5e9' },
+    { id: 'moses', emoji: '🪨', label: 'Moses & Tablets', color: '#92400e' },
+    { id: 'david', emoji: '🦁', label: 'David & Goliath', color: '#dc2626' },
+    { id: 'jonah', emoji: '🐋', label: 'Jonah & Whale', color: '#2563eb' },
+    { id: 'nativity', emoji: '👶', label: 'Birth of Jesus', color: '#fbbf24' },
+    { id: 'cross', emoji: '✝️', label: 'Crucifixion', color: '#7c3aed' }
+  ];
+
+  let cards = [];
+  pairs.forEach(p => {
+    cards.push({ id: p.id, type: 'emoji', content: p.emoji, color: p.color });
+    cards.push({ id: p.id, type: 'label', content: p.label, color: p.color });
+  });
+
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+
+  bibleMatchState = { cards, flipped: [], matched: [], moves: 0, locked: false };
+  renderBibleMatch();
+}
+
+function renderBibleMatch() {
+  const { cards, flipped, matched, moves } = bibleMatchState;
+  const totalPairs = cards.length / 2;
+  const matchedPairs = matched.length / 2;
+  const allMatched = matchedPairs === totalPairs;
+
+  const cardsHtml = cards.map((c, i) => {
+    const isFlipped = flipped.includes(i) || matched.includes(i);
+    return `
+      <button onclick="flipBibleCard(${i})" style="aspect-ratio: 1; background: ${isFlipped ? `linear-gradient(135deg, #fff, ${c.color}33)` : 'linear-gradient(135deg, #fef3c7, #d97706)'}; border: 3px solid ${isFlipped ? c.color : '#92400e'}; border-radius: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; ${isFlipped ? `color: ${c.color};` : 'color: #fff;'} font-size: ${isFlipped && c.type === 'label' ? '0.7rem' : '1.8rem'}; padding: 6px; text-align: center; box-shadow: 0 3px 0 ${isFlipped ? c.color : '#92400e'}; ${matched.includes(i) ? 'opacity: 0.5;' : ''} display: flex; align-items: center; justify-content: center; line-height: 1.2;">
+        ${isFlipped ? escapeHtml(c.content) : '📖'}
+      </button>
+    `;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #92400e;">← All Games</button>
+        <button onclick="startBibleMatch()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #92400e;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🧠</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.8rem; margin: 4px 0;">Bible Memory Match</h1>
+      </div>
+      <div style="display: flex; justify-content: space-around; background: rgba(255,255,255,0.85); border: 2px solid #d97706; border-radius: 14px; padding: 10px; margin: 14px 0; box-shadow: 0 3px 0 #92400e;">
+        <div style="text-align: center;"><div style="font-family: 'Quicksand', sans-serif; font-size: 0.75rem; color: var(--pastel-lavender-darker); letter-spacing: 0.1em;">MATCHES</div><div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem;">${matchedPairs} / ${totalPairs}</div></div>
+        <div style="text-align: center;"><div style="font-family: 'Quicksand', sans-serif; font-size: 0.75rem; color: var(--pastel-lavender-darker); letter-spacing: 0.1em;">MOVES</div><div style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.4rem;">${moves}</div></div>
+      </div>
+      ${allMatched ? `<div style="background: linear-gradient(135deg, #d1fae5, #10b981); border: 3px solid #047857; border-radius: 18px; padding: 18px; margin: 14px 0; text-align: center; box-shadow: 0 5px 0 #047857;"><div style="font-size: 3rem;">🎉📖🎉</div><h2 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.6rem; margin: 6px 0;">You Won!</h2><p style="font-family: 'Quicksand', sans-serif; color: #fff; font-size: 0.9rem;">Completed in ${moves} moves!</p></div>` : ''}
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0;">${cardsHtml}</div>
+    </div>
+  `);
+}
+
+function flipBibleCard(idx) {
+  const s = bibleMatchState;
+  if (s.locked) return;
+  if (s.flipped.includes(idx) || s.matched.includes(idx)) return;
+  if (s.flipped.length >= 2) return;
+  s.flipped.push(idx);
+  if (s.flipped.length === 2) {
+    s.moves++;
+    s.locked = true;
+    const [a, b] = s.flipped;
+    if (s.cards[a].id === s.cards[b].id && a !== b) {
+      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; renderBibleMatch(); }, 800);
+    } else {
+      setTimeout(() => { s.flipped = []; s.locked = false; renderBibleMatch(); }, 1200);
+    }
+  }
+  renderBibleMatch();
+}
+
+// ============================================
+// GAME 2: WHO DID WHAT (Bible Characters Quiz)
+// ============================================
+const BIBLE_CHARACTERS = [
+  { q: 'Who built a giant Ark to save the animals?', options: ['Moses', 'Noah', 'David', 'Abraham'], correct: 1, fact: 'Noah obeyed God and built the Ark — saving his family and the animals!' },
+  { q: 'Who killed the giant Goliath with a stone?', options: ['Samson', 'David', 'Joshua', 'Jonah'], correct: 1, fact: 'Young David trusted God and won with just a sling and a stone!' },
+  { q: 'Who was swallowed by a big fish?', options: ['Daniel', 'Jonah', 'Peter', 'Moses'], correct: 1, fact: 'Jonah was inside the whale for 3 days — a sign of Jesus rising in 3 days!' },
+  { q: 'Who received the Ten Commandments from God?', options: ['Abraham', 'Noah', 'Moses', 'Joshua'], correct: 2, fact: 'Moses went up Mount Sinai and met God face to face!' },
+  { q: 'Who was the angel that announced Jesus\' birth to Mary?', options: ['Michael', 'Raphael', 'Gabriel', 'Uriel'], correct: 2, fact: 'Archangel Gabriel — the messenger of the Annunciation!' },
+  { q: 'Who was thrown into the lions\' den?', options: ['Daniel', 'David', 'Joseph', 'Job'], correct: 0, fact: 'Daniel prayed three times a day — God shut the lions\' mouths!' },
+  { q: 'Who walked on water with Jesus?', options: ['John', 'James', 'Peter', 'Andrew'], correct: 2, fact: 'Peter walked on water until he doubted — then Jesus caught him!' },
+  { q: 'Who denied Jesus three times?', options: ['Judas', 'Peter', 'Thomas', 'John'], correct: 1, fact: 'Peter denied Jesus, then wept bitterly and was forgiven.' },
+  { q: 'Who betrayed Jesus for 30 silver coins?', options: ['Peter', 'Judas', 'Pilate', 'Caiaphas'], correct: 1, fact: 'Judas Iscariot — a sad warning of what greed can do.' },
+  { q: 'Who said "Behold the handmaid of the Lord"?', options: ['Mary', 'Elizabeth', 'Anne', 'Martha'], correct: 0, fact: 'Mary\'s FIAT — her YES that brought Jesus into the world!' },
+  { q: 'Who was the father of Jesus on earth?', options: ['Joachim', 'Joseph', 'Zechariah', 'Simeon'], correct: 1, fact: 'St. Joseph — the most chaste foster-father of Jesus!' },
+  { q: 'Who said "Let there be light"?', options: ['Adam', 'Moses', 'God', 'An angel'], correct: 2, fact: 'God spoke creation into being on the first day!' },
+  { q: 'Who was the first man God created?', options: ['Cain', 'Adam', 'Abel', 'Seth'], correct: 1, fact: 'Adam was made from the dust of the earth.' },
+  { q: 'Who was the first woman?', options: ['Eve', 'Mary', 'Sarah', 'Rachel'], correct: 0, fact: 'Eve was made from Adam\'s rib — the mother of all the living.' },
+  { q: 'How many days did Jesus stay in the desert?', options: ['7', '10', '40', '50'], correct: 2, fact: 'Forty days of fasting — defeating the devil with God\'s Word!' },
+  { q: 'Who baptized Jesus in the Jordan?', options: ['Peter', 'John the Baptist', 'Joseph', 'James'], correct: 1, fact: 'John the Baptist — the voice crying in the desert!' },
+  { q: 'How many loaves did Jesus use to feed 5,000?', options: ['Two', 'Five', 'Seven', 'Twelve'], correct: 1, fact: 'Five loaves and two fish — a miracle of multiplication!' },
+  { q: 'Who was Jesus\' cousin?', options: ['Peter', 'Andrew', 'John the Baptist', 'James'], correct: 2, fact: 'John the Baptist! He leapt for joy in Elizabeth\'s womb when Mary visited.' },
+  { q: 'On what day did Jesus rise from the dead?', options: ['Friday', 'Saturday', 'Sunday', 'Monday'], correct: 2, fact: 'Easter Sunday — the most important day in history!' },
+  { q: 'How old was Jesus when He began teaching publicly?', options: ['12', '20', '30', '33'], correct: 2, fact: 'Jesus began His public ministry at about 30 years old.' }
+];
+
+let bibleCharState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startBibleCharacters() {
+  bibleCharState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderBibleCharacters();
+}
+
+function renderBibleCharacters() {
+  const s = bibleCharState;
+  if (s.current >= BIBLE_CHARACTERS.length) return renderBibleCharResults();
+  const q = BIBLE_CHARACTERS[s.current];
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let bg = 'linear-gradient(135deg, #fff, #d1fae5)', border = '#10b981', shadow = '#047857', textColor = '#047857';
+    if (s.answered) {
+      if (i === q.correct) { bg = 'linear-gradient(135deg, #d1fae5, #10b981)'; border = '#047857'; shadow = '#047857'; textColor = '#fff'; }
+      else if (i === s.lastAnswer) { bg = 'linear-gradient(135deg, #fee2e2, #ef4444)'; border = '#991b1b'; shadow = '#991b1b'; textColor = '#fff'; }
+      else { bg = 'rgba(255,255,255,0.5)'; border = '#cbd5e1'; shadow = '#94a3b8'; textColor = '#64748b'; }
+    }
+    return `<button onclick="${s.answered ? '' : `answerBibleChar(${i})`}" ${s.answered ? 'disabled' : ''} style="display: block; width: 100%; background: ${bg}; border: 3px solid ${border}; border-radius: 14px; padding: 14px; margin: 8px 0; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${textColor}; font-size: 0.95rem; box-shadow: 0 4px 0 ${shadow}; text-align: left;">${String.fromCharCode(65 + i)}. ${escapeHtml(opt)}${s.answered && i === q.correct ? ' ✅' : ''}${s.answered && i === s.lastAnswer && i !== q.correct ? ' ❌' : ''}</button>`;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #d1fae5 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #047857;">← All Games</button>
+        <button onclick="startBibleCharacters()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #047857;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🎯</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.8rem;">Who Did What?</h1>
+      </div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #10b981; border-radius: 14px; padding: 10px; margin: 14px 0; box-shadow: 0 3px 0 #047857;">
+        <div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.9rem; margin-bottom: 6px;"><span>Question ${s.current + 1} of ${BIBLE_CHARACTERS.length}</span><span>⭐ ${s.score}</span></div>
+        <div style="background: #d1fae5; height: 8px; border-radius: 4px; overflow: hidden;"><div style="background: linear-gradient(90deg, #10b981, #047857); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / BIBLE_CHARACTERS.length) * 100}%;"></div></div>
+      </div>
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #047857; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #047857;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #064e3b; font-size: 1.05rem; line-height: 1.5; margin: 0;">${escapeHtml(q.q)}</p></div>
+      ${optionsHtml}
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.85rem; margin: 0 0 6px;">📖 DID YOU KNOW?</p><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">${escapeHtml(q.fact)}</p></div><button onclick="nextBibleChar()" style="width: 100%; background: linear-gradient(180deg, #10b981, #047857); color: #fff; border: 3px solid #047857; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #064e3b;">${s.current + 1 < BIBLE_CHARACTERS.length ? 'Next Question →' : 'See Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerBibleChar(idx) {
+  bibleCharState.lastAnswer = idx;
+  bibleCharState.answered = true;
+  if (idx === BIBLE_CHARACTERS[bibleCharState.current].correct) bibleCharState.score++;
+  renderBibleCharacters();
+}
+
+function nextBibleChar() {
+  bibleCharState.current++;
+  bibleCharState.answered = false;
+  bibleCharState.lastAnswer = null;
+  renderBibleCharacters();
+}
+
+function renderBibleCharResults() {
+  const total = BIBLE_CHARACTERS.length;
+  const pct = Math.round((bibleCharState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep going!';
+  if (pct >= 90) { medal = '🏆'; msg = 'Bible scholar!'; }
+  else if (pct >= 75) { medal = '🥇'; msg = 'Excellent!'; }
+  else if (pct >= 60) { medal = '🥈'; msg = 'Good work!'; }
+  else if (pct >= 40) { medal = '🥉'; msg = 'Nice try!'; }
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #d1fae5 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px;"><button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;">
+        <div style="font-size: 6rem;">${medal}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 2.2rem;">Quiz Complete!</h1>
+        <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 4px solid #10b981; border-radius: 18px; padding: 22px; margin: 18px 0; box-shadow: 0 5px 0 #047857;">
+          <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.85rem;">YOUR SCORE</p>
+          <div style="font-family: 'Pacifico', cursive; color: #047857; font-size: 3.5rem;">${bibleCharState.score} / ${total}</div>
+          <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857;">${pct}%</p>
+        </div>
+        <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p>
+      </div>
+      <button onclick="startBibleCharacters()" style="width: 100%; background: linear-gradient(180deg, #10b981, #047857); color: #fff; border: 3px solid #047857; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #064e3b; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderBibleGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #d1fae5); color: #047857; border: 3px solid #10b981; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #047857; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 3: BIBLE SCENE FILL-IN
+// ============================================
+const BIBLE_FILL_QUOTES = [
+  { template: 'In the beginning, God created the _BLANK1_ and the _BLANK2_.', blanks: ['heavens', 'earth'], who: 'Genesis 1:1' },
+  { template: '_BLANK1_, full of grace, the _BLANK2_ is with thee.', blanks: ['Hail Mary', 'Lord'], who: 'Angel Gabriel to Mary' },
+  { template: 'Behold the _BLANK1_ of the Lord; be it done to me according to thy _BLANK2_.', blanks: ['handmaid', 'word'], who: 'Mary\'s Fiat' },
+  { template: 'Go and _BLANK1_ thy neighbor as _BLANK2_.', blanks: ['love', 'thyself'], who: 'Jesus' },
+  { template: 'I am the way, the _BLANK1_, and the _BLANK2_.', blanks: ['truth', 'life'], who: 'Jesus' },
+  { template: 'Suffer the little _BLANK1_ to come unto _BLANK2_.', blanks: ['children', 'Me'], who: 'Jesus' },
+  { template: 'Blessed are the _BLANK1_ in heart, for they shall see _BLANK2_.', blanks: ['pure', 'God'], who: 'Beatitudes' },
+  { template: 'For God so loved the _BLANK1_ that He gave His only _BLANK2_.', blanks: ['world', 'Son'], who: 'John 3:16' }
+];
+
+let bibleFillState = { idx: 0, answers: [], currentBlank: 0 };
+
+function startBibleSceneFill() {
+  bibleFillState = { idx: 0, answers: [], currentBlank: 0 };
+  renderBibleFill();
+}
+
+function renderBibleFill() {
+  const s = bibleFillState;
+  if (s.idx >= BIBLE_FILL_QUOTES.length) return renderBibleFillFinish();
+  const q = BIBLE_FILL_QUOTES[s.idx];
+  const totalBlanks = q.blanks.length;
+  const filled = s.answers.length;
+
+  let displayText = q.template;
+  for (let i = 0; i < totalBlanks; i++) {
+    const placeholder = `_BLANK${i + 1}_`;
+    if (i < filled) {
+      const isCorrect = s.answers[i].toLowerCase().trim() === q.blanks[i].toLowerCase();
+      displayText = displayText.replace(placeholder, `<strong style="color: ${isCorrect ? '#047857' : '#dc2626'}; background: ${isCorrect ? '#d1fae5' : '#fee2e2'}; padding: 2px 8px; border-radius: 6px;">${escapeHtml(s.answers[i])}${isCorrect ? ' ✅' : ' ❌ (' + q.blanks[i] + ')'}</strong>`);
+    } else if (i === filled) {
+      displayText = displayText.replace(placeholder, `<span style="display: inline-block; background: #fef3c7; border: 2px dashed #b45309; color: #b45309; padding: 2px 14px; border-radius: 6px; font-weight: 700;">??? (BLANK ${i + 1})</span>`);
+    } else {
+      displayText = displayText.replace(placeholder, `<span style="display: inline-block; background: #f3f4f6; border: 1px dashed #cbd5e1; color: #94a3b8; padding: 2px 14px; border-radius: 6px;">_____</span>`);
+    }
+  }
+
+  let options = [];
+  if (s.currentBlank < totalBlanks) {
+    const correct = q.blanks[s.currentBlank];
+    options.push(correct);
+    const allWords = [].concat(...BIBLE_FILL_QUOTES.map(p => p.blanks)).filter(w => w.toLowerCase() !== correct.toLowerCase());
+    const shuffled = allWords.sort(() => Math.random() - 0.5).slice(0, 3);
+    options = options.concat(shuffled);
+    options = options.sort(() => Math.random() - 0.5);
+  }
+
+  const allFilled = filled >= totalBlanks;
+  const allCorrect = allFilled && s.answers.every((a, i) => a.toLowerCase().trim() === q.blanks[i].toLowerCase());
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startBibleSceneFill()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🧩</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.8rem;">Famous Bible Words</h1>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem;">Quote ${s.idx + 1} of ${BIBLE_FILL_QUOTES.length}</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #5b21b6;">
+        <p style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: #5b21b6; font-weight: 700; text-align: center; margin: 0 0 12px;">📖 Said by: ${escapeHtml(q.who)}</p>
+        <p style="font-family: 'Georgia', serif; color: var(--plum-deep); font-size: 1rem; line-height: 1.9; margin: 0; font-style: italic;">"${displayText}"</p>
+      </div>
+      ${!allFilled ? `<p style="font-family: 'Quicksand', sans-serif; color: #5b21b6; font-weight: 700; text-align: center; margin: 14px 0 8px;">🎯 Pick the word for blank ${s.currentBlank + 1}:</p><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">${options.map(opt => `<button onclick="answerBibleFill('${escapeHtml(opt).replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 14px; padding: 12px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #5b21b6; font-size: 0.95rem; box-shadow: 0 3px 0 #5b21b6;">${escapeHtml(opt)}</button>`).join('')}</div>` : `<div style="background: linear-gradient(135deg, ${allCorrect ? '#d1fae5' : '#fef3c7'}, ${allCorrect ? '#10b981' : '#f59e0b'}); border: 3px solid ${allCorrect ? '#047857' : '#b45309'}; border-radius: 18px; padding: 16px; margin: 14px 0; text-align: center;"><div style="font-size: 3rem;">${allCorrect ? '🎉' : '👍'}</div><p style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.4rem; margin: 4px 0;">${allCorrect ? 'PERFECT!' : 'Good Try!'}</p></div><button onclick="nextBibleFill()" style="width: 100%; background: linear-gradient(180deg, #7c3aed, #5b21b6); color: #fff; border: 3px solid #5b21b6; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #4c1d95;">${s.idx + 1 < BIBLE_FILL_QUOTES.length ? 'Next Quote →' : 'Finish! 🏆'}</button>`}
+    </div>
+  `);
+}
+
+function answerBibleFill(word) {
+  bibleFillState.answers.push(word);
+  bibleFillState.currentBlank++;
+  renderBibleFill();
+}
+
+function nextBibleFill() {
+  bibleFillState.idx++;
+  bibleFillState.currentBlank = 0;
+  bibleFillState.answers = [];
+  renderBibleFill();
+}
+
+function renderBibleFillFinish() {
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px;"><button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;">
+        <div style="font-size: 6rem;">🏆</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 2.2rem;">All Quotes Complete!</h1>
+        <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">God is so proud of you!</p>
+      </div>
+      <button onclick="startBibleSceneFill()" style="width: 100%; background: linear-gradient(180deg, #7c3aed, #5b21b6); color: #fff; border: 3px solid #5b21b6; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #4c1d95; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderBibleGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #ede9fe); color: #5b21b6; border: 3px solid #7c3aed; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #5b21b6; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 4: OLD vs NEW TESTAMENT SORT
+// ============================================
+const BIBLE_SORT_STORIES = [
+  { name: 'Creation', testament: 'OT', icon: '🌍' },
+  { name: 'Adam & Eve', testament: 'OT', icon: '🌳' },
+  { name: 'Noah\'s Ark', testament: 'OT', icon: '🚢' },
+  { name: 'Moses & Ten Commandments', testament: 'OT', icon: '🪨' },
+  { name: 'David & Goliath', testament: 'OT', icon: '🦁' },
+  { name: 'Daniel in Lions\' Den', testament: 'OT', icon: '🦁' },
+  { name: 'Jonah & the Whale', testament: 'OT', icon: '🐋' },
+  { name: 'The Annunciation', testament: 'NT', icon: '👼' },
+  { name: 'The Nativity', testament: 'NT', icon: '👶' },
+  { name: 'Baptism of Jesus', testament: 'NT', icon: '🌊' },
+  { name: 'Feeding 5,000', testament: 'NT', icon: '🍞' },
+  { name: 'The Last Supper', testament: 'NT', icon: '🍷' },
+  { name: 'The Crucifixion', testament: 'NT', icon: '✝️' },
+  { name: 'The Resurrection', testament: 'NT', icon: '🌅' }
+];
+
+let bibleSortState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startBibleSort() {
+  bibleSortState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderBibleSort();
+}
+
+function renderBibleSort() {
+  const s = bibleSortState;
+  if (s.current >= BIBLE_SORT_STORIES.length) return renderBibleSortResults();
+  const story = BIBLE_SORT_STORIES[s.current];
+  const isCorrect = s.answered && s.lastAnswer === story.testament;
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startBibleSort()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">⚖️</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.8rem;">Old or New Testament?</h1>
+      </div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #ec4899; border-radius: 14px; padding: 10px; margin: 14px 0; box-shadow: 0 3px 0 #be185d;">
+        <div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #be185d; font-size: 0.9rem; margin-bottom: 6px;"><span>Story ${s.current + 1} of ${BIBLE_SORT_STORIES.length}</span><span>⭐ ${s.score}</span></div>
+        <div style="background: #fce7f3; height: 8px; border-radius: 4px; overflow: hidden;"><div style="background: linear-gradient(90deg, #ec4899, #be185d); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / BIBLE_SORT_STORIES.length) * 100}%;"></div></div>
+      </div>
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #be185d; border-radius: 18px; padding: 22px; margin: 14px 0; text-align: center; box-shadow: 0 4px 0 #be185d;">
+        <div style="font-size: 4rem; margin: 4px 0;">${story.icon}</div>
+        <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem; margin: 4px 0;">${escapeHtml(story.name)}</p>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0;">
+        <button onclick="${s.answered ? '' : 'answerBibleSort(\'OT\')'}" ${s.answered ? 'disabled' : ''} style="background: ${s.answered && story.testament === 'OT' ? 'linear-gradient(135deg, #d1fae5, #10b981)' : s.answered && s.lastAnswer === 'OT' ? 'linear-gradient(135deg, #fee2e2, #ef4444)' : 'linear-gradient(135deg, #fff, #fef3c7)'}; border: 4px solid ${s.answered && story.testament === 'OT' ? '#047857' : s.answered && s.lastAnswer === 'OT' ? '#991b1b' : '#d97706'}; border-radius: 18px; padding: 18px; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Pacifico', cursive; font-size: 1.1rem; color: ${s.answered && story.testament === 'OT' ? '#fff' : s.answered && s.lastAnswer === 'OT' ? '#fff' : '#92400e'}; box-shadow: 0 5px 0 ${s.answered && story.testament === 'OT' ? '#047857' : s.answered && s.lastAnswer === 'OT' ? '#991b1b' : '#92400e'}; line-height: 1.2;">📜 OLD<br>Testament</button>
+        <button onclick="${s.answered ? '' : 'answerBibleSort(\'NT\')'}" ${s.answered ? 'disabled' : ''} style="background: ${s.answered && story.testament === 'NT' ? 'linear-gradient(135deg, #d1fae5, #10b981)' : s.answered && s.lastAnswer === 'NT' ? 'linear-gradient(135deg, #fee2e2, #ef4444)' : 'linear-gradient(135deg, #fff, #dbeafe)'}; border: 4px solid ${s.answered && story.testament === 'NT' ? '#047857' : s.answered && s.lastAnswer === 'NT' ? '#991b1b' : '#2563eb'}; border-radius: 18px; padding: 18px; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Pacifico', cursive; font-size: 1.1rem; color: ${s.answered && story.testament === 'NT' ? '#fff' : s.answered && s.lastAnswer === 'NT' ? '#fff' : '#1e40af'}; box-shadow: 0 5px 0 ${s.answered && story.testament === 'NT' ? '#047857' : s.answered && s.lastAnswer === 'NT' ? '#991b1b' : '#1e40af'}; line-height: 1.2;">✝️ NEW<br>Testament</button>
+      </div>
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, ${isCorrect ? '#d1fae5' : '#fee2e2'}); border: 3px solid ${isCorrect ? '#10b981' : '#ef4444'}; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${isCorrect ? '#047857' : '#991b1b'}; font-size: 1rem; margin: 0;">${isCorrect ? '🎉 Correct!' : '😢 Not quite!'} This is in the ${story.testament === 'OT' ? 'Old' : 'New'} Testament.</p></div><button onclick="nextBibleSort()" style="width: 100%; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; border: 3px solid #be185d; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #9f1239;">${s.current + 1 < BIBLE_SORT_STORIES.length ? 'Next →' : 'See Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerBibleSort(t) {
+  bibleSortState.lastAnswer = t;
+  bibleSortState.answered = true;
+  if (t === BIBLE_SORT_STORIES[bibleSortState.current].testament) bibleSortState.score++;
+  renderBibleSort();
+}
+
+function nextBibleSort() {
+  bibleSortState.current++;
+  bibleSortState.answered = false;
+  bibleSortState.lastAnswer = null;
+  renderBibleSort();
+}
+
+function renderBibleSortResults() {
+  const total = BIBLE_SORT_STORIES.length;
+  const pct = Math.round((bibleSortState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep going!';
+  if (pct >= 90) medal = '🏆', msg = 'Bible expert!';
+  else if (pct >= 75) medal = '🥇', msg = 'Excellent!';
+  else if (pct >= 60) medal = '🥈', msg = 'Good!';
+  else if (pct >= 40) medal = '🥉', msg = 'Nice try!';
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px;"><button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;">
+        <div style="font-size: 6rem;">${medal}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 2.2rem;">Game Complete!</h1>
+        <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 4px solid #ec4899; border-radius: 18px; padding: 22px; margin: 18px 0;">
+          <div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 3.5rem;">${bibleSortState.score} / ${total}</div>
+          <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #be185d;">${pct}%</p>
+        </div>
+        <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p>
+      </div>
+      <button onclick="startBibleSort()" style="width: 100%; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; border: 3px solid #be185d; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #9f1239; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderBibleGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #fce7f3); color: #be185d; border: 3px solid #ec4899; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #be185d; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 5: BIBLE TRIVIA
+// ============================================
+const BIBLE_TRIVIA = [
+  { q: 'How many days did God use to create the world?', options: ['3', '6', '7', '10'], correct: 1, fact: '6 days of creation, then He rested on the 7th!' },
+  { q: 'How many books are in the Bible?', options: ['66', '73', '80', '100'], correct: 1, fact: 'The Catholic Bible has 73 books — Protestants removed 7!' },
+  { q: 'Who is the first prophet of the Old Testament?', options: ['Adam', 'Noah', 'Moses', 'Elijah'], correct: 0, fact: 'Adam is considered a prophet — but Moses is the great prophet of the Law.' },
+  { q: 'How many wise men visited baby Jesus?', options: ['Two', 'Three', 'Five', 'Twelve'], correct: 1, fact: 'Tradition says 3 — Caspar, Melchior, Balthasar — bringing gold, frankincense, myrrh.' },
+  { q: 'What language did Jesus mostly speak?', options: ['Hebrew', 'Greek', 'Aramaic', 'Latin'], correct: 2, fact: 'Aramaic — the everyday language in Galilee at that time.' },
+  { q: 'How many Apostles did Jesus choose?', options: ['7', '10', '12', '15'], correct: 2, fact: '12 — to mirror the 12 tribes of Israel.' },
+  { q: 'Where was Jesus born?', options: ['Nazareth', 'Jerusalem', 'Bethlehem', 'Cana'], correct: 2, fact: 'Bethlehem — fulfilling Micah\'s prophecy!' },
+  { q: 'Who carried Jesus\' Cross part of the way?', options: ['Peter', 'Simon of Cyrene', 'John', 'Joseph'], correct: 1, fact: 'Simon of Cyrene was forced to help carry the Cross.' },
+  { q: 'How many days was Jesus dead before rising?', options: ['1', '3', '7', '40'], correct: 1, fact: 'Three days — Friday afternoon to Sunday morning.' },
+  { q: 'Where did Jesus turn water into wine?', options: ['Bethany', 'Cana', 'Galilee', 'Jerusalem'], correct: 1, fact: 'The Wedding at Cana — His first public miracle, at Mary\'s request!' },
+  { q: 'How many Beatitudes did Jesus give?', options: ['5', '7', '8', '10'], correct: 2, fact: '8 Beatitudes from the Sermon on the Mount.' },
+  { q: 'Who was the strongest man in the Bible?', options: ['Goliath', 'Samson', 'David', 'Moses'], correct: 1, fact: 'Samson — strong as long as his hair was uncut.' },
+  { q: 'How many Commandments did God give Moses?', options: ['5', '7', '10', '12'], correct: 2, fact: 'The Ten Commandments — written on stone tablets!' },
+  { q: 'Who was the first Pope?', options: ['Paul', 'Peter', 'James', 'John'], correct: 1, fact: 'St. Peter — Jesus said: "Upon this rock I will build my Church."' },
+  { q: 'On what day was the Holy Spirit sent to the Apostles?', options: ['Easter', 'Christmas', 'Pentecost', 'Good Friday'], correct: 2, fact: 'Pentecost — 50 days after Easter. The birthday of the Church!' },
+  { q: 'What is the longest book of the Bible?', options: ['Genesis', 'Psalms', 'Isaiah', 'Matthew'], correct: 1, fact: 'Psalms — 150 prayer-songs, many written by King David!' },
+  { q: 'Who saw a burning bush that did not burn up?', options: ['Abraham', 'Moses', 'Elijah', 'Joshua'], correct: 1, fact: 'Moses — at Mount Horeb, where God said "I AM"!' },
+  { q: 'What did Jesus say is the greatest commandment?', options: ['Do not kill', 'Love God with all your heart', 'Honor your parents', 'Do not steal'], correct: 1, fact: 'Love the Lord your God with all your heart — and love your neighbor!' },
+  { q: 'Who wrote most of the New Testament letters?', options: ['Peter', 'Paul', 'John', 'James'], correct: 1, fact: 'St. Paul wrote 13 of 27 NT books!' },
+  { q: 'How many years was Jesus on earth?', options: ['25', '30', '33', '40'], correct: 2, fact: 'Jesus lived about 33 years — the perfect life.' },
+  { q: 'What is the last book of the Bible?', options: ['Revelation', 'Acts', 'Romans', 'Hebrews'], correct: 0, fact: 'The Apocalypse (Revelation) of St. John — about the end times!' },
+  { q: 'Who saw Jesus first after He rose from the dead?', options: ['Peter', 'John', 'Mary Magdalene', 'His Mother (tradition)'], correct: 3, fact: 'Tradition holds Jesus appeared FIRST to His Blessed Mother!' },
+  { q: 'What is the Bible\'s shortest verse?', options: ['"Jesus wept."', '"Pray always."', '"God is love."', '"Be still."'], correct: 0, fact: '"Jesus wept" (John 11:35) — at the tomb of Lazarus.' },
+  { q: 'How many sons did Jacob have?', options: ['7', '10', '12', '15'], correct: 2, fact: '12 sons — became the 12 tribes of Israel!' },
+  { q: 'What animal did Balaam ride that talked to him?', options: ['Camel', 'Horse', 'Donkey', 'Sheep'], correct: 2, fact: 'A donkey! God opened its mouth to speak to Balaam.' }
+];
+
+let bibleTriviaState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startBibleTrivia() {
+  bibleTriviaState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderBibleTrivia();
+}
+
+function renderBibleTrivia() {
+  const s = bibleTriviaState;
+  if (s.current >= BIBLE_TRIVIA.length) return renderBibleTriviaResults();
+  const q = BIBLE_TRIVIA[s.current];
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let bg = 'linear-gradient(135deg, #fff, #dbeafe)', border = '#2563eb', shadow = '#1e40af', textColor = '#1e40af';
+    if (s.answered) {
+      if (i === q.correct) { bg = 'linear-gradient(135deg, #d1fae5, #10b981)'; border = '#047857'; shadow = '#047857'; textColor = '#fff'; }
+      else if (i === s.lastAnswer) { bg = 'linear-gradient(135deg, #fee2e2, #ef4444)'; border = '#991b1b'; shadow = '#991b1b'; textColor = '#fff'; }
+      else { bg = 'rgba(255,255,255,0.5)'; border = '#cbd5e1'; shadow = '#94a3b8'; textColor = '#64748b'; }
+    }
+    return `<button onclick="${s.answered ? '' : `answerBibleTrivia(${i})`}" ${s.answered ? 'disabled' : ''} style="display: block; width: 100%; background: ${bg}; border: 3px solid ${border}; border-radius: 14px; padding: 14px; margin: 8px 0; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${textColor}; font-size: 0.95rem; box-shadow: 0 4px 0 ${shadow}; text-align: left;">${String.fromCharCode(65 + i)}. ${escapeHtml(opt)}${s.answered && i === q.correct ? ' ✅' : ''}${s.answered && i === s.lastAnswer && i !== q.correct ? ' ❌' : ''}</button>`;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #1e40af; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startBibleTrivia()" style="background: rgba(255,255,255,0.85); border: 2px solid #1e40af; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🎡</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.8rem;">Bible Trivia</h1>
+      </div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #2563eb; border-radius: 14px; padding: 10px; margin: 14px 0; box-shadow: 0 3px 0 #1e40af;">
+        <div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #1e40af; font-size: 0.9rem; margin-bottom: 6px;"><span>Question ${s.current + 1} of ${BIBLE_TRIVIA.length}</span><span>⭐ ${s.score}</span></div>
+        <div style="background: #dbeafe; height: 8px; border-radius: 4px; overflow: hidden;"><div style="background: linear-gradient(90deg, #2563eb, #1e40af); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / BIBLE_TRIVIA.length) * 100}%;"></div></div>
+      </div>
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 3px solid #1e40af; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #1e40af;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #1e3a8a; font-size: 1.05rem; line-height: 1.5; margin: 0;">${escapeHtml(q.q)}</p></div>
+      ${optionsHtml}
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.85rem; margin: 0 0 6px;">📖 DID YOU KNOW?</p><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">${escapeHtml(q.fact)}</p></div><button onclick="nextBibleTrivia()" style="width: 100%; background: linear-gradient(180deg, #2563eb, #1e40af); color: #fff; border: 3px solid #1e40af; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #1e3a8a;">${s.current + 1 < BIBLE_TRIVIA.length ? 'Next →' : 'See Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerBibleTrivia(idx) {
+  bibleTriviaState.lastAnswer = idx;
+  bibleTriviaState.answered = true;
+  if (idx === BIBLE_TRIVIA[bibleTriviaState.current].correct) bibleTriviaState.score++;
+  renderBibleTrivia();
+}
+
+function nextBibleTrivia() {
+  bibleTriviaState.current++;
+  bibleTriviaState.answered = false;
+  bibleTriviaState.lastAnswer = null;
+  renderBibleTrivia();
+}
+
+function renderBibleTriviaResults() {
+  const total = BIBLE_TRIVIA.length;
+  const pct = Math.round((bibleTriviaState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep going!';
+  if (pct >= 90) medal = '🏆', msg = 'Bible scholar!';
+  else if (pct >= 75) medal = '🥇', msg = 'Excellent!';
+  else if (pct >= 60) medal = '🥈', msg = 'Good!';
+  else if (pct >= 40) medal = '🥉', msg = 'Nice try!';
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px;"><button onclick="renderBibleGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #1e40af; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;">
+        <div style="font-size: 6rem;">${medal}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 2.2rem;">Quiz Complete!</h1>
+        <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 4px solid #2563eb; border-radius: 18px; padding: 22px; margin: 18px 0;">
+          <div style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 3.5rem;">${bibleTriviaState.score} / ${total}</div>
+          <p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #1e40af;">${pct}%</p>
+        </div>
+        <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p>
+      </div>
+      <button onclick="startBibleTrivia()" style="width: 100%; background: linear-gradient(180deg, #2563eb, #1e40af); color: #fff; border: 3px solid #1e40af; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #1e3a8a; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderBibleGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #dbeafe); color: #1e40af; border: 3px solid #2563eb; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #1e40af; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+
+// ============================================
+// 🕰️ MASS GAMES FOR KIDS
+// 5 games: Latin Match, Mass Trivia, Old vs New T/F, Latin Fill-In, Wheel of Mass
+// ============================================
+
+function renderMassGames() {
+  ensureGuestStudent();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderMassGames();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 30%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderMassSection()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← The Mass</button>
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🏠 Home</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">🎮 🕰️ ✝️</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 2rem; margin: 6px 0; text-shadow: 2px 2px 0 #fff;">Mass Games for Kids</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Mga Dula bahin sa Misa ~</p>
+      </div>
+
+      <button onclick="startLatinMatch()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🧠</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem;">Latin Memory Match</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Pares-Pares ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Match Latin to English meaning!</div></div></div>
+      </button>
+
+      <button onclick="startMassTrivia()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #ede9fe); border: 4px solid #7c3aed; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #5b21b6; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🎯</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.4rem;">Mass Trivia</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Pangutana sa Misa ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">25 questions about the Holy Mass!</div></div></div>
+      </button>
+
+      <button onclick="startOldNewMass()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #d1fae5); border: 4px solid #10b981; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #047857; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">⚖️</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem;">Old or New Mass?</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Karaan o Bag-ong Misa? ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">True or False — 20 statements!</div></div></div>
+      </button>
+
+      <button onclick="startLatinFill()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fce7f3); border: 4px solid #ec4899; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #be185d; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🧩</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem;">Latin Prayer Fill-In</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Sulati ang Latin ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Complete the Latin prayers!</div></div></div>
+      </button>
+
+      <button onclick="startMassWheel()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #dbeafe); border: 4px solid #2563eb; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #1e40af; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🎡</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.4rem;">Wheel of Mass</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Ligid sa Misa ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Spin to land on a part of the Mass!</div></div></div>
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 1: LATIN MEMORY MATCH
+// ============================================
+let latinMatchState = { cards: [], flipped: [], matched: [], moves: 0, locked: false };
+
+function startLatinMatch() {
+  const pairs = [
+    { id: 'introibo', latin: 'Introibo ad altare Dei', english: 'I will go to the altar of God', color: '#d97706' },
+    { id: 'dominus', latin: 'Dominus vobiscum', english: 'The Lord be with you', color: '#7c3aed' },
+    { id: 'sanctus', latin: 'Sanctus, Sanctus, Sanctus', english: 'Holy, Holy, Holy', color: '#fbbf24' },
+    { id: 'agnus', latin: 'Agnus Dei', english: 'Lamb of God', color: '#dc2626' },
+    { id: 'kyrie', latin: 'Kyrie Eleison', english: 'Lord, have mercy', color: '#10b981' },
+    { id: 'gloria', latin: 'Gloria in excelsis Deo', english: 'Glory to God in the highest', color: '#ec4899' },
+    { id: 'pax', latin: 'Pax vobis', english: 'Peace be with you', color: '#0ea5e9' }
+  ];
+
+  let cards = [];
+  pairs.forEach(p => {
+    cards.push({ id: p.id, type: 'latin', content: p.latin, color: p.color });
+    cards.push({ id: p.id, type: 'english', content: p.english, color: p.color });
+  });
+
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+
+  latinMatchState = { cards, flipped: [], matched: [], moves: 0, locked: false };
+  renderLatinMatch();
+}
+
+function renderLatinMatch() {
+  const { cards, flipped, matched, moves } = latinMatchState;
+  const totalPairs = cards.length / 2;
+  const matchedPairs = matched.length / 2;
+  const allMatched = matchedPairs === totalPairs;
+
+  const cardsHtml = cards.map((c, i) => {
+    const isFlipped = flipped.includes(i) || matched.includes(i);
+    return `<button onclick="flipLatinCard(${i})" style="aspect-ratio: 1.3; background: ${isFlipped ? `linear-gradient(135deg, #fff, ${c.color}33)` : 'linear-gradient(135deg, #fef3c7, #d97706)'}; border: 3px solid ${isFlipped ? c.color : '#92400e'}; border-radius: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; ${isFlipped ? `color: ${c.color};` : 'color: #fff;'} font-size: 0.7rem; padding: 6px; text-align: center; box-shadow: 0 3px 0 ${isFlipped ? c.color : '#92400e'}; ${matched.includes(i) ? 'opacity: 0.5;' : ''} display: flex; align-items: center; justify-content: center; line-height: 1.2; ${isFlipped && c.type === 'latin' ? 'font-style: italic;' : ''}">${isFlipped ? escapeHtml(c.content) : '✝️'}</button>`;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startLatinMatch()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 3rem;">🧠</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.8rem;">Latin Memory Match</h1>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1rem;">Match Latin → English</p>
+      </div>
+      <div style="display: flex; justify-content: space-around; background: rgba(255,255,255,0.85); border: 2px solid #d97706; border-radius: 14px; padding: 10px; margin: 14px 0;">
+        <div style="text-align: center;"><div style="font-family: 'Quicksand', sans-serif; font-size: 0.75rem; color: var(--pastel-lavender-darker); letter-spacing: 0.1em;">MATCHES</div><div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem;">${matchedPairs} / ${totalPairs}</div></div>
+        <div style="text-align: center;"><div style="font-family: 'Quicksand', sans-serif; font-size: 0.75rem; color: var(--pastel-lavender-darker); letter-spacing: 0.1em;">MOVES</div><div style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.4rem;">${moves}</div></div>
+      </div>
+      ${allMatched ? `<div style="background: linear-gradient(135deg, #d1fae5, #10b981); border: 3px solid #047857; border-radius: 18px; padding: 18px; text-align: center;"><div style="font-size: 3rem;">🎉✝️🎉</div><h2 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.6rem;">Deo Gratias! You Won!</h2><p style="font-family: 'Quicksand', sans-serif; color: #fff;">Completed in ${moves} moves!</p></div>` : ''}
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0;">${cardsHtml}</div>
+    </div>
+  `);
+}
+
+function flipLatinCard(idx) {
+  const s = latinMatchState;
+  if (s.locked || s.flipped.includes(idx) || s.matched.includes(idx) || s.flipped.length >= 2) return;
+  s.flipped.push(idx);
+  if (s.flipped.length === 2) {
+    s.moves++;
+    s.locked = true;
+    const [a, b] = s.flipped;
+    if (s.cards[a].id === s.cards[b].id && a !== b) {
+      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; renderLatinMatch(); }, 800);
+    } else {
+      setTimeout(() => { s.flipped = []; s.locked = false; renderLatinMatch(); }, 1200);
+    }
+  }
+  renderLatinMatch();
+}
+
+// ============================================
+// GAME 2: MASS TRIVIA
+// ============================================
+const MASS_TRIVIA = [
+  { q: 'What language is the Traditional Latin Mass?', options: ['Greek', 'Latin', 'Hebrew', 'Aramaic'], correct: 1, fact: 'Latin — the universal language of the Catholic Church for over 1,500 years!' },
+  { q: 'Which direction does the priest face in the Traditional Mass?', options: ['Toward the people', 'Toward the East / Tabernacle', 'North', 'South'], correct: 1, fact: 'Ad orientem — facing East with the people, leading them to God.' },
+  { q: 'What is the most important moment of the Mass?', options: ['The Gospel', 'The Consecration', 'The Sermon', 'Communion'], correct: 1, fact: 'The Consecration — when bread and wine BECOME Jesus\' Body and Blood!' },
+  { q: 'What does "Eucharist" mean?', options: ['Sacrifice', 'Thanksgiving', 'Bread', 'Memorial'], correct: 1, fact: 'Eucharist = Thanksgiving in Greek!' },
+  { q: 'What are unleavened hosts made from?', options: ['Wheat and water', 'Rice flour', 'Cornmeal', 'Wheat and yeast'], correct: 0, fact: 'Pure wheat flour and water — no yeast, like the Passover bread!' },
+  { q: 'What color does the priest wear at funerals (Traditional Mass)?', options: ['White', 'Red', 'Black', 'Green'], correct: 2, fact: 'Black — for solemn mourning and prayer for the dead!' },
+  { q: 'How many lit candles are usually on the altar at High Mass?', options: ['2', '4', '6', '12'], correct: 2, fact: '6 candles! Plus a 7th for the Pope or Bishop.' },
+  { q: 'What is a "Missal"?', options: ['A song book', 'The book with all Mass prayers', 'A church bell', 'A vestment'], correct: 1, fact: 'The Missal contains all the prayers of the Mass for the whole year!' },
+  { q: 'What is the bread called after consecration?', options: ['Bread', 'Wafer', 'The Body of Christ', 'Manna'], correct: 2, fact: 'It is no longer bread — it is truly the Body of Christ!' },
+  { q: 'What is the special cloth on the altar called?', options: ['Sheet', 'Corporal', 'Towel', 'Veil'], correct: 1, fact: 'The Corporal — a small white cloth where the Host rests.' },
+  { q: 'When was the New Mass introduced?', options: ['1900', '1969', '1990', '2010'], correct: 1, fact: '1969, after Vatican II. Before that, the Latin Mass was the universal Mass.' },
+  { q: 'Which Pope codified the Traditional Latin Mass?', options: ['St. Pius V', 'St. Pius X', 'Pius XII', 'John XXIII'], correct: 0, fact: 'St. Pope Pius V in 1570 — for all Roman Catholics, forever!' },
+  { q: 'What is a "Tabernacle"?', options: ['The altar', 'A statue', 'Where Jesus is kept in the Eucharist', 'A baptismal font'], correct: 2, fact: 'The Tabernacle holds Jesus truly present in the Blessed Sacrament!' },
+  { q: 'What does "Sanctus" mean?', options: ['Praise', 'Holy', 'Lord', 'Blessed'], correct: 1, fact: 'Sanctus = Holy! "Holy, Holy, Holy is the Lord God of Hosts!"' },
+  { q: 'What is the priest\'s outer garment called?', options: ['Robe', 'Gown', 'Chasuble', 'Tunic'], correct: 2, fact: 'The Chasuble — symbolizing charity, the yoke of Christ.' },
+  { q: 'What does the priest do at the Offertory?', options: ['Reads the Gospel', 'Offers bread and wine', 'Blesses the people', 'Gives a homily'], correct: 1, fact: 'Offers bread and wine to be transformed into Jesus!' },
+  { q: 'How many parts are in the Traditional Latin Mass?', options: ['2', '3', 'Mass of Catechumens & Mass of the Faithful', '5'], correct: 2, fact: 'Two main parts: Mass of Catechumens (instruction) and Mass of the Faithful (sacrifice).' },
+  { q: 'What is the "Confiteor"?', options: ['A song', 'The "I confess" prayer', 'A blessing', 'A reading'], correct: 1, fact: 'The Confiteor — "I confess to almighty God..." — said at the start of Mass.' },
+  { q: 'Why do Catholics genuflect (kneel briefly)?', options: ['Tradition only', 'Out of respect for Jesus in the Tabernacle', 'To pray for help', 'For exercise'], correct: 1, fact: 'Because Jesus is TRULY present in the Tabernacle!' },
+  { q: 'What is a "Crucifix"?', options: ['Empty cross', 'Cross with Jesus on it', 'A statue of Mary', 'A church bell'], correct: 1, fact: 'A cross WITH Jesus\' body — reminding us of His sacrifice.' },
+  { q: 'What is the "Pater Noster" in English?', options: ['Hail Mary', 'Glory Be', 'Our Father', 'Apostle\'s Creed'], correct: 2, fact: 'Pater Noster = Our Father — the prayer Jesus taught us!' },
+  { q: 'What does the priest pour onto his fingers before consecration?', options: ['Oil', 'Water', 'Wine', 'Vinegar'], correct: 1, fact: 'Water — to symbolically purify before touching Jesus.' },
+  { q: 'How long is a Sunday obligation Mass?', options: ['About 30-60 min', '5 minutes', '3 hours', '5 hours'], correct: 0, fact: 'Usually 30-60 minutes — but the longer, the more grace!' },
+  { q: 'What is the "Real Presence"?', options: ['Jesus is symbolic', 'Jesus is truly present in the Eucharist', 'Jesus is in heaven only', 'Jesus is in nature'], correct: 1, fact: 'Body, Blood, Soul, and Divinity — Jesus is REALLY there!' },
+  { q: 'Who can validly say Mass?', options: ['Anyone', 'Only ordained priests', 'Bishops only', 'The Pope only'], correct: 1, fact: 'Only ordained Catholic priests have the power to consecrate!' }
+];
+
+let massTriviaState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startMassTrivia() {
+  massTriviaState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderMassTrivia();
+}
+
+function renderMassTrivia() {
+  const s = massTriviaState;
+  if (s.current >= MASS_TRIVIA.length) return renderMassTriviaResults();
+  const q = MASS_TRIVIA[s.current];
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let bg = 'linear-gradient(135deg, #fff, #ede9fe)', border = '#7c3aed', shadow = '#5b21b6', textColor = '#5b21b6';
+    if (s.answered) {
+      if (i === q.correct) { bg = 'linear-gradient(135deg, #d1fae5, #10b981)'; border = '#047857'; shadow = '#047857'; textColor = '#fff'; }
+      else if (i === s.lastAnswer) { bg = 'linear-gradient(135deg, #fee2e2, #ef4444)'; border = '#991b1b'; shadow = '#991b1b'; textColor = '#fff'; }
+      else { bg = 'rgba(255,255,255,0.5)'; border = '#cbd5e1'; shadow = '#94a3b8'; textColor = '#64748b'; }
+    }
+    return `<button onclick="${s.answered ? '' : `answerMassTrivia(${i})`}" ${s.answered ? 'disabled' : ''} style="display: block; width: 100%; background: ${bg}; border: 3px solid ${border}; border-radius: 14px; padding: 14px; margin: 8px 0; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${textColor}; font-size: 0.95rem; box-shadow: 0 4px 0 ${shadow}; text-align: left;">${String.fromCharCode(65 + i)}. ${escapeHtml(opt)}${s.answered && i === q.correct ? ' ✅' : ''}${s.answered && i === s.lastAnswer && i !== q.correct ? ' ❌' : ''}</button>`;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startMassTrivia()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🎯</div><h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.8rem;">Mass Trivia</h1></div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #7c3aed; border-radius: 14px; padding: 10px; margin: 14px 0;"><div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #5b21b6; font-size: 0.9rem; margin-bottom: 6px;"><span>Question ${s.current + 1} of ${MASS_TRIVIA.length}</span><span>⭐ ${s.score}</span></div><div style="background: #ede9fe; height: 8px; border-radius: 4px; overflow: hidden;"><div style="background: linear-gradient(90deg, #7c3aed, #5b21b6); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / MASS_TRIVIA.length) * 100}%;"></div></div></div>
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #5b21b6; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #5b21b6;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #4c1d95; font-size: 1.05rem; line-height: 1.5; margin: 0;">${escapeHtml(q.q)}</p></div>
+      ${optionsHtml}
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.85rem; margin: 0 0 6px;">📖 DID YOU KNOW?</p><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">${escapeHtml(q.fact)}</p></div><button onclick="nextMassTrivia()" style="width: 100%; background: linear-gradient(180deg, #7c3aed, #5b21b6); color: #fff; border: 3px solid #5b21b6; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #4c1d95;">${s.current + 1 < MASS_TRIVIA.length ? 'Next →' : 'See Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerMassTrivia(idx) {
+  massTriviaState.lastAnswer = idx;
+  massTriviaState.answered = true;
+  if (idx === MASS_TRIVIA[massTriviaState.current].correct) massTriviaState.score++;
+  renderMassTrivia();
+}
+
+function nextMassTrivia() {
+  massTriviaState.current++;
+  massTriviaState.answered = false;
+  massTriviaState.lastAnswer = null;
+  renderMassTrivia();
+}
+
+function renderMassTriviaResults() {
+  const total = MASS_TRIVIA.length;
+  const pct = Math.round((massTriviaState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep learning!';
+  if (pct >= 90) medal = '🏆', msg = 'Mass scholar!';
+  else if (pct >= 75) medal = '🥇', msg = 'Excellent!';
+  else if (pct >= 60) medal = '🥈', msg = 'Good work!';
+  else if (pct >= 40) medal = '🥉', msg = 'Nice try!';
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center;"><button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;"><div style="font-size: 6rem;">${medal}</div><h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 2.2rem;">Quiz Complete!</h1><div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 4px solid #7c3aed; border-radius: 18px; padding: 22px; margin: 18px 0;"><div style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 3.5rem;">${massTriviaState.score} / ${total}</div><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #5b21b6;">${pct}%</p></div><p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p></div>
+      <button onclick="startMassTrivia()" style="width: 100%; background: linear-gradient(180deg, #7c3aed, #5b21b6); color: #fff; border: 3px solid #5b21b6; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #4c1d95; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderMassGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #ede9fe); color: #5b21b6; border: 3px solid #7c3aed; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #5b21b6; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 3: OLD vs NEW MASS — TRUE/FALSE
+// ============================================
+const OLD_NEW_MASS = [
+  { stmt: 'The Traditional Latin Mass is celebrated in Latin.', answer: true, fact: '✅ Yes! Latin throughout — the universal language of the Church.' },
+  { stmt: 'In the Traditional Mass, the priest faces the people.', answer: false, fact: '❌ FALSE. He faces East / the Tabernacle, leading the people TO God.' },
+  { stmt: 'The Traditional Mass uses Gregorian Chant.', answer: true, fact: '✅ Yes! Gregorian Chant — the official sacred music of the Church.' },
+  { stmt: 'The Novus Ordo Mass began in 1969.', answer: true, fact: '✅ Yes! The new Mass was introduced after Vatican II.' },
+  { stmt: 'In the Traditional Mass, women must cover their heads.', answer: true, fact: '✅ Yes! A veil/mantilla — based on St. Paul\'s teaching (1 Cor 11).' },
+  { stmt: 'You can receive Communion in your hand at the Traditional Mass.', answer: false, fact: '❌ FALSE. Communion is received on the tongue, kneeling.' },
+  { stmt: 'The Traditional Mass has 6 candles on the altar.', answer: true, fact: '✅ Yes! Six lit beeswax candles for solemn Masses.' },
+  { stmt: 'St. Pope Pius V codified the Traditional Latin Mass in 1570.', answer: true, fact: '✅ Yes! Through "Quo Primum" — for all time.' },
+  { stmt: 'The priest says most prayers SILENTLY in the Traditional Mass.', answer: true, fact: '✅ Yes! Especially the Canon — said in sacred silence.' },
+  { stmt: 'Servers must be ordained to serve the Traditional Mass.', answer: false, fact: '❌ FALSE. Boys and men can serve — no ordination needed.' },
+  { stmt: 'There is an altar rail in most Traditional Mass churches.', answer: true, fact: '✅ Yes! For receiving Communion kneeling.' },
+  { stmt: 'The Traditional Mass uses the same Liturgy for over 1,500 years.', answer: true, fact: '✅ Yes! It developed organically from the Apostles to St. Gregory the Great onwards.' },
+  { stmt: 'Both Masses are valid Catholic Masses.', answer: true, fact: '✅ Yes — but the Traditional Mass is uniquely revered.' },
+  { stmt: 'Pope St. Pius V said the Traditional Mass should change every 50 years.', answer: false, fact: '❌ FALSE! He said it should be celebrated "for all time, in perpetuity."' },
+  { stmt: 'Mass is the renewal of Calvary.', answer: true, fact: '✅ Yes! Every Mass is the same Sacrifice of Calvary, made present.' },
+  { stmt: 'The Traditional Mass uses kneeling for most of the prayers.', answer: true, fact: '✅ Yes — kneeling shows reverence to God truly present.' },
+  { stmt: 'You can talk loudly in church before Mass starts.', answer: false, fact: '❌ FALSE. Reverent silence — Jesus is in the Tabernacle!' },
+  { stmt: 'The Traditional Mass has no homily.', answer: false, fact: '❌ FALSE. Homilies are given, usually after the Gospel.' },
+  { stmt: 'The Last Gospel (start of John\'s Gospel) is read at end of Traditional Mass.', answer: true, fact: '✅ Yes! "In the beginning was the Word..." — a beautiful conclusion.' },
+  { stmt: 'Catholics are obliged to attend Mass every Sunday.', answer: true, fact: '✅ Yes! Sunday Mass is a holy obligation.' }
+];
+
+let onmState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startOldNewMass() {
+  onmState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderOldNewMass();
+}
+
+function renderOldNewMass() {
+  const s = onmState;
+  if (s.current >= OLD_NEW_MASS.length) return renderONMResults();
+  const q = OLD_NEW_MASS[s.current];
+  const isCorrect = s.answered && s.lastAnswer === q.answer;
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #d1fae5 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startOldNewMass()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">⚖️</div><h1 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.8rem;">True or False</h1></div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #10b981; border-radius: 14px; padding: 10px; margin: 14px 0;"><div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.9rem; margin-bottom: 6px;"><span>Q ${s.current + 1} of ${OLD_NEW_MASS.length}</span><span>⭐ ${s.score}</span></div><div style="background: #d1fae5; height: 8px; border-radius: 4px;"><div style="background: linear-gradient(90deg, #10b981, #047857); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / OLD_NEW_MASS.length) * 100}%;"></div></div></div>
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #047857; border-radius: 18px; padding: 22px; margin: 14px 0; text-align: center;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #064e3b; font-size: 1.1rem; line-height: 1.5; margin: 0;">${escapeHtml(q.stmt)}</p></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button onclick="${s.answered ? '' : 'answerONM(true)'}" ${s.answered ? 'disabled' : ''} style="background: ${s.answered && q.answer === true ? 'linear-gradient(135deg, #d1fae5, #10b981)' : s.answered && s.lastAnswer === true ? 'linear-gradient(135deg, #fee2e2, #ef4444)' : 'linear-gradient(135deg, #fff, #d1fae5)'}; border: 4px solid ${s.answered && q.answer === true ? '#047857' : s.answered && s.lastAnswer === true ? '#991b1b' : '#10b981'}; border-radius: 18px; padding: 22px; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Pacifico', cursive; font-size: 1.4rem; color: ${s.answered && q.answer === true ? '#fff' : s.answered && s.lastAnswer === true ? '#fff' : '#047857'}; box-shadow: 0 5px 0 ${s.answered && q.answer === true ? '#047857' : s.answered && s.lastAnswer === true ? '#991b1b' : '#047857'};">✅ True</button>
+        <button onclick="${s.answered ? '' : 'answerONM(false)'}" ${s.answered ? 'disabled' : ''} style="background: ${s.answered && q.answer === false ? 'linear-gradient(135deg, #d1fae5, #10b981)' : s.answered && s.lastAnswer === false ? 'linear-gradient(135deg, #fee2e2, #ef4444)' : 'linear-gradient(135deg, #fff, #fee2e2)'}; border: 4px solid ${s.answered && q.answer === false ? '#047857' : s.answered && s.lastAnswer === false ? '#991b1b' : '#dc2626'}; border-radius: 18px; padding: 22px; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Pacifico', cursive; font-size: 1.4rem; color: ${s.answered && q.answer === false ? '#fff' : s.answered && s.lastAnswer === false ? '#fff' : '#dc2626'}; box-shadow: 0 5px 0 ${s.answered && q.answer === false ? '#047857' : s.answered && s.lastAnswer === false ? '#991b1b' : '#991b1b'};">❌ False</button>
+      </div>
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, ${isCorrect ? '#d1fae5' : '#fee2e2'}); border: 3px solid ${isCorrect ? '#10b981' : '#ef4444'}; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${isCorrect ? '#047857' : '#991b1b'}; font-size: 1rem; margin: 0 0 6px;">${isCorrect ? '🎉 Correct!' : '😢 Not quite!'}</p><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">${escapeHtml(q.fact)}</p></div><button onclick="nextONM()" style="width: 100%; background: linear-gradient(180deg, #10b981, #047857); color: #fff; border: 3px solid #047857; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #064e3b; margin: 8px 0;">${s.current + 1 < OLD_NEW_MASS.length ? 'Next →' : 'Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerONM(ans) {
+  onmState.lastAnswer = ans;
+  onmState.answered = true;
+  if (ans === OLD_NEW_MASS[onmState.current].answer) onmState.score++;
+  renderOldNewMass();
+}
+
+function nextONM() {
+  onmState.current++;
+  onmState.answered = false;
+  onmState.lastAnswer = null;
+  renderOldNewMass();
+}
+
+function renderONMResults() {
+  const total = OLD_NEW_MASS.length;
+  const pct = Math.round((onmState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep learning!';
+  if (pct >= 90) medal = '🏆', msg = 'Mass expert!';
+  else if (pct >= 75) medal = '🥇', msg = 'Excellent!';
+  else if (pct >= 60) medal = '🥈', msg = 'Good!';
+  else if (pct >= 40) medal = '🥉', msg = 'Nice try!';
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #d1fae5 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="text-align: center;"><button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;"><div style="font-size: 6rem;">${medal}</div><h1 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 2.2rem;">Game Complete!</h1><div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 4px solid #10b981; border-radius: 18px; padding: 22px; margin: 18px 0;"><div style="font-family: 'Pacifico', cursive; color: #047857; font-size: 3.5rem;">${onmState.score} / ${total}</div><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857;">${pct}%</p></div><p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p></div>
+      <button onclick="startOldNewMass()" style="width: 100%; background: linear-gradient(180deg, #10b981, #047857); color: #fff; border: 3px solid #047857; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #064e3b; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderMassGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #d1fae5); color: #047857; border: 3px solid #10b981; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #047857; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 4: LATIN PRAYER FILL-IN
+// ============================================
+const LATIN_FILL = [
+  { title: 'Sign of the Cross', titleBs: 'Timaan sa Krus', template: 'In _BLANK1_ Patris, et _BLANK2_, et Spiritus _BLANK3_. Amen.', blanks: ['nomine', 'Filii', 'Sancti'] },
+  { title: 'Pater Noster (start)', titleBs: 'Amahan Namo', template: '_BLANK1_ noster, qui es in _BLANK2_, sanctificetur _BLANK3_ tuum.', blanks: ['Pater', 'caelis', 'nomen'] },
+  { title: 'Ave Maria (start)', titleBs: 'Maghimaya Ka, Maria', template: '_BLANK1_ Maria, gratia _BLANK2_, _BLANK3_ tecum.', blanks: ['Ave', 'plena', 'Dominus'] },
+  { title: 'Sanctus', titleBs: 'Santo, Santo, Santo', template: '_BLANK1_, _BLANK2_, Sanctus, _BLANK3_ Deus Sabaoth!', blanks: ['Sanctus', 'Sanctus', 'Dominus'] },
+  { title: 'Agnus Dei', titleBs: 'Kordero sa Diyos', template: '_BLANK1_ Dei, qui tollis peccata _BLANK2_, miserere _BLANK3_.', blanks: ['Agnus', 'mundi', 'nobis'] }
+];
+
+let lfState = { idx: 0, answers: [], currentBlank: 0 };
+
+function startLatinFill() {
+  lfState = { idx: 0, answers: [], currentBlank: 0 };
+  renderLatinFill();
+}
+
+function renderLatinFill() {
+  const s = lfState;
+  if (s.idx >= LATIN_FILL.length) return renderLFFinish();
+  const q = LATIN_FILL[s.idx];
+  const totalBlanks = q.blanks.length;
+  const filled = s.answers.length;
+
+  let displayText = q.template;
+  for (let i = 0; i < totalBlanks; i++) {
+    const placeholder = `_BLANK${i + 1}_`;
+    if (i < filled) {
+      const isCorrect = s.answers[i].toLowerCase().trim() === q.blanks[i].toLowerCase();
+      displayText = displayText.replace(placeholder, `<strong style="color: ${isCorrect ? '#047857' : '#dc2626'}; background: ${isCorrect ? '#d1fae5' : '#fee2e2'}; padding: 2px 8px; border-radius: 6px;">${escapeHtml(s.answers[i])}${isCorrect ? ' ✅' : ' ❌ (' + q.blanks[i] + ')'}</strong>`);
+    } else if (i === filled) {
+      displayText = displayText.replace(placeholder, `<span style="display: inline-block; background: #fef3c7; border: 2px dashed #b45309; color: #b45309; padding: 2px 14px; border-radius: 6px; font-weight: 700;">??? (BLANK ${i + 1})</span>`);
+    } else {
+      displayText = displayText.replace(placeholder, `<span style="display: inline-block; background: #f3f4f6; border: 1px dashed #cbd5e1; color: #94a3b8; padding: 2px 14px; border-radius: 6px;">_____</span>`);
+    }
+  }
+
+  let options = [];
+  if (s.currentBlank < totalBlanks) {
+    const correct = q.blanks[s.currentBlank];
+    options.push(correct);
+    const allWords = [].concat(...LATIN_FILL.map(p => p.blanks)).filter(w => w.toLowerCase() !== correct.toLowerCase());
+    const unique = [...new Set(allWords)];
+    const shuffled = unique.sort(() => Math.random() - 0.5).slice(0, 3);
+    options = options.concat(shuffled);
+    options = options.sort(() => Math.random() - 0.5);
+  }
+
+  const allFilled = filled >= totalBlanks;
+  const allCorrect = allFilled && s.answers.every((a, i) => a.toLowerCase().trim() === q.blanks[i].toLowerCase());
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startLatinFill()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🧩</div><h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.8rem;">Latin Prayer Fill-In</h1><p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem;">Prayer ${s.idx + 1} of ${LATIN_FILL.length}</p></div>
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #be185d;">
+        <p style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: #be185d; font-weight: 700; text-align: center; margin: 0;">📿 ${escapeHtml(q.title)}</p>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1rem; text-align: center; margin: 4px 0 12px;">~ ${escapeHtml(q.titleBs)} ~</p>
+        <p style="font-family: 'Georgia', serif; color: var(--plum-deep); font-size: 1rem; line-height: 1.9; margin: 0; font-style: italic;">${displayText}</p>
+      </div>
+      ${!allFilled ? `<p style="font-family: 'Quicksand', sans-serif; color: #be185d; font-weight: 700; text-align: center; margin: 14px 0 8px;">🎯 Pick the Latin word for blank ${s.currentBlank + 1}:</p><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">${options.map(opt => `<button onclick="answerLF('${escapeHtml(opt).replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 14px; padding: 12px; cursor: pointer; font-family: 'Georgia', serif; font-weight: 700; font-style: italic; color: #be185d; font-size: 0.95rem; box-shadow: 0 3px 0 #be185d;">${escapeHtml(opt)}</button>`).join('')}</div>` : `<div style="background: linear-gradient(135deg, ${allCorrect ? '#d1fae5' : '#fef3c7'}, ${allCorrect ? '#10b981' : '#f59e0b'}); border: 3px solid ${allCorrect ? '#047857' : '#b45309'}; border-radius: 18px; padding: 16px; margin: 14px 0; text-align: center;"><div style="font-size: 3rem;">${allCorrect ? '🎉' : '👍'}</div><p style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.4rem; margin: 4px 0;">${allCorrect ? 'PERFECT!' : 'Good Try!'}</p></div><button onclick="nextLF()" style="width: 100%; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; border: 3px solid #be185d; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #9f1239;">${s.idx + 1 < LATIN_FILL.length ? 'Next Prayer →' : 'Finish! 🏆'}</button>`}
+    </div>
+  `);
+}
+
+function answerLF(word) {
+  lfState.answers.push(word);
+  lfState.currentBlank++;
+  renderLatinFill();
+}
+
+function nextLF() {
+  lfState.idx++;
+  lfState.currentBlank = 0;
+  lfState.answers = [];
+  renderLatinFill();
+}
+
+function renderLFFinish() {
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="text-align: center;"><button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;"><div style="font-size: 6rem;">🏆</div><h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 2.2rem;">Deo Gratias!</h1><p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">All Latin prayers complete!</p></div>
+      <button onclick="startLatinFill()" style="width: 100%; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; border: 3px solid #be185d; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #9f1239; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderMassGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #fce7f3); color: #be185d; border: 3px solid #ec4899; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #be185d; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 5: WHEEL OF MASS
+// ============================================
+const MASS_PARTS = [
+  { name: 'The Asperges', nameBs: 'Pagsablig sa Tubig', icon: '💧', color: '#0ea5e9', desc: 'Holy water sprinkled on the people before Mass — reminding us of Baptism and asking God to cleanse us.' },
+  { name: 'Prayers at the Foot of the Altar', nameBs: 'Pag-ampo sa Tiilan', icon: '🙏', color: '#7c3aed', desc: 'The priest and servers pray Psalm 42 — "Introibo ad altare Dei" — preparing to enter God\'s presence.' },
+  { name: 'The Confiteor', nameBs: 'Confiteor', icon: '😢', color: '#dc2626', desc: 'A prayer of contrition — "I confess to almighty God..." — said by the priest and the servers.' },
+  { name: 'The Kyrie', nameBs: 'Kyrie', icon: '🕊️', color: '#10b981', desc: 'Nine pleas: "Lord, have mercy. Christ, have mercy. Lord, have mercy." — to the Holy Trinity.' },
+  { name: 'The Gloria', nameBs: 'Gloria', icon: '✨', color: '#fbbf24', desc: 'The angels\' song from Bethlehem: "Glory to God in the highest, and on earth peace to men of good will."' },
+  { name: 'The Collect', nameBs: 'Collect', icon: '📿', color: '#ec4899', desc: 'The opening prayer that "collects" the prayers of the people — changes each Sunday.' },
+  { name: 'The Epistle', nameBs: 'Sulat', icon: '✉️', color: '#92400e', desc: 'A reading from the New Testament letters (Paul, James, Peter, John, etc.).' },
+  { name: 'The Gospel', nameBs: 'Maayong Balita', icon: '📖', color: '#1e40af', desc: 'A reading from one of the four Gospels — the words and actions of Jesus Himself.' },
+  { name: 'The Credo', nameBs: 'Pagtuo', icon: '⛪', color: '#6d28d9', desc: 'The Nicene Creed — our profession of faith, sung or said.' },
+  { name: 'The Offertory', nameBs: 'Halad', icon: '🍞', color: '#d97706', desc: 'Bread and wine offered to God — soon to be transformed into Jesus.' },
+  { name: 'The Sanctus', nameBs: 'Santo', icon: '👼', color: '#f59e0b', desc: 'The angels\' praise: "Holy, Holy, Holy is the Lord God of Hosts!" — the threshold of the great mystery.' },
+  { name: 'The Consecration', nameBs: 'Consagrasyon', icon: '✝️', color: '#dc2626', desc: 'THE most sacred moment: bread and wine BECOME the Body and Blood of Christ. The priest says Jesus\' own words.' },
+  { name: 'The Pater Noster', nameBs: 'Amahan Namo', icon: '🙌', color: '#7c3aed', desc: 'The Our Father — the prayer Jesus Himself taught us, sung in Latin.' },
+  { name: 'The Agnus Dei', nameBs: 'Kordero sa Diyos', icon: '🐑', color: '#0ea5e9', desc: '"Lamb of God, who takes away the sins of the world, have mercy on us." — said three times.' },
+  { name: 'Holy Communion', nameBs: 'Komunyon', icon: '🍾', color: '#10b981', desc: 'Receiving Jesus truly — Body, Blood, Soul, and Divinity. The greatest moment of our lives.' },
+  { name: 'The Last Gospel', nameBs: 'Katapusang Maayong Balita', icon: '📜', color: '#5b21b6', desc: 'The beginning of John\'s Gospel: "In the beginning was the Word..." — read at the end as a final blessing.' },
+  { name: 'The Ite Missa Est', nameBs: 'Pasalamat', icon: '🕊️', color: '#fbbf24', desc: '"Go, the Mass is ended" — sent forth to bring Christ to the world!' }
+];
+
+let massWheelState = { spinning: false, result: null };
+
+function startMassWheel() {
+  massWheelState = { spinning: false, result: null };
+  renderMassWheel();
+}
+
+function renderMassWheel() {
+  const s = massWheelState;
+  const m = s.result !== null ? MASS_PARTS[s.result] : null;
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px;"><button onclick="renderMassGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #1e40af; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🎡</div><h1 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.8rem;">Wheel of Mass</h1><p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem;">~ Spin to learn a part of the Mass! ~</p></div>
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 4px solid #2563eb; border-radius: 50%; aspect-ratio: 1; max-width: 280px; margin: 18px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 0 #1e40af; position: relative; overflow: hidden;">
+        <div style="position: absolute; inset: 0; background: conic-gradient(from 0deg, #fbbf24 0deg 90deg, #7c3aed 90deg 180deg, #10b981 180deg 270deg, #ec4899 270deg 360deg); opacity: 0.3;"></div>
+        ${s.spinning ? `<div style="font-size: 4rem; animation: spinWheel 0.4s linear infinite; z-index: 2;">✝️</div>` : m ? `<div style="text-align: center; z-index: 2; padding: 14px;"><div style="font-size: 3.5rem;">${m.icon}</div><p style="font-family: 'Pacifico', cursive; color: ${m.color}; font-size: 0.9rem; margin: 4px 0; line-height: 1.1; text-shadow: 1px 1px 0 #fff;">${escapeHtml(m.name)}</p></div>` : `<div style="text-align: center; z-index: 2;"><div style="font-size: 4rem;">✝️</div><p style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1rem;">Spin Me!</p></div>`}
+      </div>
+      <style>@keyframes spinWheel { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
+      ${!s.spinning && !m ? `<button onclick="spinMassWheel()" style="width: 100%; background: linear-gradient(180deg, #fbbf24, #b45309); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 16px; cursor: pointer; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 5px 0 #78350f; margin: 8px 0; text-shadow: 1px 1px 0 #92400e;">🎡 SPIN THE WHEEL!</button>` : ''}
+      ${m && !s.spinning ? `<div style="background: linear-gradient(135deg, #fff, ${m.color}33); border: 3px solid ${m.color}; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 ${m.color};"><div style="text-align: center; margin-bottom: 10px;"><div style="font-size: 3rem;">${m.icon}</div><p style="font-family: 'Pacifico', cursive; color: ${m.color}; font-size: 1.4rem; margin: 4px 0;">${escapeHtml(m.name)}</p><p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin: 0;">~ ${escapeHtml(m.nameBs)} ~</p></div><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.6; margin: 10px 0;">${escapeHtml(m.desc)}</p></div><button onclick="startMassWheel()" style="width: 100%; background: linear-gradient(180deg, #fbbf24, #b45309); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #78350f; margin: 8px 0;">🎡 Spin Again!</button>` : ''}
+      <button onclick="renderMassGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #dbeafe); color: #1e40af; border: 3px solid #2563eb; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #1e40af; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+function spinMassWheel() {
+  massWheelState.spinning = true;
+  renderMassWheel();
+  setTimeout(() => {
+    massWheelState.spinning = false;
+    massWheelState.result = Math.floor(Math.random() * MASS_PARTS.length);
+    renderMassWheel();
+  }, 2000);
+}
+
+
+// ============================================
+// 📚 CATECHISM GAMES FOR KIDS
+// 5 games: Creed Match, Q&A Quiz, Doctrine T/F, Creed Fill-In, Wheel of Wisdom
+// ============================================
+
+function renderCatechismGames() {
+  ensureGuestStudent();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderCatechismGames();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 30%, #fce7f3 60%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderCatechism()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← Catechism</button>
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🏠 Home</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">🎮 📚 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 2rem; margin: 6px 0; text-shadow: 2px 2px 0 #fff;">Catechism Games</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Mga Dula sa Pagtulun-an ~</p>
+      </div>
+
+      <button onclick="startCreedMatch()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🧠</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem;">Creed Memory Match</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Pares-Pares ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Match Creed articles to their meanings!</div></div></div>
+      </button>
+
+      <button onclick="startCatechismQuiz()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fce7f3); border: 4px solid #ec4899; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #be185d; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🎯</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem;">Catechism Q&A Quiz</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Pangutana sa Pagtulun-an ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">25 traditional Catholic questions!</div></div></div>
+      </button>
+
+      <button onclick="startDoctrineTF()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #d1fae5); border: 4px solid #10b981; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #047857; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">✅</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem;">True or False?</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Tinuod o Bakak ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Test what you know about the Faith!</div></div></div>
+      </button>
+
+      <button onclick="startCreedFill()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #ede9fe); border: 4px solid #7c3aed; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #5b21b6; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🧩</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.4rem;">Creed Fill-In</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Sulati ang Kredo ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Complete the Apostles\' Creed!</div></div></div>
+      </button>
+
+      <button onclick="startWisdomWheel()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #dbeafe); border: 4px solid #2563eb; border-radius: 22px; padding: 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #1e40af; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 14px;"><div style="font-size: 3rem;">🎡</div><div style="flex: 1;"><div style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.4rem;">Wheel of Wisdom</div><div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Ligid sa Kaalam ~</div><div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">Spin to learn a Catholic teaching!</div></div></div>
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 1: CREED MEMORY MATCH
+// ============================================
+let creedMatchState = { cards: [], flipped: [], matched: [], moves: 0, locked: false };
+
+function startCreedMatch() {
+  const pairs = [
+    { id: 'father', emoji: '👑', label: 'Father Almighty', color: '#fbbf24' },
+    { id: 'son', emoji: '✝️', label: 'Jesus, His Son', color: '#dc2626' },
+    { id: 'spirit', emoji: '🕊️', label: 'Holy Spirit', color: '#0ea5e9' },
+    { id: 'mary', emoji: '🌹', label: 'Born of Mary', color: '#ec4899' },
+    { id: 'cross', emoji: '🩸', label: 'Crucified, Died', color: '#7c3aed' },
+    { id: 'rise', emoji: '🌅', label: 'Rose Again', color: '#10b981' },
+    { id: 'church', emoji: '⛪', label: 'Holy Church', color: '#92400e' }
+  ];
+
+  let cards = [];
+  pairs.forEach(p => {
+    cards.push({ id: p.id, type: 'emoji', content: p.emoji, color: p.color });
+    cards.push({ id: p.id, type: 'label', content: p.label, color: p.color });
+  });
+
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+
+  creedMatchState = { cards, flipped: [], matched: [], moves: 0, locked: false };
+  renderCreedMatch();
+}
+
+function renderCreedMatch() {
+  const { cards, flipped, matched, moves } = creedMatchState;
+  const totalPairs = cards.length / 2;
+  const matchedPairs = matched.length / 2;
+  const allMatched = matchedPairs === totalPairs;
+
+  const cardsHtml = cards.map((c, i) => {
+    const isFlipped = flipped.includes(i) || matched.includes(i);
+    return `<button onclick="flipCreedCard(${i})" style="aspect-ratio: 1; background: ${isFlipped ? `linear-gradient(135deg, #fff, ${c.color}33)` : 'linear-gradient(135deg, #fef3c7, #d97706)'}; border: 3px solid ${isFlipped ? c.color : '#92400e'}; border-radius: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; ${isFlipped ? `color: ${c.color};` : 'color: #fff;'} font-size: ${isFlipped && c.type === 'label' ? '0.7rem' : '1.8rem'}; padding: 6px; text-align: center; box-shadow: 0 3px 0 ${isFlipped ? c.color : '#92400e'}; ${matched.includes(i) ? 'opacity: 0.5;' : ''} display: flex; align-items: center; justify-content: center; line-height: 1.2;">${isFlipped ? escapeHtml(c.content) : '📚'}</button>`;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startCreedMatch()" style="background: rgba(255,255,255,0.85); border: 2px solid #92400e; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🧠</div><h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.8rem;">Creed Memory Match</h1></div>
+      <div style="display: flex; justify-content: space-around; background: rgba(255,255,255,0.85); border: 2px solid #d97706; border-radius: 14px; padding: 10px; margin: 14px 0;">
+        <div style="text-align: center;"><div style="font-family: 'Quicksand', sans-serif; font-size: 0.75rem; color: var(--pastel-lavender-darker); letter-spacing: 0.1em;">MATCHES</div><div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem;">${matchedPairs} / ${totalPairs}</div></div>
+        <div style="text-align: center;"><div style="font-family: 'Quicksand', sans-serif; font-size: 0.75rem; color: var(--pastel-lavender-darker); letter-spacing: 0.1em;">MOVES</div><div style="font-family: 'Pacifico', cursive; color: #d97706; font-size: 1.4rem;">${moves}</div></div>
+      </div>
+      ${allMatched ? `<div style="background: linear-gradient(135deg, #d1fae5, #10b981); border: 3px solid #047857; border-radius: 18px; padding: 18px; text-align: center;"><div style="font-size: 3rem;">🎉📚🎉</div><h2 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.6rem;">You Won!</h2><p style="font-family: 'Quicksand', sans-serif; color: #fff;">Completed in ${moves} moves!</p></div>` : ''}
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0;">${cardsHtml}</div>
+    </div>
+  `);
+}
+
+function flipCreedCard(idx) {
+  const s = creedMatchState;
+  if (s.locked || s.flipped.includes(idx) || s.matched.includes(idx) || s.flipped.length >= 2) return;
+  s.flipped.push(idx);
+  if (s.flipped.length === 2) {
+    s.moves++;
+    s.locked = true;
+    const [a, b] = s.flipped;
+    if (s.cards[a].id === s.cards[b].id && a !== b) {
+      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; renderCreedMatch(); }, 800);
+    } else {
+      setTimeout(() => { s.flipped = []; s.locked = false; renderCreedMatch(); }, 1200);
+    }
+  }
+  renderCreedMatch();
+}
+
+// ============================================
+// GAME 2: CATECHISM Q&A QUIZ (Penny Catechism style)
+// ============================================
+const CATECHISM_QA = [
+  { q: 'Who made you?', options: ['My parents', 'God', 'A teacher', 'I was always here'], correct: 1, fact: 'God made me. — Penny Catechism Q.1' },
+  { q: 'Why did God make you?', options: ['To work hard', 'To be smart', 'To know, love, and serve Him', 'To be famous'], correct: 2, fact: 'To know Him, to love Him, to serve Him in this world, and be happy with Him forever in the next!' },
+  { q: 'How many Persons are there in God?', options: ['One', 'Two', 'Three', 'Four'], correct: 2, fact: 'Three Divine Persons in One God: Father, Son, and Holy Spirit — the Holy Trinity.' },
+  { q: 'What is the Blessed Trinity?', options: ['One God in three Persons', 'Three gods', 'A holy book', 'A type of prayer'], correct: 0, fact: 'One God in Three Divine Persons — the central mystery of our faith!' },
+  { q: 'Who is God?', options: ['A great man', 'The Creator and Lord of all things', 'An angel', 'A spirit only'], correct: 1, fact: 'God is the Creator and Lord of all things, infinitely perfect and eternally happy.' },
+  { q: 'What is a soul?', options: ['Your brain', 'A spiritual living thing made by God', 'Your shadow', 'Just a feeling'], correct: 1, fact: 'A spiritual living thing, made in God\'s image, that will never die.' },
+  { q: 'How many Sacraments are there?', options: ['3', '5', '7', '10'], correct: 2, fact: 'Seven: Baptism, Confirmation, Eucharist, Penance, Anointing, Holy Orders, Matrimony!' },
+  { q: 'What is the first Sacrament?', options: ['Communion', 'Baptism', 'Confirmation', 'Confession'], correct: 1, fact: 'Baptism — the door to all the other sacraments. It washes away Original Sin.' },
+  { q: 'How many Commandments are there?', options: ['5', '7', '10', '12'], correct: 2, fact: 'The Ten Commandments — given by God to Moses on Mount Sinai.' },
+  { q: 'What is the first Commandment?', options: ['Honor parents', 'I am the Lord thy God', 'Do not steal', 'Do not lie'], correct: 1, fact: '"I am the Lord thy God; thou shalt not have strange gods before Me."' },
+  { q: 'Who is the founder of the Catholic Church?', options: ['Peter', 'Paul', 'Jesus Christ', 'The Pope'], correct: 2, fact: 'Jesus Christ — He said: "Upon this rock I will build my Church."' },
+  { q: 'Who was the first Pope?', options: ['Paul', 'John', 'Peter', 'James'], correct: 2, fact: 'St. Peter — Jesus made him the first Pope!' },
+  { q: 'How many Marks of the Church are there?', options: ['Two', 'Three', 'Four', 'Five'], correct: 2, fact: 'Four: One, Holy, Catholic, and Apostolic.' },
+  { q: 'What is sin?', options: ['A mistake', 'A free choice against God\'s law', 'Bad luck', 'An accident'], correct: 1, fact: 'Sin is a free, deliberate choice against God\'s law.' },
+  { q: 'How many kinds of sin are there?', options: ['One', 'Two: Original and actual', 'Three', 'Four'], correct: 1, fact: 'Original Sin (inherited from Adam) and Actual Sin (we choose).' },
+  { q: 'What are the two kinds of actual sin?', options: ['Big and small', 'Mortal and venial', 'Old and new', 'Inside and outside'], correct: 1, fact: 'Mortal (kills grace in soul) and Venial (wounds grace).' },
+  { q: 'What is grace?', options: ['Saying thank you', 'A free gift of God to help us be holy', 'A type of prayer', 'A blessing'], correct: 1, fact: 'A supernatural gift from God that helps us be holy and reach Heaven.' },
+  { q: 'Where will Jesus come at the end of the world?', options: ['Bethlehem', 'Jerusalem', 'In the clouds with great power', 'A church'], correct: 2, fact: 'In the clouds with great power and majesty — to judge the living and the dead.' },
+  { q: 'What is Heaven?', options: ['A garden on earth', 'Where the saints live with God forever', 'A dream', 'Outer space'], correct: 1, fact: 'The eternal home of those who die in God\'s grace — perfect happiness with God!' },
+  { q: 'What is Purgatory?', options: ['A second Heaven', 'A place of cleansing for souls before Heaven', 'Same as Hell', 'A church'], correct: 1, fact: 'A state of purification for souls who die with venial sin or temporal punishment to pay.' },
+  { q: 'Why must we pray?', options: ['It is fun', 'It is required by tradition only', 'God commanded it; we need His help', 'To impress others'], correct: 2, fact: 'God commanded us to pray, and we need His help and grace constantly.' },
+  { q: 'What is the most perfect prayer?', options: ['Hail Mary', 'Glory Be', 'The Our Father', 'The Memorare'], correct: 2, fact: 'The Our Father — Jesus Himself taught it!' },
+  { q: 'Who taught us the Our Father?', options: ['Peter', 'Paul', 'Jesus', 'Mary'], correct: 2, fact: 'Jesus Christ Himself — when His disciples asked how to pray.' },
+  { q: 'What is the Hail Mary made of?', options: ['One prayer', 'Words from Gabriel, Elizabeth, and the Church', 'A Bible verse', 'A song'], correct: 1, fact: 'Gabriel\'s greeting + Elizabeth\'s words + the Church\'s prayer for sinners!' },
+  { q: 'What is the Bible?', options: ['Any holy book', 'The Word of God in writing', 'A storybook', 'A history book'], correct: 1, fact: 'The inspired Word of God — written by men under the inspiration of the Holy Spirit.' }
+];
+
+let catQuizState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startCatechismQuiz() {
+  catQuizState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderCatechismQuiz();
+}
+
+function renderCatechismQuiz() {
+  const s = catQuizState;
+  if (s.current >= CATECHISM_QA.length) return renderCatQuizResults();
+  const q = CATECHISM_QA[s.current];
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let bg = 'linear-gradient(135deg, #fff, #fce7f3)', border = '#ec4899', shadow = '#be185d', textColor = '#be185d';
+    if (s.answered) {
+      if (i === q.correct) { bg = 'linear-gradient(135deg, #d1fae5, #10b981)'; border = '#047857'; shadow = '#047857'; textColor = '#fff'; }
+      else if (i === s.lastAnswer) { bg = 'linear-gradient(135deg, #fee2e2, #ef4444)'; border = '#991b1b'; shadow = '#991b1b'; textColor = '#fff'; }
+      else { bg = 'rgba(255,255,255,0.5)'; border = '#cbd5e1'; shadow = '#94a3b8'; textColor = '#64748b'; }
+    }
+    return `<button onclick="${s.answered ? '' : `answerCatQuiz(${i})`}" ${s.answered ? 'disabled' : ''} style="display: block; width: 100%; background: ${bg}; border: 3px solid ${border}; border-radius: 14px; padding: 14px; margin: 8px 0; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${textColor}; font-size: 0.95rem; box-shadow: 0 4px 0 ${shadow}; text-align: left;">${String.fromCharCode(65 + i)}. ${escapeHtml(opt)}${s.answered && i === q.correct ? ' ✅' : ''}${s.answered && i === s.lastAnswer && i !== q.correct ? ' ❌' : ''}</button>`;
+  }).join('');
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startCatechismQuiz()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🎯</div><h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.8rem;">Catechism Q&A</h1></div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #ec4899; border-radius: 14px; padding: 10px; margin: 14px 0;"><div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #be185d; font-size: 0.9rem; margin-bottom: 6px;"><span>Q ${s.current + 1} of ${CATECHISM_QA.length}</span><span>⭐ ${s.score}</span></div><div style="background: #fce7f3; height: 8px; border-radius: 4px;"><div style="background: linear-gradient(90deg, #ec4899, #be185d); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / CATECHISM_QA.length) * 100}%;"></div></div></div>
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #be185d; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #be185d;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #831843; font-size: 1.05rem; line-height: 1.5; margin: 0;">${escapeHtml(q.q)}</p></div>
+      ${optionsHtml}
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.85rem; margin: 0 0 6px;">📖 DID YOU KNOW?</p><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">${escapeHtml(q.fact)}</p></div><button onclick="nextCatQuiz()" style="width: 100%; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; border: 3px solid #be185d; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #9f1239;">${s.current + 1 < CATECHISM_QA.length ? 'Next →' : 'Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerCatQuiz(idx) {
+  catQuizState.lastAnswer = idx;
+  catQuizState.answered = true;
+  if (idx === CATECHISM_QA[catQuizState.current].correct) catQuizState.score++;
+  renderCatechismQuiz();
+}
+
+function nextCatQuiz() {
+  catQuizState.current++;
+  catQuizState.answered = false;
+  catQuizState.lastAnswer = null;
+  renderCatechismQuiz();
+}
+
+function renderCatQuizResults() {
+  const total = CATECHISM_QA.length;
+  const pct = Math.round((catQuizState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep studying!';
+  if (pct >= 90) medal = '🏆', msg = 'Catechism scholar!';
+  else if (pct >= 75) medal = '🥇', msg = 'Excellent!';
+  else if (pct >= 60) medal = '🥈', msg = 'Good work!';
+  else if (pct >= 40) medal = '🥉', msg = 'Nice try!';
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fce7f3 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="text-align: center;"><button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;"><div style="font-size: 6rem;">${medal}</div><h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 2.2rem;">Quiz Complete!</h1><div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 4px solid #ec4899; border-radius: 18px; padding: 22px; margin: 18px 0;"><div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 3.5rem;">${catQuizState.score} / ${total}</div><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #be185d;">${pct}%</p></div><p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p></div>
+      <button onclick="startCatechismQuiz()" style="width: 100%; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; border: 3px solid #be185d; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #9f1239; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderCatechismGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #fce7f3); color: #be185d; border: 3px solid #ec4899; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #be185d; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 3: DOCTRINE TRUE/FALSE
+// ============================================
+const DOCTRINE_TF = [
+  { stmt: 'There is only one God.', answer: true, fact: '✅ Yes! One God in Three Divine Persons.' },
+  { stmt: 'Mary is greater than God.', answer: false, fact: '❌ FALSE. Mary is the greatest creature, but God is infinitely above all creatures.' },
+  { stmt: 'Jesus is both God and man.', answer: true, fact: '✅ Yes! Fully God AND fully man — the Hypostatic Union.' },
+  { stmt: 'The Bible has 73 books in the Catholic Bible.', answer: true, fact: '✅ Yes! Protestants removed 7 books.' },
+  { stmt: 'Catholics worship statues.', answer: false, fact: '❌ FALSE. We HONOR the saints they represent. We worship only God.' },
+  { stmt: 'Jesus founded the Catholic Church.', answer: true, fact: '✅ Yes! "Upon this rock I will build my Church" (Matthew 16:18).' },
+  { stmt: 'Confession only forgives little sins.', answer: false, fact: '❌ FALSE. Confession can forgive ALL sins — even mortal ones.' },
+  { stmt: 'The Pope is the successor of St. Peter.', answer: true, fact: '✅ Yes! In an unbroken line for 2,000 years!' },
+  { stmt: 'Catholics must attend Mass every Sunday.', answer: true, fact: '✅ Yes! Sunday Mass is a holy obligation.' },
+  { stmt: 'Mortal sin destroys the life of grace in your soul.', answer: true, fact: '✅ Yes! Mortal sin kills grace — that is why we must confess it.' },
+  { stmt: 'You can earn Heaven by being a good person without God.', answer: false, fact: '❌ FALSE. Heaven is a free gift — but it requires God\'s grace and cooperating with it.' },
+  { stmt: 'The Eucharist is just a symbol.', answer: false, fact: '❌ FALSE. The Eucharist is TRULY Jesus — Body, Blood, Soul, and Divinity.' },
+  { stmt: 'Angels are real beings.', answer: true, fact: '✅ Yes! Pure spirits created by God.' },
+  { stmt: 'Hell is a real place of eternal punishment.', answer: true, fact: '✅ Yes! Jesus warned about Hell more than Heaven.' },
+  { stmt: 'Once saved, always saved.', answer: false, fact: '❌ FALSE. We can lose grace through mortal sin and must persevere to the end.' },
+  { stmt: 'There are 7 Sacraments.', answer: true, fact: '✅ Yes! Baptism, Confirmation, Eucharist, Penance, Anointing, Holy Orders, Matrimony.' },
+  { stmt: 'The Holy Trinity is one God in three Persons.', answer: true, fact: '✅ Yes! The central mystery of our Faith.' },
+  { stmt: 'Mary had other children besides Jesus.', answer: false, fact: '❌ FALSE. Mary is Ever-Virgin — Jesus is her only Son.' },
+  { stmt: 'You should pray every day.', answer: true, fact: '✅ Yes! "Pray without ceasing" (1 Thessalonians 5:17).' },
+  { stmt: 'Faith is a feeling.', answer: false, fact: '❌ FALSE. Faith is a virtue and gift from God — not just a feeling.' }
+];
+
+let doctTFState = { current: 0, score: 0, answered: false, lastAnswer: null };
+
+function startDoctrineTF() {
+  doctTFState = { current: 0, score: 0, answered: false, lastAnswer: null };
+  renderDoctrineTF();
+}
+
+function renderDoctrineTF() {
+  const s = doctTFState;
+  if (s.current >= DOCTRINE_TF.length) return renderDoctTFResults();
+  const q = DOCTRINE_TF[s.current];
+  const isCorrect = s.answered && s.lastAnswer === q.answer;
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #d1fae5 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startDoctrineTF()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">✅ ❌</div><h1 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.8rem;">True or False</h1></div>
+      <div style="background: rgba(255,255,255,0.85); border: 2px solid #10b981; border-radius: 14px; padding: 10px; margin: 14px 0;"><div style="display: flex; justify-content: space-between; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.9rem; margin-bottom: 6px;"><span>Q ${s.current + 1} of ${DOCTRINE_TF.length}</span><span>⭐ ${s.score}</span></div><div style="background: #d1fae5; height: 8px; border-radius: 4px;"><div style="background: linear-gradient(90deg, #10b981, #047857); height: 100%; width: ${((s.current + (s.answered ? 1 : 0)) / DOCTRINE_TF.length) * 100}%;"></div></div></div>
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #047857; border-radius: 18px; padding: 22px; margin: 14px 0; text-align: center;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #064e3b; font-size: 1.1rem; line-height: 1.5; margin: 0;">${escapeHtml(q.stmt)}</p></div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button onclick="${s.answered ? '' : 'answerDoctTF(true)'}" ${s.answered ? 'disabled' : ''} style="background: ${s.answered && q.answer === true ? 'linear-gradient(135deg, #d1fae5, #10b981)' : s.answered && s.lastAnswer === true ? 'linear-gradient(135deg, #fee2e2, #ef4444)' : 'linear-gradient(135deg, #fff, #d1fae5)'}; border: 4px solid ${s.answered && q.answer === true ? '#047857' : s.answered && s.lastAnswer === true ? '#991b1b' : '#10b981'}; border-radius: 18px; padding: 22px; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Pacifico', cursive; font-size: 1.4rem; color: ${s.answered && q.answer === true ? '#fff' : s.answered && s.lastAnswer === true ? '#fff' : '#047857'}; box-shadow: 0 5px 0 ${s.answered && q.answer === true ? '#047857' : s.answered && s.lastAnswer === true ? '#991b1b' : '#047857'};">✅ True</button>
+        <button onclick="${s.answered ? '' : 'answerDoctTF(false)'}" ${s.answered ? 'disabled' : ''} style="background: ${s.answered && q.answer === false ? 'linear-gradient(135deg, #d1fae5, #10b981)' : s.answered && s.lastAnswer === false ? 'linear-gradient(135deg, #fee2e2, #ef4444)' : 'linear-gradient(135deg, #fff, #fee2e2)'}; border: 4px solid ${s.answered && q.answer === false ? '#047857' : s.answered && s.lastAnswer === false ? '#991b1b' : '#dc2626'}; border-radius: 18px; padding: 22px; cursor: ${s.answered ? 'default' : 'pointer'}; font-family: 'Pacifico', cursive; font-size: 1.4rem; color: ${s.answered && q.answer === false ? '#fff' : s.answered && s.lastAnswer === false ? '#fff' : '#dc2626'}; box-shadow: 0 5px 0 ${s.answered && q.answer === false ? '#047857' : s.answered && s.lastAnswer === false ? '#991b1b' : '#991b1b'};">❌ False</button>
+      </div>
+      ${s.answered ? `<div style="background: linear-gradient(135deg, #fff, ${isCorrect ? '#d1fae5' : '#fee2e2'}); border: 3px solid ${isCorrect ? '#10b981' : '#ef4444'}; border-radius: 14px; padding: 14px; margin: 14px 0;"><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: ${isCorrect ? '#047857' : '#991b1b'}; font-size: 1rem; margin: 0 0 6px;">${isCorrect ? '🎉 Correct!' : '😢 Not quite!'}</p><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">${escapeHtml(q.fact)}</p></div><button onclick="nextDoctTF()" style="width: 100%; background: linear-gradient(180deg, #10b981, #047857); color: #fff; border: 3px solid #047857; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #064e3b; margin: 8px 0;">${s.current + 1 < DOCTRINE_TF.length ? 'Next →' : 'Results 🏆'}</button>` : ''}
+    </div>
+  `);
+}
+
+function answerDoctTF(ans) {
+  doctTFState.lastAnswer = ans;
+  doctTFState.answered = true;
+  if (ans === DOCTRINE_TF[doctTFState.current].answer) doctTFState.score++;
+  renderDoctrineTF();
+}
+
+function nextDoctTF() {
+  doctTFState.current++;
+  doctTFState.answered = false;
+  doctTFState.lastAnswer = null;
+  renderDoctrineTF();
+}
+
+function renderDoctTFResults() {
+  const total = DOCTRINE_TF.length;
+  const pct = Math.round((doctTFState.score / total) * 100);
+  let medal = '🌱', msg = 'Keep going!';
+  if (pct >= 90) medal = '🏆', msg = 'Defender of the faith!';
+  else if (pct >= 75) medal = '🥇', msg = 'Excellent!';
+  else if (pct >= 60) medal = '🥈', msg = 'Good!';
+  else if (pct >= 40) medal = '🥉', msg = 'Nice try!';
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #d1fae5 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="text-align: center;"><button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #047857; color: #047857; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;"><div style="font-size: 6rem;">${medal}</div><h1 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 2.2rem;">Game Complete!</h1><div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 4px solid #10b981; border-radius: 18px; padding: 22px; margin: 18px 0;"><div style="font-family: 'Pacifico', cursive; color: #047857; font-size: 3.5rem;">${doctTFState.score} / ${total}</div><p style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857;">${pct}%</p></div><p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">${msg}</p></div>
+      <button onclick="startDoctrineTF()" style="width: 100%; background: linear-gradient(180deg, #10b981, #047857); color: #fff; border: 3px solid #047857; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #064e3b; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderCatechismGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #d1fae5); color: #047857; border: 3px solid #10b981; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #047857; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 4: CREED FILL-IN
+// ============================================
+const CREED_FILL = [
+  { title: 'The Apostles\' Creed (Part 1)', titleBs: 'Kredo sa mga Apostoles', template: 'I believe in God, the _BLANK1_ almighty, _BLANK2_ of heaven and _BLANK3_.', blanks: ['Father', 'Creator', 'earth'] },
+  { title: 'The Apostles\' Creed (Part 2)', titleBs: 'Kredo sa mga Apostoles', template: 'And in _BLANK1_ Christ, His only _BLANK2_, our _BLANK3_.', blanks: ['Jesus', 'Son', 'Lord'] },
+  { title: 'The Apostles\' Creed (Part 3)', titleBs: 'Kredo sa mga Apostoles', template: 'Born of the Virgin _BLANK1_, suffered under _BLANK2_, was _BLANK3_, died, and was buried.', blanks: ['Mary', 'Pontius Pilate', 'crucified'] },
+  { title: 'The Apostles\' Creed (Part 4)', titleBs: 'Kredo sa mga Apostoles', template: 'On the third day He rose again from the _BLANK1_; He ascended into _BLANK2_, and sits at the right hand of the _BLANK3_.', blanks: ['dead', 'heaven', 'Father'] },
+  { title: 'Hail Mary', titleBs: 'Maghimaya Ka Maria', template: 'Holy _BLANK1_, _BLANK2_ of God, pray for us _BLANK3_, now and at the hour of our death.', blanks: ['Mary', 'Mother', 'sinners'] }
+];
+
+let creedFillState = { idx: 0, answers: [], currentBlank: 0 };
+
+function startCreedFill() {
+  creedFillState = { idx: 0, answers: [], currentBlank: 0 };
+  renderCreedFill();
+}
+
+function renderCreedFill() {
+  const s = creedFillState;
+  if (s.idx >= CREED_FILL.length) return renderCFFinish();
+  const q = CREED_FILL[s.idx];
+  const totalBlanks = q.blanks.length;
+  const filled = s.answers.length;
+
+  let displayText = q.template;
+  for (let i = 0; i < totalBlanks; i++) {
+    const placeholder = `_BLANK${i + 1}_`;
+    if (i < filled) {
+      const isCorrect = s.answers[i].toLowerCase().trim() === q.blanks[i].toLowerCase();
+      displayText = displayText.replace(placeholder, `<strong style="color: ${isCorrect ? '#047857' : '#dc2626'}; background: ${isCorrect ? '#d1fae5' : '#fee2e2'}; padding: 2px 8px; border-radius: 6px;">${escapeHtml(s.answers[i])}${isCorrect ? ' ✅' : ' ❌ (' + q.blanks[i] + ')'}</strong>`);
+    } else if (i === filled) {
+      displayText = displayText.replace(placeholder, `<span style="display: inline-block; background: #fef3c7; border: 2px dashed #b45309; color: #b45309; padding: 2px 14px; border-radius: 6px; font-weight: 700;">??? (BLANK ${i + 1})</span>`);
+    } else {
+      displayText = displayText.replace(placeholder, `<span style="display: inline-block; background: #f3f4f6; border: 1px dashed #cbd5e1; color: #94a3b8; padding: 2px 14px; border-radius: 6px;">_____</span>`);
+    }
+  }
+
+  let options = [];
+  if (s.currentBlank < totalBlanks) {
+    const correct = q.blanks[s.currentBlank];
+    options.push(correct);
+    const allWords = [].concat(...CREED_FILL.map(p => p.blanks)).filter(w => w.toLowerCase() !== correct.toLowerCase());
+    const unique = [...new Set(allWords)];
+    const shuffled = unique.sort(() => Math.random() - 0.5).slice(0, 3);
+    options = options.concat(shuffled);
+    options = options.sort(() => Math.random() - 0.5);
+  }
+
+  const allFilled = filled >= totalBlanks;
+  const allCorrect = allFilled && s.answers.every((a, i) => a.toLowerCase().trim() === q.blanks[i].toLowerCase());
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button>
+        <button onclick="startCreedFill()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">🔄 Restart</button>
+      </div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🧩</div><h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.8rem;">Creed Fill-In</h1><p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem;">Prayer ${s.idx + 1} of ${CREED_FILL.length}</p></div>
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #5b21b6;">
+        <p style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: #5b21b6; font-weight: 700; text-align: center; margin: 0;">📖 ${escapeHtml(q.title)}</p>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1rem; text-align: center; margin: 4px 0 12px;">~ ${escapeHtml(q.titleBs)} ~</p>
+        <p style="font-family: 'Georgia', serif; color: var(--plum-deep); font-size: 1rem; line-height: 1.9; margin: 0; font-style: italic;">${displayText}</p>
+      </div>
+      ${!allFilled ? `<p style="font-family: 'Quicksand', sans-serif; color: #5b21b6; font-weight: 700; text-align: center; margin: 14px 0 8px;">🎯 Pick the word for blank ${s.currentBlank + 1}:</p><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">${options.map(opt => `<button onclick="answerCF('${escapeHtml(opt).replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 14px; padding: 12px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; color: #5b21b6; font-size: 0.95rem; box-shadow: 0 3px 0 #5b21b6;">${escapeHtml(opt)}</button>`).join('')}</div>` : `<div style="background: linear-gradient(135deg, ${allCorrect ? '#d1fae5' : '#fef3c7'}, ${allCorrect ? '#10b981' : '#f59e0b'}); border: 3px solid ${allCorrect ? '#047857' : '#b45309'}; border-radius: 18px; padding: 16px; margin: 14px 0; text-align: center;"><div style="font-size: 3rem;">${allCorrect ? '🎉' : '👍'}</div><p style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.4rem; margin: 4px 0;">${allCorrect ? 'PERFECT!' : 'Good Try!'}</p></div><button onclick="nextCF()" style="width: 100%; background: linear-gradient(180deg, #7c3aed, #5b21b6); color: #fff; border: 3px solid #5b21b6; border-radius: 16px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #4c1d95;">${s.idx + 1 < CREED_FILL.length ? 'Next →' : 'Finish 🏆'}</button>`}
+    </div>
+  `);
+}
+
+function answerCF(word) {
+  creedFillState.answers.push(word);
+  creedFillState.currentBlank++;
+  renderCreedFill();
+}
+
+function nextCF() {
+  creedFillState.idx++;
+  creedFillState.currentBlank = 0;
+  creedFillState.answers = [];
+  renderCreedFill();
+}
+
+function renderCFFinish() {
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="text-align: center;"><button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #5b21b6; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin: 30px 0;"><div style="font-size: 6rem;">🏆</div><h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 2.2rem;">All Prayers Complete!</h1><p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem;">God is so proud of you!</p></div>
+      <button onclick="startCreedFill()" style="width: 100%; background: linear-gradient(180deg, #7c3aed, #5b21b6); color: #fff; border: 3px solid #5b21b6; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #4c1d95; margin: 8px 0;">🔄 Play Again</button>
+      <button onclick="renderCatechismGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #ede9fe); color: #5b21b6; border: 3px solid #7c3aed; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #5b21b6; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+// ============================================
+// GAME 5: WHEEL OF WISDOM
+// ============================================
+const WISDOM_TEACHINGS = [
+  { name: 'The Holy Trinity', nameBs: 'Santisima Trinidad', icon: '☘️', color: '#10b981', desc: 'One God in three Persons: Father, Son, and Holy Spirit. The central mystery of our faith.' },
+  { name: 'The Incarnation', nameBs: 'Pagpakatawo', icon: '👶', color: '#fbbf24', desc: 'God the Son became man, born of the Virgin Mary, to save us from our sins.' },
+  { name: 'Original Sin', nameBs: 'Original nga Sala', icon: '🍎', color: '#dc2626', desc: 'Adam and Eve\'s sin that all humans inherit — Baptism washes it away!' },
+  { name: 'The 7 Sacraments', nameBs: 'Pito ka Sakramento', icon: '🌟', color: '#7c3aed', desc: 'Baptism, Confirmation, Eucharist, Penance, Anointing, Holy Orders, Matrimony — channels of grace!' },
+  { name: 'Heaven', nameBs: 'Langit', icon: '☁️', color: '#0ea5e9', desc: 'The eternal home of the saints with God — perfect happiness forever!' },
+  { name: 'Hell', nameBs: 'Impyerno', icon: '🔥', color: '#991b1b', desc: 'The eternal punishment for those who die in mortal sin without repentance. Real and forever.' },
+  { name: 'Purgatory', nameBs: 'Purgatoryo', icon: '🕯️', color: '#f59e0b', desc: 'A state of cleansing for souls before entering Heaven. We pray for them.' },
+  { name: 'The Real Presence', nameBs: 'Tinuod nga Presensya', icon: '✝️', color: '#ec4899', desc: 'Jesus is truly present — Body, Blood, Soul, and Divinity — in the Holy Eucharist!' },
+  { name: 'The Communion of Saints', nameBs: 'Komunyon sa mga Santos', icon: '👥', color: '#8b5cf6', desc: 'All Catholics — on earth, in Purgatory, in Heaven — united as one family in Christ.' },
+  { name: 'Confession', nameBs: 'Konfesyon', icon: '🙏', color: '#10b981', desc: 'Through the priest, Jesus forgives sins and restores grace to the soul.' },
+  { name: 'The Resurrection', nameBs: 'Pagkabanhaw', icon: '🌅', color: '#fbbf24', desc: 'On the last day, all the dead will rise body and soul to be judged.' },
+  { name: 'The Last Judgment', nameBs: 'Katapusang Paghukom', icon: '⚖️', color: '#7c3aed', desc: 'Christ will return to judge the living and the dead. All hidden things will be revealed.' },
+  { name: 'Mary, Mother of God', nameBs: 'Maria, Inahan sa Diyos', icon: '🌹', color: '#ec4899', desc: 'Mary is truly the Mother of God — defined at the Council of Ephesus, 431 AD.' },
+  { name: 'The Immaculate Conception', nameBs: 'Imakulada Konsepsyon', icon: '✨', color: '#0ea5e9', desc: 'Mary was preserved from Original Sin from the very first moment of her existence!' },
+  { name: 'The Assumption', nameBs: 'Pagsaka ni Maria', icon: '👑', color: '#fbbf24', desc: 'Mary was assumed body and soul into Heaven at the end of her life.' },
+  { name: 'Guardian Angels', nameBs: 'Anghel nga Magbalantay', icon: '👼', color: '#0ea5e9', desc: 'Every person has a guardian angel watching over them from birth to death.' },
+  { name: 'The Bible', nameBs: 'Bibliya', icon: '📖', color: '#92400e', desc: 'The inspired Word of God — 73 books in the Catholic Bible (OT and NT).' },
+  { name: 'Tradition', nameBs: 'Tradisyon', icon: '⛪', color: '#5b21b6', desc: 'The teachings handed down by the Apostles — equal to Scripture as God\'s revelation.' },
+  { name: 'The Pope', nameBs: 'Ang Santo Papa', icon: '👑', color: '#fbbf24', desc: 'The successor of St. Peter — visible head of the Catholic Church on earth.' },
+  { name: 'Free Will', nameBs: 'Libreng Pagpili', icon: '🎯', color: '#10b981', desc: 'God gives every person the freedom to choose good or evil — responsibility comes with this gift.' }
+];
+
+let wisdomWheelState = { spinning: false, result: null };
+
+function startWisdomWheel() {
+  wisdomWheelState = { spinning: false, result: null };
+  renderWisdomWheel();
+}
+
+function renderWisdomWheel() {
+  const s = wisdomWheelState;
+  const m = s.result !== null ? WISDOM_TEACHINGS[s.result] : null;
+
+  render(`
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border-radius: 22px; padding: 22px 16px;">
+      <div style="text-align: center; margin-bottom: 14px;"><button onclick="renderCatechismGames()" style="background: rgba(255,255,255,0.85); border: 2px solid #1e40af; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer;">← All Games</button></div>
+      <div style="text-align: center; margin-bottom: 14px;"><div style="font-size: 3rem;">🎡</div><h1 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.8rem;">Wheel of Wisdom</h1><p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem;">~ Spin to learn a Catholic teaching! ~</p></div>
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 4px solid #2563eb; border-radius: 50%; aspect-ratio: 1; max-width: 280px; margin: 18px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 0 #1e40af; position: relative; overflow: hidden;">
+        <div style="position: absolute; inset: 0; background: conic-gradient(from 0deg, #fbbf24, #ec4899, #7c3aed, #10b981, #2563eb, #fbbf24); opacity: 0.3;"></div>
+        ${s.spinning ? `<div style="font-size: 4rem; animation: spinWisdom 0.4s linear infinite; z-index: 2;">📚</div>` : m ? `<div style="text-align: center; z-index: 2; padding: 14px;"><div style="font-size: 3.5rem;">${m.icon}</div><p style="font-family: 'Pacifico', cursive; color: ${m.color}; font-size: 0.9rem; margin: 4px 0; line-height: 1.1;">${escapeHtml(m.name)}</p></div>` : `<div style="text-align: center; z-index: 2;"><div style="font-size: 4rem;">📚</div><p style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1rem;">Spin Me!</p></div>`}
+      </div>
+      <style>@keyframes spinWisdom { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
+      ${!s.spinning && !m ? `<button onclick="spinWisdomWheel()" style="width: 100%; background: linear-gradient(180deg, #fbbf24, #b45309); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 16px; cursor: pointer; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 5px 0 #78350f;">🎡 SPIN THE WHEEL!</button>` : ''}
+      ${m && !s.spinning ? `<div style="background: linear-gradient(135deg, #fff, ${m.color}33); border: 3px solid ${m.color}; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 ${m.color};"><div style="text-align: center; margin-bottom: 10px;"><div style="font-size: 3rem;">${m.icon}</div><p style="font-family: 'Pacifico', cursive; color: ${m.color}; font-size: 1.4rem; margin: 4px 0;">${escapeHtml(m.name)}</p><p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ ${escapeHtml(m.nameBs)} ~</p></div><p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.6; margin: 10px 0;">${escapeHtml(m.desc)}</p></div><button onclick="startWisdomWheel()" style="width: 100%; background: linear-gradient(180deg, #fbbf24, #b45309); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #78350f; margin: 8px 0;">🎡 Spin Again!</button>` : ''}
+      <button onclick="renderCatechismGames()" style="width: 100%; background: linear-gradient(180deg, #fff, #dbeafe); color: #1e40af; border: 3px solid #2563eb; border-radius: 18px; padding: 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #1e40af; margin: 8px 0;">🎮 Try Another Game</button>
+    </div>
+  `);
+}
+
+function spinWisdomWheel() {
+  wisdomWheelState.spinning = true;
+  renderWisdomWheel();
+  setTimeout(() => {
+    wisdomWheelState.spinning = false;
+    wisdomWheelState.result = Math.floor(Math.random() * WISDOM_TEACHINGS.length);
+    renderWisdomWheel();
+  }, 2000);
+}
+
+
+// ============================================
 // 📚 CATECHISM FOR ALL AGES
 // Phase 1: Foundation + The Apostles' Creed
 // Traditional pre-Vatican II style (Roman/Baltimore/Penny)
@@ -16104,6 +17663,19 @@ function renderCatechism() {
           <em>Phase 2: The 7 Sacraments + Prayer<br>Phase 3: Last Things, Devotions, Angels & Demons, Crisis in the Church</em>
         </p>
       </div>
+
+      <!-- 🎮 CATECHISM GAMES -->
+      <button onclick="renderCatechismGames()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7 30%, #fce7f3 60%, #ede9fe); border: 4px solid #d97706; border-radius: 22px; padding: 18px; margin: 14px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e, 0 0 25px rgba(217, 119, 6, 0.3); text-align: left; position: relative;">
+        <div style="position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 14px; border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.1em; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: rotate(8deg);">✨ FUN ✨</div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 3.5rem;">🎮</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.5rem; line-height: 1.1;">Catechism Games</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem;">~ Mga Dula sa Pagtulun-an ~</div>
+            <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: var(--plum-deep); margin-top: 4px; font-weight: 700;">🧠 Match · 🎯 Q&A · ✅ T/F · 🧩 Creed Fill · 🎡 Wisdom Wheel</div>
+          </div>
+        </div>
+      </button>
 
       ${pillarsHtml}
 
