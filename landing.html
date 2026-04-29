@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#be185d">
+<title>Catechism Quest ✨ Catholic Lessons for Kids</title>
+
+<!-- SEO -->
+<meta name="description" content="A free traditional Catholic catechism app for children. Bible stories, the Holy Mass, Mary's apparitions, prayers, and 20+ fun games — in English and Bisaya.">
+<meta name="keywords" content="Catholic catechism, kids Catholic app, traditional Latin Mass, SSPX, Bisaya catechism, Catholic homeschool, Mary apparitions">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mjbaguhin.github.io/catechism-quest/">
+<meta property="og:title" content="Catechism Quest ✨ Catholic Lessons for Kids">
+<meta property="og:description" content="A free traditional Catholic catechism app for children. Bible, Mass, Mary, prayers, and games — in English and Bisaya.">
+<meta property="og:image" content="https://mjbaguhin.github.io/catechism-quest/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Caveat:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(180deg, #fff 0%, #fef3c7 30%, #fce7f3 60%, #ede9fe 100%);
+  background-attachment: fixed;
+  color: #4c1d95;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 40px 16px;
+}
+.hero-icon {
+  font-size: 5rem;
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-family: 'Pacifico', cursive;
+  color: #be185d;
+  font-size: 3rem;
+  text-shadow: 2px 2px 0 #fff;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.hero .tagline {
+  font-family: 'Caveat', cursive;
+  color: #7c3aed;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+.hero .subtitle {
+  font-family: 'Caveat', cursive;
+  color: #b45309;
+  font-size: 1.3rem;
+  margin-bottom: 22px;
+}
+
+/* Big call-to-action button */
+.cta-btn {
+  display: inline-block;
+  background: linear-gradient(180deg, #ec4899, #be185d);
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 18px 38px;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 6px 0 #9f1239, 0 0 30px rgba(236, 72, 153, 0.4);
+  margin: 16px 0;
+  transition: transform 0.2s;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+}
+.cta-secondary {
+  display: inline-block;
+  background: rgba(255,255,255,0.85);
+  color: #be185d;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 22px;
+  border-radius: 14px;
+  border: 2px solid #ec4899;
+  text-decoration: none;
+  margin: 8px;
+  box-shadow: 0 3px 0 #be185d;
+}
+
+/* Section card */
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 22px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 6px 20px rgba(190, 24, 93, 0.08);
+}
+.card h2 {
+  font-family: 'Pacifico', cursive;
+  color: #be185d;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.card .bs {
+  font-family: 'Caveat', cursive;
+  color: #7c3aed;
+  font-size: 1.2rem;
+  margin-bottom: 14px;
+}
+.card p {
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+/* Categories grid */
+.categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 14px 0;
+}
+.category {
+  background: linear-gradient(135deg, #fff, #fce7f3);
+  border-radius: 16px;
+  padding: 18px 14px;
+  border: 2px solid #ec4899;
+  text-align: center;
+  box-shadow: 0 4px 0 #be185d;
+}
+.category .emoji {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 6px;
+}
+.category .name {
+  font-family: 'Pacifico', cursive;
+  color: #be185d;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+.category .desc {
+  font-family: 'Quicksand', sans-serif;
+  color: #4c1d95;
+  font-size: 0.78rem;
+  margin-top: 4px;
+}
+
+/* Highlight cards */
+.highlight {
+  background: linear-gradient(180deg, #1e1b4b, #4c1d95);
+  border: 3px solid #fbbf24;
+  color: #fef3c7;
+  padding: 24px;
+  border-radius: 22px;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+.highlight h2 {
+  font-family: 'Pacifico', cursive;
+  color: #fbbf24;
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 0 #000;
+}
+.highlight p {
+  margin-bottom: 12px;
+}
+
+/* Features list */
+.features {
+  list-style: none;
+  padding: 0;
+}
+.features li {
+  background: rgba(255,255,255,0.7);
+  border-left: 4px solid #ec4899;
+  padding: 12px 16px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 30px 16px;
+  color: #6b21a8;
+  font-size: 0.85rem;
+}
+footer .pax {
+  font-family: 'Pacifico', cursive;
+  color: #be185d;
+  font-size: 1.5rem;
+  margin: 8px 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.2rem; }
+  .categories { grid-template-columns: 1fr; }
+  .cta-btn { font-size: 1.1rem; padding: 16px 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-icon">✝️ 🌹 ✨</div>
+    <h1>Catechism Quest</h1>
+    <p class="tagline">~ A Sunday Class Adventure ~</p>
+    <p class="subtitle">~ Para sa mga Bunso ug Pamilya ~</p>
+    <a href="index.html" class="cta-btn">▶ Open the App</a>
+  </div>
+
+  <div class="card">
+    <h2>📖 What is Catechism Quest?</h2>
+    <p class="bs">~ Unsa ni? ~</p>
+    <p>
+      A <strong>free, traditional Catholic catechism app</strong> for children — built with love by a Filipino Catholic teacher (Ate MJ) for the families and students she serves.
+    </p>
+    <p>
+      Every section is in <strong>English AND Bisaya</strong>, so children growing up in the Philippines can hear the Faith in their mother tongue. Designed with care for traditional Catholic families — pre-Vatican II catechetics, the Traditional Latin Mass, the saints, and the Blessed Mother.
+    </p>
+  </div>
+
+  <div class="highlight">
+    <h2>💫 Start with the Big Questions</h2>
+    <p>
+      Every child wonders: <em>Who am I? Why am I here? Why is my heart beating?</em>
+    </p>
+    <p>
+      The most important section in the app addresses these questions <strong>head-on</strong> — gently, in a child's voice, in the language of the soul searching for its Maker.
+    </p>
+    <p style="font-family: 'Caveat', cursive; font-size: 1.3rem; color: #fbbf24; margin-top: 16px;">
+      ~ The road home, placed in a child's hands while they are still small enough to receive it. ~
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🎯 What's Inside</h2>
+    <p class="bs">~ Unsa ang sulod? ~</p>
+    <div class="categories">
+      <div class="category">
+        <span class="emoji">💫</span>
+        <div class="name">Big Questions</div>
+        <div class="desc">12 deep questions every child asks</div>
+      </div>
+      <div class="category">
+        <span class="emoji">🕰️</span>
+        <div class="name">The Holy Mass</div>
+        <div class="desc">Traditional Latin Mass for kids</div>
+      </div>
+      <div class="category">
+        <span class="emoji">🌹</span>
+        <div class="name">Mama Mary's Garden</div>
+        <div class="desc">7 Apparitions, Rosary, Saints</div>
+      </div>
+      <div class="category">
+        <span class="emoji">📿</span>
+        <div class="name">Camp Preparedness</div>
+        <div class="desc">Lessons + reward codes</div>
+      </div>
+      <div class="category">
+        <span class="emoji">📖</span>
+        <div class="name">Bible Stories</div>
+        <div class="desc">14 stories, Old & New Testament</div>
+      </div>
+      <div class="category">
+        <span class="emoji">🔮</span>
+        <div class="name">Divine Prophecies</div>
+        <div class="desc">Saints' visions & end times</div>
+      </div>
+      <div class="category">
+        <span class="emoji">📚</span>
+        <div class="name">Catechism for All Ages</div>
+        <div class="desc">Pre-Vatican II Q&A style</div>
+      </div>
+      <div class="category">
+        <span class="emoji">🎮</span>
+        <div class="name">20+ Fun Games</div>
+        <div class="desc">Memory, trivia, prayer fill-ins</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>✨ Built for Catholic Families</h2>
+    <p class="bs">~ Para sa mga Pamilyang Katoliko ~</p>
+    <ul class="features">
+      <li><strong>📲 Free forever</strong> — no subscription, no ads, no tracking</li>
+      <li><strong>🇵🇭 English + Bisaya</strong> — so kids hear the Faith in their language</li>
+      <li><strong>📿 Traditional content</strong> — pre-Vatican II catechetics, Latin Mass, the saints</li>
+      <li><strong>👨‍👩‍👧‍👦 Family-friendly</strong> — designed for parents to use alongside their children</li>
+      <li><strong>📱 Works offline</strong> — install it on your phone like an app, even without internet</li>
+      <li><strong>🎮 Fun games</strong> — Memory Match, Trivia, True/False, Word Fill, and Wheels of Wisdom</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align: center;">
+    <h2>📱 How to Install</h2>
+    <p>You can install this app on your phone like a regular app — without going through the Play Store!</p>
+    <div style="text-align: left; margin: 14px 0;">
+      <p><strong>📱 On Android (Chrome):</strong></p>
+      <p style="margin-left: 16px; font-size: 0.92rem;">1. Open the app → 2. Tap the menu (⋮) → 3. Tap "Install app" or "Add to Home Screen"</p>
+      <p style="margin-top: 12px;"><strong>📱 On iPhone (Safari):</strong></p>
+      <p style="margin-left: 16px; font-size: 0.92rem;">1. Open the app in Safari → 2. Tap the Share button (□↑) → 3. Tap "Add to Home Screen"</p>
+    </div>
+    <a href="index.html" class="cta-btn">▶ Open the App</a>
+  </div>
+
+  <div class="highlight">
+    <h2>🙏 Pax Christi</h2>
+    <p style="font-family: 'Caveat', cursive; font-size: 1.4rem; color: #fbbf24;">
+      ~ Suffer the little children to come unto Me ~
+    </p>
+    <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 12px;">
+      Mark 10:14
+    </p>
+  </div>
+
+  <footer>
+    <p class="pax">Ad Jesum per Mariam</p>
+    <p>Built with love by Ate MJ for the children of Cagayan de Oro and Catholic families everywhere</p>
+    <p style="margin-top: 12px;">
+      <a href="index.html" class="cta-secondary">▶ Open the App</a>
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>

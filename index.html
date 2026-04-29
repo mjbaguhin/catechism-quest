@@ -3,8 +3,44 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#5a0e0e" />
-<title>Catechism Quest ✨ Sunday Class Adventure</title>
+<meta name="theme-color" content="#be185d" />
+<title>Catechism Quest ✨ Catholic Lessons for Kids</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="A free traditional Catholic catechism app for children. Bible stories, the Holy Mass, Mary's apparitions, prayers, and games — in English and Bisaya. For families who love their Faith." />
+<meta name="keywords" content="Catholic catechism, kids Catholic app, traditional Latin Mass, SSPX, Bisaya catechism, Catholic homeschool, Mary apparitions, Catholic kids games, Bible stories, Catholic Philippines" />
+<meta name="author" content="Ate MJ's Class" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://mjbaguhin.github.io/catechism-quest/" />
+<meta property="og:title" content="Catechism Quest ✨ Catholic Lessons for Kids" />
+<meta property="og:description" content="A free traditional Catholic catechism app for children. Bible stories, the Holy Mass, Mary's apparitions, prayers, and 20+ fun games — in English and Bisaya." />
+<meta property="og:image" content="https://mjbaguhin.github.io/catechism-quest/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="Catechism Quest" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Catechism Quest ✨ Catholic Lessons for Kids" />
+<meta name="twitter:description" content="A free traditional Catholic catechism app for children. Bible, Mass, Mary, prayers, and games — in English and Bisaya." />
+<meta name="twitter:image" content="https://mjbaguhin.github.io/catechism-quest/og-image.png" />
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json" />
+
+<!-- Apple iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Catechism Quest" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+<!-- Icons -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Caveat:wght@600;700&family=Fredoka:wght@400;600&family=Pacifico&family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
@@ -17867,6 +17903,54 @@ loadTeacherName();
 loadSoundPref();
 loadAmbientPref();
 setupFirstInteractionListener();
+
+// ============================================
+// 📱 PWA INSTALL & SERVICE WORKER
+// Allows users to "Add to Home Screen" like a real app
+// ============================================
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  showInstallButton();
+});
+
+function showInstallButton() {
+  if (document.getElementById('pwa-install-btn')) return;
+  const btn = document.createElement('button');
+  btn.id = 'pwa-install-btn';
+  btn.innerHTML = '📲 Install App';
+  btn.style.cssText = 'position: fixed; bottom: 16px; right: 16px; background: linear-gradient(135deg, #fbbf24, #b45309); color: #fff; border: 3px solid #92400e; border-radius: 999px; padding: 10px 18px; font-family: Quicksand, sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 10000; animation: pwa-pulse 2s ease-in-out infinite;';
+  btn.onclick = async () => {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      if (outcome === 'accepted') btn.remove();
+      deferredInstallPrompt = null;
+    }
+  };
+  document.body.appendChild(btn);
+  if (!document.getElementById('pwa-pulse-style')) {
+    const style = document.createElement('style');
+    style.id = 'pwa-pulse-style';
+    style.textContent = '@keyframes pwa-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }';
+    document.head.appendChild(style);
+  }
+}
+
+window.addEventListener('appinstalled', () => {
+  const btn = document.getElementById('pwa-install-btn');
+  if (btn) btn.remove();
+});
+
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW failed:', err));
+  });
+}
+
 // Always go straight to home — no teacher setup gate to avoid friction
 // for first-time visitors. Teacher name defaults to "Ate MJ" and can be
 // changed later via Settings gear if needed.
