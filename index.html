@@ -5368,7 +5368,27 @@ function renderHome() {
         </div>
       </button>
 
-      <!-- Category 5: Catechism for All Ages — Sneak Peek -->
+      <!-- Category 5: Divine Prophecies & Warnings -->
+      <button onclick="renderProphecies()" style="display: block; width: 100%; background: linear-gradient(135deg, #1f2937 0%, #4b1d1d 60%, #7f1d1d 100%); border: 4px solid #fbbf24; border-radius: 24px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 6px 0 #000, 0 0 30px rgba(251, 191, 36, 0.3); text-align: left; position: relative;">
+        <div style="position: absolute; top: 12px; right: 16px; font-size: 1.4rem;">⚡</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+          <div style="font-size: 3.5rem;">🔮</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #fbbf24; font-size: 1.5rem; line-height: 1.1; text-shadow: 1px 1px 0 #000;">Divine Prophecies</div>
+            <div style="font-family: 'Caveat', cursive; color: #fed7aa; font-size: 1.05rem; margin-top: 2px;">~ Mga Tagna gikan sa Langit ~</div>
+          </div>
+        </div>
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid #fbbf24; border-radius: 14px; padding: 10px 12px; margin-top: 8px;">
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; color: #fed7aa; font-weight: 700;">Fatima · La Salette · Quito · Three Days of Darkness · Pope Leo XIII</div>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: #fed7aa; font-style: italic; margin-top: 2px;">⚠️ Two modes: Kids (curiosity) • Adults (deep & sobering)</div>
+          <div style="background: rgba(251, 191, 36, 0.2); border-radius: 12px; padding: 6px 10px; margin: 6px 0 0; line-height: 1.4; font-size: 0.95rem; text-align: center; color: #fef3c7; font-style: italic;">"Watch ye therefore..." — Matthew 24:42</div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <span style="display: inline-block; background: linear-gradient(180deg, #fbbf24, #92400e); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 22px; border-radius: 14px; font-size: 0.92rem; box-shadow: 0 3px 0 #000;">🔮 Read Prophecies</span>
+        </div>
+      </button>
+
+      <!-- Category 6: Catechism for All Ages — Sneak Peek -->
       <div style="display: block; width: 100%; background: linear-gradient(135deg, #f9fafb, #fef3c7 80%); border: 4px dashed #d97706; border-radius: 24px; padding: 22px 18px; margin: 12px 0; font-family: 'Quicksand', sans-serif; text-align: left; position: relative; opacity: 0.85;">
         <div style="position: absolute; top: 10px; right: 14px; background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; letter-spacing: 0.1em; box-shadow: 0 2px 4px rgba(217, 119, 6, 0.3);">✨ SNEAK PEEK</div>
         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px; margin-top: 6px;">
@@ -10722,6 +10742,9 @@ function printCategory(categoryId) {
   } else if (categoryId === 'bible') {
     title = 'Bible Stories for Kids — Family Guide';
     bodyHtml = buildBiblePrintContent();
+  } else if (categoryId === 'prophecy') {
+    title = 'Divine Prophecies & Warnings — Family Guide';
+    bodyHtml = buildProphecyPrintContent();
   }
 
   // Open new window with clean printable version
@@ -11607,6 +11630,107 @@ function buildBiblePrintContent() {
   return html;
 }
 
+function buildProphecyPrintContent() {
+  let html = `
+    <h2>📖 About This Guide</h2>
+    <p>This guide presents <strong>Divine Prophecies and Warnings</strong> from Sacred Scripture, approved Marian apparitions, and traditional Catholic mystical sources. Each prophecy is presented with both a <strong>Kids version</strong> (curiosity-stirring) and an <strong>Adults version</strong> (deep, sobering reflection with full prophetic texts).</p>
+
+    <div class="quote" style="background: #fef3c7; border-left: 4px solid #92400e; padding: 14px 18px; margin: 16px 0;">
+      <strong>⚠️ Important Notice on Sources</strong><br>
+      The Catholic Church distinguishes between:
+      <ul style="margin: 8px 0;">
+        <li><strong>📖 Sacred Scripture</strong> — Required belief (the inspired Word of God)</li>
+        <li><strong>✅ Church-Approved Apparitions</strong> — Catholics may give pious belief</li>
+        <li><strong>⚠️ Private Revelation</strong> — Catholics are NOT required to believe; discern with prudence</li>
+      </ul>
+      Even non-approved prophecies, when from holy souls, can stir us to greater conversion. Read with the Holy Spirit's guidance.
+    </div>
+
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #be185d; padding: 14px 18px; margin: 16px 0;">
+      <strong>"Watch ye therefore, because you know not what hour your Lord will come."</strong><br>
+      <em>— Matthew 24:42</em>
+    </div>
+  `;
+
+  if (typeof PROPHECIES !== 'undefined') {
+    PROPHECIES.forEach(p => {
+      const approvalLabel = {
+        'approved': '✅ Church Approved',
+        'approved-with-notes': '⚠️ Approved with Notes',
+        'historical': '📜 Historical Account',
+        'private-revelation': '⚠️ Private Revelation',
+        'scripture': '📖 Sacred Scripture',
+        'not-approved': '🚫 Not Approved'
+      }[p.approval] || '';
+
+      html += `
+        <h2 class="section-break">${p.icon} ${p.name}</h2>
+        <p style="margin: 0 0 4px;"><em>${p.nameBs}</em></p>
+        <p style="margin: 0 0 12px; font-size: 10pt; color: #6b7280;"><strong>${approvalLabel}</strong> · ${p.era}</p>
+        <p style="font-style: italic; color: #4b5563; margin: 0 0 16px;">${p.summary}</p>
+
+        <!-- KIDS VERSION -->
+        <div class="story-block" style="page-break-inside: avoid; background: #fef3c7; border-left: 4px solid #d97706;">
+          <h3 style="color: #92400e;">👶 For Kids: ${p.kids.title}</h3>
+
+          <h4 style="color: #92400e;">📖 The Story</h4>
+          <p style="white-space: pre-line;">${p.kids.story}</p>
+
+          <h4 style="color: #5b21b6;">✨ Amazing Facts</h4>
+          <ul style="list-style: none; padding-left: 12px;">
+            ${p.kids.facts.map(f => `<li style="margin: 3px 0;">${f}</li>`).join('')}
+          </ul>
+
+          <div class="quote" style="background: #fce7f3; border-left: 4px solid #ec4899; margin: 10px 0;">
+            <strong>💭 Think About This...</strong><br>
+            <em>${p.kids.questionHook}</em>
+          </div>
+
+          <p style="font-style: italic; color: #6d28d9; font-size: 10pt; margin: 8px 0 0;">${p.kids.bisayaSummary}</p>
+        </div>
+
+        <!-- ADULTS VERSION -->
+        <div class="story-block" style="page-break-inside: avoid; background: #1f2937; color: #fef3c7; border-left: 4px solid #fbbf24;">
+          <h3 style="color: #fbbf24;">👨‍🦳 For Adults: ${p.adults.title}</h3>
+
+          <h4 style="color: #fbbf24;">📖 Reflection</h4>
+          <p style="color: #fef3c7; white-space: pre-line;">${p.adults.reflection}</p>
+
+          <h4 style="color: #fbbf24;">📜 The Prophetic Texts</h4>
+          ${p.adults.keyTexts.map(kt => `
+            <div style="background: rgba(0,0,0,0.4); border: 1px solid #fbbf24; border-radius: 6px; padding: 10px 12px; margin: 8px 0;">
+              <p style="font-weight: bold; color: #fbbf24; margin: 0 0 6px; font-size: 10pt;">📖 ${kt.ref}</p>
+              <p style="color: #fef3c7; font-style: italic; margin: 0 0 8px; line-height: 1.6;">"${kt.text}"</p>
+              <p style="background: rgba(0,0,0,0.5); padding: 6px 8px; border-radius: 4px; color: #fed7aa; font-size: 10pt; margin: 0;"><strong style="color: #f87171;">📜 Fulfillment / Notes:</strong> ${kt.fulfilled}</p>
+            </div>
+          `).join('')}
+
+          <div style="background: linear-gradient(135deg, #7f1d1d, #4c1d95); border: 2px solid #fbbf24; border-radius: 8px; padding: 14px; margin: 12px 0;">
+            <p style="color: #fbbf24; font-weight: bold; margin: 0 0 6px;">🔥 Call to Conversion</p>
+            <p style="color: #fff; white-space: pre-line; line-height: 1.7; margin: 0;">${p.adults.callToConversion}</p>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  html += `
+    <h2 class="section-break">🙏 Closing Prayer</h2>
+    <p>Almighty and eternal God, You have spoken through Your prophets and saints to warn us, to call us to repentance, and to lead us to salvation. Grant us the grace to hear Your voice, to believe Your warnings, and to live in such a way that we are always prepared for the coming of Your Son, our Lord Jesus Christ.</p>
+
+    <p>Holy Mary, Mother of God and Mother of the Church, you who have appeared in so many places to warn your children — pray for us. Saint Michael the Archangel, defend us in battle. All ye holy prophets and seers, pray for us.</p>
+
+    <p>May we have the courage to face the truth, the wisdom to discern, and the love to never lose hope. Through Christ our Lord. Amen.</p>
+
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #be185d; padding: 14px 18px; margin: 16px 0;">
+      <strong>Ad Jesum per Mariam — To Jesus through Mary!</strong><br>
+      <em>"In the end, my Immaculate Heart will triumph." — Our Lady of Fatima</em>
+    </div>
+  `;
+
+  return html;
+}
+
 // ============================================
 // 📖 BIBLE STORIES FOR KIDS
 // 14 essential Bible stories — Old + New Testament
@@ -12466,6 +12590,598 @@ function renderConfessionGuide() {
       </button>
       <button onclick="renderBibleStory('moses')" style="width: 100%; background: linear-gradient(180deg, #fef3c7 0%, #d97706 100%); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #92400e; margin: 8px 0;">
         📖 Back to Moses Story
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// 🔮 DIVINE PROPHECIES & WARNINGS
+// Phase 1: Foundation + 6 core prophecies
+// Two modes: Kids (curiosity) + Adults (deep, sobering)
+// ============================================
+
+let prophecyState = { mode: 'kids', current: null };
+
+const PROPHECIES = [
+  {
+    id: 'ot-messiah',
+    name: 'Old Testament Prophecies of the Messiah',
+    nameBs: 'Mga Tagna sa Karaang Tugon Bahin sa Mesiyas',
+    icon: '📜',
+    era: 'Before Christ',
+    approval: 'scripture',
+    summary: 'Hundreds of years before Jesus was born, God revealed exactly who the Messiah would be — and ALL the prophecies came true!',
+
+    kids: {
+      title: 'The Greatest Detective Story Ever! 🔍',
+      story: 'Imagine if 700 years ago, someone wrote down EVERYTHING about you — the town you\'d be born in, your mom\'s name, what would happen when you were a baby, and even how you would die. Sounds impossible, right?\n\nBut that\'s EXACTLY what the Old Testament prophets did about Jesus! Hundreds of years before Jesus was born, God told the prophets all about Him. And every single prophecy came TRUE!',
+      facts: [
+        '👶 Isaiah said the Messiah would be born of a VIRGIN (Isaiah 7:14) — Mary!',
+        '🏠 Micah said He\'d be born in BETHLEHEM (Micah 5:2) — He was!',
+        '🌟 The Wise Men followed a STAR (Numbers 24:17) — fulfilled!',
+        '🐎 He would ride into Jerusalem on a DONKEY (Zechariah 9:9) — Palm Sunday!',
+        '💰 He would be sold for 30 pieces of silver (Zechariah 11:12) — Judas!',
+        '✝️ He would have hands and feet pierced (Psalm 22:16) — the Cross!',
+        '👕 They would cast lots for His clothes (Psalm 22:18) — at Calvary!',
+        '🌅 He would rise from the dead (Psalm 16:10) — Easter Sunday!'
+      ],
+      questionHook: '🤔 If God knew ALL of this 700+ years before Jesus was born... what else does He know about YOU?',
+      bisayaSummary: '~ Daghang gatusan ka tuig sa wala pa matawo si Hesus, gisulti na sa Diyos ang TANAN bahin Kaniya pinaagi sa mga propeta. Ug ang TANAN natuman! ~'
+    },
+
+    adults: {
+      title: 'The Mathematical Impossibility of Coincidence',
+      reflection: 'There are over <strong>300 specific Messianic prophecies</strong> in the Old Testament, all fulfilled in the person of Jesus Christ. The mathematician Peter Stoner calculated that the probability of just <strong>8 of these prophecies</strong> being fulfilled by one person is 1 in 10¹⁷ (one hundred quadrillion). For all 300+ — the number becomes essentially infinite.\n\nThis is not coincidence. This is the <strong>signature of God</strong> on history itself.',
+      keyTexts: [
+        {
+          ref: 'Isaiah 7:14',
+          text: '"Therefore the Lord himself shall give you a sign. Behold a virgin shall conceive, and bear a son, and his name shall be called Emmanuel."',
+          fulfilled: 'Mary, ever-virgin, conceived Jesus by the Holy Spirit (Luke 1:26-38). Emmanuel means "God with us."'
+        },
+        {
+          ref: 'Isaiah 53:3-7',
+          text: '"He was despised and the most abject of men, a man of sorrows... He was wounded for our iniquities, he was bruised for our sins... he shall be led as a sheep to the slaughter, and shall be dumb as a lamb before his shearer."',
+          fulfilled: 'The Passion of Christ — written 700 years before it happened. Read Matthew 27.'
+        },
+        {
+          ref: 'Daniel 9:24-27',
+          text: '"Seventy weeks are shortened upon thy people... and after sixty-two weeks Christ shall be slain..."',
+          fulfilled: 'Daniel\'s precise timeline pointed to AD 33 — the exact year of Christ\'s Crucifixion. Even rabbinical tradition admitted this prophecy demanded the Messiah come BEFORE the Temple was destroyed in 70 AD.'
+        },
+        {
+          ref: 'Psalm 22:1, 16-18 (written by King David, ~1000 BC)',
+          text: '"My God, my God, why hast thou forsaken me?... they have dug my hands and feet. They have numbered all my bones... They parted my garments amongst them; and upon my vesture they cast lots."',
+          fulfilled: 'A perfect description of Crucifixion — written CENTURIES before crucifixion was even invented as a method of execution!'
+        },
+        {
+          ref: 'Zechariah 12:10',
+          text: '"They shall look upon me, whom they have pierced: and they shall mourn for him as one mourneth for an only son..."',
+          fulfilled: 'The Roman soldier pierced Christ\'s side with a lance (John 19:34-37).'
+        }
+      ],
+      callToConversion: 'If God so meticulously planned the First Coming of Christ — every detail prophesied centuries in advance — how much more carefully has He planned the Second Coming? The same God who fulfilled all these prophecies has also given us prophecies about the End Times. They will be fulfilled with the same precision.\n\n<strong>What does this demand of us?</strong> Faith. Trust. Repentance. Vigilance. The God of history is not silent — He has spoken, and He will speak again.'
+    }
+  },
+
+  {
+    id: 'fatima',
+    name: 'The Three Secrets of Fatima',
+    nameBs: 'Ang Tulo ka Sekreto sa Fatima',
+    icon: '☀️',
+    era: '1917',
+    approval: 'approved',
+    summary: 'In 1917, Our Lady appeared to three shepherd children in Portugal and revealed three terrible secrets about the world\'s future. Two have come true.',
+
+    kids: {
+      title: 'The Lady from Heaven Who Showed Hell to Children 😨',
+      story: 'In 1917, Our Lady appeared to three children — Lucia (10), Francisco (9), and Jacinta (7) — in a town called Fatima in Portugal. She came on the 13th of each month, six times!\n\nOn July 13, 1917, Our Lady showed them a VISION OF HELL — a sea of fire with demons and souls of poor sinners crying out in pain. Jacinta said: "I felt so afraid I almost died!" 😰\n\nThen Mary told them THREE SECRETS about the future of the world. Two have already come TRUE in real life!',
+      facts: [
+        '☀️ October 13, 1917: 70,000 people saw the SUN DANCE in the sky! (Newspapers reported it!)',
+        '🌍 1st Secret: The vision of HELL',
+        '⚔️ 2nd Secret: A great war was coming (World War II — happened!)',
+        '🇷🇺 3rd Secret: Russia would spread errors and a Pope would be attacked',
+        '🙏 Mary asked for: praying the Rosary, the Five First Saturdays, and the consecration of Russia',
+        '💕 Bl. Jacinta and Francisco died young as Mary predicted — they are SAINTS now!',
+        '👵 Sister Lucia lived to 97 — she became a Carmelite nun and wrote down the secrets'
+      ],
+      questionHook: '🤔 Mary said "Many souls go to Hell because there is no one to pray and make sacrifices for them." Who in YOUR family needs your prayers? Could YOU be the one to pray a Rosary and save them?',
+      bisayaSummary: '~ Niadtong 1917, mipakita si Mama Mary sa tulo ka batan-on sa Fatima ug gipakita ang impyerno. Iyang gihatag ang Tulo ka Sekreto. Duha na natuman! ~'
+    },
+
+    adults: {
+      title: 'The Most Important Marian Apparition of the 20th Century',
+      reflection: 'Fatima is unique: it is <strong>fully approved by the Church</strong>, witnessed by <strong>70,000 people</strong> at the Miracle of the Sun (October 13, 1917 — even atheists and journalists confirmed it), and has had <strong>direct papal involvement</strong> for over a century.\n\nThe message is sobering: <strong>"Many souls go to Hell because there is no one to pray and make sacrifices for them."</strong> Our Lady of Fatima\'s urgency was not subtle. She came as both a Mother and a Prophetess of Doom — warning of catastrophes that have unfolded with terrible accuracy.',
+      keyTexts: [
+        {
+          ref: 'First Secret — The Vision of Hell (July 13, 1917)',
+          text: '"Our Lady showed us a great sea of fire which seemed to be under the earth. Plunged in this fire were demons and souls in human form, like transparent burning embers, all blackened or burnished bronze, floating about in the conflagration, now raised into the air by the flames that issued from within themselves together with great clouds of smoke, now falling back on every side like sparks in huge fires, without weight or equilibrium, amid shrieks and groans of pain and despair, which horrified us and made us tremble with fear."',
+          fulfilled: 'This vision is meant to wake us up. Hell is REAL. Many people go there. Without prayer and sacrifice, souls are lost forever.'
+        },
+        {
+          ref: 'Second Secret — The Coming Wars',
+          text: '"You have seen hell where the souls of poor sinners go. To save them, God wishes to establish in the world devotion to my Immaculate Heart... The war is going to end [WWI]: but if people do not cease offending God, a worse one will break out during the reign of Pius XI [WWII]... When you shall see a night illumined by an unknown light, know that this is the great sign given you by God that He is about to punish the world... Russia will spread her errors throughout the world, raising up wars and persecutions of the Church. The good will be martyred; the Holy Father will have much to suffer; various nations will be annihilated."',
+          fulfilled: 'WWII began under Pius XI. The unknown light appeared January 25, 1938 — the greatest aurora borealis in centuries, visible across Europe. Six weeks later, Hitler invaded Austria. Russia spread Communism — killing more Christians than ALL persecutions in 2000 years combined. Pope John Paul II was shot on May 13, 1981 — the anniversary of Fatima\'s first apparition.'
+        },
+        {
+          ref: 'Third Secret — Officially "Released" 2000',
+          text: '"...we saw an Angel with a flaming sword in his left hand; flashing, it gave out flames that looked as though they would set the world on fire... and we saw a Bishop dressed in White \'we had the impression that it was the Holy Father\'... half trembling with halting step, afflicted with pain and sorrow, he prayed for the souls of the corpses he met on his way; having reached the top of the mountain, on his knees at the foot of the big Cross he was killed by a group of soldiers who fired bullets and arrows at him..."',
+          fulfilled: 'WARNING: Many traditional Catholics believe the Vatican\'s 2000 release was incomplete. Cardinal Ratzinger himself once said the Third Secret pointed to "things contained in this message that correspond to what the Apocalypse announces." Sister Lucia\'s confessor, Fr. Joseph Schweigl, said in 1952: "I cannot reveal what I learned at Fatima concerning the Third Secret, but I can say that it has two parts: one concerns the Pope, the other, logically — although I must say nothing — would have to be the continuation of the words: \'In Portugal, the dogma of the faith will always be preserved\' [implying loss of faith elsewhere]."'
+        },
+        {
+          ref: 'The Five Requests of Our Lady',
+          text: '1. Daily Rosary\n2. Five First Saturdays devotion\n3. Consecration of Russia by the Pope and ALL bishops together to the Immaculate Heart\n4. Wearing the Brown Scapular\n5. Sacrifice for sinners',
+          fulfilled: 'The full consecration of Russia in the manner specified by Our Lady is debated — many traditional theologians believe it has NOT yet been done correctly. This is significant.'
+        }
+      ],
+      callToConversion: 'Fatima is not history — it is <strong>prophecy still unfolding</strong>. The chastisement Our Lady warned about has only partially been mitigated. The errors of Russia spread to every corner of the world. The Church suffers from within.\n\n<strong>What does Our Lady demand?</strong> Not panic — but <strong>conversion</strong>. The daily Rosary. The Brown Scapular. Reparation. The First Saturdays. <strong>"In the end, my Immaculate Heart will triumph."</strong> But triumph comes through suffering, not ease.\n\nIf you have not yet given Mary your daily Rosary — start tonight. The hour is late.'
+    }
+  },
+
+  {
+    id: 'lasalette',
+    name: 'La Salette — Mélanie\'s Secret',
+    nameBs: 'La Salette — Sekreto ni Melanie',
+    icon: '😢',
+    era: '1846',
+    approval: 'approved-with-notes',
+    summary: 'Our Lady appeared weeping on a French mountain to two children, giving warnings about apostasy in the Church and chastisement upon the world.',
+
+    kids: {
+      title: 'The Lady Who Cried for the World 😢',
+      story: 'On September 19, 1846, two French children — Mélanie (15) and Maximin (11) — were watching cows on a mountain in La Salette, France. Suddenly they saw a beautiful Lady sitting and CRYING with her face in her hands!\n\nShe spoke to them, weeping the whole time. She said: "If my people will not submit, I shall be forced to let go of the hand of my Son. It is so heavy and weighs me down so much, I can no longer hold it back." 😰\n\nShe gave them messages — and a secret each. The full secrets were eventually published, and they describe terrible things coming to the world and the Church.',
+      facts: [
+        '😢 Mary CRIED the entire time she spoke',
+        '⏰ She warned of corruption in the Church and the world',
+        '🍞 She predicted famines, plagues, and natural disasters',
+        '👶 She said: "Many children will die because of fasting" — many would not even know how to pray',
+        '📜 The secrets were published in 1879 with a Bishop\'s approval',
+        '🌹 Pope Pius IX approved La Salette as a Church-recognized apparition',
+        '⛪ Mélanie became a religious sister'
+      ],
+      questionHook: '🤔 What made Mama Mary cry? Could it be that PEOPLE — even Catholics — were not loving her Son? Are YOU bringing tears to her eyes... or smiles?',
+      bisayaSummary: '~ Si Mama Mary mihilak sa Pransya niadtong 1846. Iyang gipasidan-an: kung ang mga tawo dili maghinulsol, dunay umaabut nga grabe nga silot. ~'
+    },
+
+    adults: {
+      title: 'The Suppressed Prophecy That Traditional Catholics Cannot Ignore',
+      reflection: 'La Salette has a unique status: <strong>the apparition itself is approved</strong> (by Bishop de Bruillard in 1851, then by Pope Pius IX), but the <strong>full secret published by Mélanie in 1879</strong> was deeply controversial. Many in the post-Vatican II Church have tried to suppress it. Yet traditional Catholics — and SSPX in particular — recognize its searing relevance.\n\nThe full text was published with the imprimatur of the Bishop of Lecce. It has been suppressed repeatedly because of what it reveals.',
+      keyTexts: [
+        {
+          ref: 'Mélanie\'s Secret (1879 publication, with imprimatur)',
+          text: '"The priests, ministers of my Son, the priests, by their wicked lives, by their irreverence and their impiety in the celebration of the holy mysteries, by their love of money, their love of honors and pleasures — the priests have become cesspools of impurity. Yes, the priests are asking for vengeance, and vengeance is hanging over their heads. Woe to the priests and to persons consecrated to God who, by their unfaithfulness and their wicked lives, are crucifying my Son again!"',
+          fulfilled: 'Look at the clerical scandals exposed since 2000. Look at the financial corruption in the Vatican. Look at the loss of faith among priests. La Salette\'s words have echoed across 175 years with terrible clarity.'
+        },
+        {
+          ref: 'Mélanie\'s Secret — On the Church',
+          text: '"Rome will lose the Faith and become the seat of the Antichrist. The demons of the air, together with the Antichrist, will perform great wonders on earth and in the air, and men will become more and more depraved. God will take care of His faithful servants and men of good will; the Gospel will be preached everywhere, all peoples and all nations will know the Truth!"',
+          fulfilled: 'Take this seriously. This is the most controversial passage. Many traditional theologians (including Bishop Williamson and others in SSPX-aligned circles) believe we have entered the era La Salette warned about. Cardinals have publicly used the language of "smoke of Satan in the Church" (Paul VI, 1972). Discern, pray, do not despair.'
+        },
+        {
+          ref: 'Mélanie\'s Secret — On Chastisement',
+          text: '"A precursor of the Antichrist, with his troops gathered from several nations, will fight against the true Christ, the only Saviour of the world. He will shed much blood and will want to annihilate the worship of God to make himself be looked upon as a God... The earth will be struck by calamities of all kinds (in addition to plague and famine which will be widespread); there will be wars unto the last war, which will then be waged by the ten kings of the Antichrist..."',
+          fulfilled: 'Awaiting fulfillment. La Salette describes a chastisement of unprecedented severity — but ALSO a glorious restoration of the Church afterward. The faithful are not abandoned.'
+        }
+      ],
+      callToConversion: 'La Salette is not a message of despair — it is a message of <strong>urgent repentance</strong>. Our Lady wept because she loves us. She warned because there is still time.\n\n<strong>Three duties for our age:</strong>\n1. <strong>Hold fast to Tradition</strong> — the unchanging Catholic faith\n2. <strong>Pray for priests</strong> — the holier the priest, the holier the people\n3. <strong>Live as if the chastisement is coming</strong> — because it may be\n\nThe SSPX exists in part because of La Salette\'s warnings about the loss of faith. Remember why you go to the Old Mass. Remember the cost of fidelity. Mary weeps still — let us console her with our Rosaries and our lives.'
+    }
+  },
+
+  {
+    id: 'leo-xiii',
+    name: 'Pope Leo XIII\'s Vision (1884)',
+    nameBs: 'Ang Panan-awon ni Papa Leo XIII',
+    icon: '🏛️',
+    era: '1884',
+    approval: 'historical',
+    summary: 'In 1884, Pope Leo XIII fell into a trance after Mass and saw Satan being granted 100 years to attempt the destruction of the Church.',
+
+    kids: {
+      title: 'The Pope Who Heard the Devil 😱',
+      story: 'On October 13, 1884 (33 years BEFORE Fatima!), Pope Leo XIII had just finished saying Mass. Suddenly, he stopped at the foot of the altar and stood there, FROZEN, for about 10 minutes. His face turned white as a sheet!\n\nWhen he finally moved, the Pope rushed to his office and wrote a powerful prayer to Saint Michael the Archangel — the prayer we still pray today!\n\nWhat did the Pope see? Years later, he told the cardinals: he had heard a CONVERSATION between Jesus and Satan. The devil boasted: "I can destroy your Church if I have more time and more power." Jesus asked: "How much time? How much power?" Satan answered: "75 to 100 years and a greater power over those who give themselves to my service."',
+      facts: [
+        '🗓️ October 13, 1884 — exactly 33 years before the Fatima Miracle of the Sun (Oct 13, 1917!)',
+        '😈 Satan was given 100 years to try to destroy the Catholic Church',
+        '🛡️ The Pope wrote the famous Saint Michael Prayer that very day',
+        '⛪ He ordered it to be prayed AFTER EVERY MASS — until Vatican II removed it',
+        '✨ The 100 years would have ended around 1984 — many thought big trouble was coming',
+        '🔥 The "Smoke of Satan" entered the Church (Pope Paul VI said so in 1972)',
+        '🙏 SSPX still prays the Saint Michael Prayer after every Mass!'
+      ],
+      questionHook: '🤔 If a POPE saw the devil ask for 100 years to destroy the Church... what does that mean for OUR time? Are we living in the prophecy? And what should YOU do about it?',
+      bisayaSummary: '~ Niadtong 1884, ang Papa nakakita sa demonyo nga gihatagan og 100 ka tuig aron sulayan pagguba ang Simbahan. Iyang gisulat ang Pag-ampo kang San Miguel! ~'
+    },
+
+    adults: {
+      title: 'The Vision That Explains the Crisis in the Church',
+      reflection: 'On October 13, 1884, Pope Leo XIII experienced what witnesses described as a vision of <strong>extraordinary vividness</strong>. After the experience, he immediately composed the famous <strong>Prayer to Saint Michael the Archangel</strong> and ordered it prayed at the end of every Low Mass — a practice maintained for nearly 80 years.\n\nHis nephew Cardinal Rinaldo Angeli later testified: "Leo XIII truly saw, in a vision, demonic spirits who were congregating on the Eternal City [Rome]. The prayer that he asked all the Church to recite was the fruit of that experience."\n\nThe Pope reportedly stated: <em>"Satan asked permission to test the Church for a century. He has been given the choice of one age in which to do his worst work."</em>',
+      keyTexts: [
+        {
+          ref: 'The Original Long Form of the St. Michael Prayer (composed 1884)',
+          text: '"O glorious Prince of the heavenly host, Saint Michael the Archangel, defend us in the battle and in the terrible warfare that we are waging against the principalities and powers, against the rulers of this world of darkness, against the spirits of wickedness in the high places... May God restrain them, we humbly pray; and do thou, O Prince of the heavenly host, by the power of God, thrust Satan down to hell and with him those other wicked spirits who wander through the world for the ruin of souls. Amen."',
+          fulfilled: 'The shorter form is what most Catholics know. But the long form — written immediately after the vision — speaks explicitly of demons swarming the Church and the world. SSPX uses the longer form.'
+        },
+        {
+          ref: 'Cardinal Nasalli Rocca\'s Testimony (1946)',
+          text: '"His Holiness Pope Pius XI [the same year, 1946] told us in our presence that during the celebration of the Holy Mass on a certain day, Pope Leo XIII heard a vivid argument between Christ and Satan, in which Satan demanded permission to put the Church to the test. The Lord granted it for a century."',
+          fulfilled: 'If we date this from 1884, the 100-year period concluded around 1984 — though some hold the test continues. The post-conciliar period (1965+) has indeed seen unprecedented loss of faith, vocations, and Mass attendance throughout the world.'
+        },
+        {
+          ref: 'Pope Paul VI — June 29, 1972',
+          text: '"From some fissure the smoke of Satan has entered the temple of God."',
+          fulfilled: 'The Pope himself acknowledged the diabolic infiltration. Combine this with Leo XIII\'s vision and the message of Fatima — a coherent prophetic picture emerges of our age.'
+        },
+        {
+          ref: 'Cardinal Caffarra (2008)',
+          text: '"Sister Lucia [of Fatima] wrote me: \'The final battle between the Lord and the kingdom of Satan will be about marriage and the family.\'"',
+          fulfilled: 'In our day: the assault on marriage, gender ideology, abortion, contraception, the destruction of the family. The prophecy continues.'
+        }
+      ],
+      callToConversion: 'Pope Leo XIII\'s vision is not a curiosity of history — it is a <strong>diagnostic key</strong> for understanding our age. The crisis in the Church, the apostasy of nations, the moral collapse of the West — these are not random. They are the predicted assault.\n\n<strong>Three responses:</strong>\n\n1. <strong>Pray the St. Michael Prayer DAILY</strong> — preferably the long form\n2. <strong>Cling to the Old Mass</strong> — Satan especially hates it because it gives glory to God\n3. <strong>Live in a state of grace</strong> — the devil cannot harm a soul united to God\n\nWe are not promised victory in this life — we are promised the Cross. But Christ has already won. Stand firm.'
+    }
+  },
+
+  {
+    id: '3-days-darkness',
+    name: 'The Three Days of Darkness',
+    nameBs: 'Ang Tulo ka Adlaw nga Kangitngit',
+    icon: '🌑',
+    era: 'Multiple saints',
+    approval: 'private-revelation',
+    summary: 'Multiple saints and mystics across centuries have prophesied a coming "Three Days of Darkness" — a period of supernatural punishment.',
+
+    kids: {
+      title: 'The Three Days of Total Darkness 🌑',
+      story: 'For hundreds of years, MANY saints have warned about a strange and scary prophecy: a future time when the WHOLE WORLD will go dark for 3 days! 😨\n\nDuring those days, the saints say:\n• 🚪 Stay HOME with all windows covered (no peeking outside!)\n• 🕯️ Only BLESSED candles will burn — regular lights won\'t work\n• 🙏 The only safe thing to do is PRAY constantly\n• 👹 Demons will roam the earth\n• 😱 People who go outside will see horrible things and die\n\nWhen the 3 days end, the world will be different. Many bad people will be gone. The world will be cleaner.',
+      facts: [
+        '🕯️ Only blessed (beeswax) candles will give light',
+        '🚪 Don\'t open the door, even if you hear loved ones\' voices (could be demons!)',
+        '💧 Bless your home with holy water',
+        '🍞 Have blessed bread and water ready (will multiply miraculously)',
+        '🙏 Pray the Rosary with your family',
+        '✝️ Wear blessed religious medals (Miraculous Medal, Brown Scapular)',
+        '⛪ The Mass will be cancelled during these days',
+        '🌅 After the darkness — a New Era of peace begins!'
+      ],
+      questionHook: '🤔 Are you ready? Do you have BLESSED candles in your home? Does your family pray the Rosary together? When the darkness comes — will YOUR family be ready?',
+      bisayaSummary: '~ Daghang santos nagtagna nga moabot ang TULO ka adlaw nga hingpit nga kangitngit. Ang mga blessed nga kandila lang ang modan-ag. Pag-ampo lang ang bugtong kaluwasan! ~'
+    },
+
+    adults: {
+      title: 'The Universal Chastisement Prophesied Across Centuries',
+      reflection: 'The Three Days of Darkness is one of the most consistently repeated prophecies in Catholic mystical tradition. It has been described by:\n\n• <strong>Bl. Anna Maria Taigi</strong> (1769-1837) — most famous account\n• <strong>St. Padre Pio</strong> (private letters, disputed)\n• <strong>Marie-Julie Jahenny</strong> (1850-1941) — extensive details\n• <strong>Sr. Marianne Gaultier</strong> (18th century)\n• <strong>St. Hildegard of Bingen</strong> (12th century)\n\nIt is a <strong>private revelation</strong>, not Catholic dogma. Catholics are not bound to believe it. But its <strong>consistency across many independent mystics</strong> over 800+ years deserves serious consideration.',
+      keyTexts: [
+        {
+          ref: 'Bl. Anna Maria Taigi (d. 1837) — Most Detailed Account',
+          text: '"There shall come over the whole earth an intense darkness lasting three days and three nights. Nothing can be seen, and the air will be laden with pestilence which will claim mainly, but not only, the enemies of religion. It will be impossible to use any man-made lighting during this darkness, except blessed candles. He, who out of curiosity, opens his window to look out, or leaves his home, will fall dead on the spot. During these three days, people should remain in their homes, pray the Rosary and beg God for mercy. All the enemies of the Church, whether known or unknown, will perish over the whole earth during that universal darkness, with the exception of a few whom God will soon convert. The air shall be infected by demons who will appear under all sorts of hideous forms."',
+          fulfilled: 'Awaiting fulfillment. Bl. Anna Maria Taigi\'s prophecies have been remarkably accurate regarding political events of her own era.'
+        },
+        {
+          ref: 'Marie-Julie Jahenny (d. 1941) — Detailed Practical Guidance',
+          text: '"My children, the crisis will explode suddenly. Punishments will be shared by all, and will succeed each other without interruption... In these days of horror, blessed candles alone will give light. One [single] candle will suffice for the duration of three days, but in the homes of the godless they will give no light... Have a tabernacle in each home, in remote rooms, where the family can take refuge to pray... Place blessed objects in the room where you have taken refuge; you will be protected... A blessed object placed near a window will keep evil from entering."',
+          fulfilled: '⚠️ NOTE: Marie-Julie Jahenny is a NOT formally approved seer, though she had remarkable holiness. Her writings are rich and detailed but should be discerned with prudence.'
+        },
+        {
+          ref: 'St. Hildegard of Bingen (d. 1179) — Doctor of the Church',
+          text: '"A powerful wind will rise in the North carrying heavy fog and the densest dust by divine command, and it will fill their throats and eyes so that they will cease their savagery and be stricken with great fear..."',
+          fulfilled: 'St. Hildegard\'s vision describes a similar period of darkness as part of a wider chastisement. As a Doctor of the Church, her writings carry significant weight.'
+        },
+        {
+          ref: 'Common Elements Across Sources',
+          text: '1. Sudden onset of supernatural darkness — covering the entire earth\n2. Duration: 3 days and 3 nights\n3. Only blessed (beeswax) candles will give light\n4. The air filled with demons\n5. Tremendous loss of life — primarily of the wicked\n6. Earthquakes, fire from the sky, plague\n7. Those who survive will emerge into a renewed world\n8. The Catholic Faith will be triumphantly restored',
+          fulfilled: 'The remarkable convergence of these details across centuries and continents — by mystics who could not have known each other — is striking.'
+        }
+      ],
+      callToConversion: 'Whether or not the Three Days of Darkness comes <em>literally</em> as described, the call it makes upon us is unchanging:\n\n<strong>Practical preparation (which a wise Catholic does anyway):</strong>\n• Keep blessed beeswax candles in your home\n• Have a domestic chapel or prayer corner\n• Wear the Brown Scapular and Miraculous Medal\n• Keep holy water in your home and use it\n• Have a Crucifix in every room\n• Pray the Rosary daily as a family\n• Go to Confession monthly\n• Keep books on the Faith for instruction without internet\n\n<strong>Spiritual preparation (the heart of it):</strong>\n• <strong>Be in the state of grace at all times</strong> — for any death may come at any moment\n• Make Total Consecration to Mary\n• Forgive enemies; reconcile with family\n• Tithe; live simply; help the poor\n• Make daily acts of love for Jesus and Mary\n\nThe wise virgin keeps her lamp filled with oil. She does not panic when the Bridegroom delays — but she does not sleep either. <em>"Watch ye, therefore, because you know not the day nor the hour."</em> (Matthew 25:13)'
+    }
+  },
+
+  {
+    id: 'quito',
+    name: 'Our Lady of Good Success — Quito (1611)',
+    nameBs: 'Among Senyora sa Maayong Kalampusan',
+    icon: '🛐',
+    era: '1611',
+    approval: 'approved',
+    summary: 'In 1611 Ecuador, Our Lady appeared with chillingly specific prophecies about the 20th century — describing our times in detail.',
+
+    kids: {
+      title: 'The Lady Who Saw the Future 400 Years Ago! 🔮',
+      story: 'In 1611, in a Catholic convent in Quito, Ecuador, a Spanish nun named MOTHER MARIANA was praying in the dark chapel. Suddenly, the statue of Our Lady GLOWED WITH LIGHT and Mary spoke to her!\n\nMary told Mother Mariana about a future time — OUR TIME — that was over 300 years away! She described the 20th century with INCREDIBLE accuracy:\n\n• 👗 "Women will dress immodestly" (mini-skirts, etc.)\n• 📱 "Communication of evil will spread fast" (TV, internet)\n• ⛪ "Many priests will lose the faith"\n• 👨‍👩‍👧 "Marriages and families will fall apart"\n• 🏳️‍🌈 "Sins against the 6th Commandment will become normal"\n• 🚸 "Children will be corrupted from a young age"\n\nShe predicted ALL of this in 1611! How? Because Mary KNOWS the future — and she warned us in advance to PREPARE!',
+      facts: [
+        '🇪🇨 Apparition happened in Quito, Ecuador (South America)',
+        '👩 Visionary: Mother Mariana de Jesús Torres (Spanish nun)',
+        '📅 Apparitions began in 1582 and continued until 1634',
+        '✅ FULLY APPROVED by the Church in 1610 (BEFORE the prophecies were fulfilled!)',
+        '⛪ The original statue is still in the convent in Quito today',
+        '🌟 Mary appeared with BABY JESUS in her arms',
+        '🛐 Title: "Our Lady of Good Success" (very powerful!)',
+        '😢 The accuracy of these prophecies for our times is shocking'
+      ],
+      questionHook: '🤔 Mary predicted OUR EXACT TIME 400 years ago — and she was 100% RIGHT. So if she also said the END would come... what does that mean for YOU? Are you ready?',
+      bisayaSummary: '~ Niadtong 1611 sa Ecuador, gisulti na ni Mama Mary ang TANAN nga mahitabo karong panahuna — 400 ka tuig sa wala pa! Ug husto ang tanan! ~'
+    },
+
+    adults: {
+      title: 'The Most Specific Prophecy of the Modern Apostasy',
+      reflection: 'Our Lady of Good Success of Quito is fully approved by the Church (Bishop Salvador de Ribera, 1610), and her prophecies are <strong>terrifyingly specific</strong> about the 20th and 21st centuries. Mother Mariana de Jesús Torres received apparitions from 1582 until her death in 1634. She wrote everything down — and her body was found <strong>incorrupt</strong>.\n\nThe Quito apparitions are largely unknown to mainstream Catholics — but traditional Catholics, especially those connected to SSPX and TFP (Tradition, Family, Property), regard them as one of the most important prophetic legacies in Church history.',
+      keyTexts: [
+        {
+          ref: 'Our Lady\'s Words to Mother Mariana (1610) — On the 20th Century',
+          text: '"Know, moreover, that Divine Justice releases terrible chastisements on entire nations not only for the sins of the people, but for those of priests and religious. For the latter are called, by the perfection of their state, to be the salt of the earth, the masters of truth, and the dispellers of divine wrath. Straying from their divine mission, they degrade themselves in such a way that, before the eyes of God, they quicken the rigor of the punishments."',
+          fulfilled: 'Direct rebuke of unfaithful clergy. The crisis in the Church is not first a crisis of the laity — it is a crisis of the clergy.'
+        },
+        {
+          ref: 'On the Loss of Faith in the Late 19th and 20th Centuries',
+          text: '"In those times, the atmosphere will be saturated with the spirit of impurity which, like a deluge of filth, will flood the streets, squares and public places... innocence will scarcely be found in children, nor modesty in women. In this hour of supreme need of the Church, those who should speak will fall silent... Pray and watch, dear daughter, and never stop pleading. Pray with insistence to your Beloved, that He may shorten those days for the elect, lest they perish in the storm."',
+          fulfilled: '"Innocence will scarcely be found in children" — written before the era of internet pornography reaching 9-year-olds. "Modesty in women" — before the bikini, before #MeToo. "Those who should speak will fall silent" — the silence of bishops on grave moral issues. ALL fulfilled.'
+        },
+        {
+          ref: 'On Marriage and the Family',
+          text: '"In those times, the Sacrament of Matrimony will be ridiculed and openly attacked... The Christian spirit will rapidly decay, extinguishing the precious light of Faith until it reaches the point that there will be an almost total and general corruption of customs."',
+          fulfilled: 'Same-sex unions called "marriage." Divorce normalized. Adultery celebrated in entertainment. Children raised without fathers. The collapse of Christian marriage as predicted.'
+        },
+        {
+          ref: 'On the Corruption of Children',
+          text: '"The unbridled passions will give way to a total corruption of customs because Satan will reign almost completely by means of the Masonic Sects. They will focus principally on the children in order to sustain this general corruption."',
+          fulfilled: 'School curricula promoting gender ideology. Drag queen story hours. Schools transitioning children without parental knowledge. The deliberate corruption of children — predicted in 1611.'
+        },
+        {
+          ref: 'On the Restoration',
+          text: '"Then the secular Clergy will leave much to be desired because priests will become careless in their sacred duties. Lacking the divine compass, they will stray from the road traced by God for the priestly ministry... To test this faith and confidence of the just, there will be moments where all will seem lost and paralyzed. THIS THEN WILL BE THE HAPPY BEGINNING OF THE COMPLETE RESTORATION."',
+          fulfilled: 'Awaiting fulfillment. Notice — the worst moment is followed BY the restoration, not BEFORE it. The darkest hour comes just before the dawn.'
+        }
+      ],
+      callToConversion: 'Our Lady of Good Success offers <strong>both warning AND consolation</strong>. The chastisements she described are upon us. But she also promised: <em>"the happy beginning of the complete restoration"</em>.\n\nWhat is asked of us in this hour?\n\n1. <strong>Recognize the times</strong> — do not pretend everything is normal\n2. <strong>Cling to Our Lady of Good Success</strong> — pray to her by name\n3. <strong>Restore the family</strong> — your domestic church is the front line\n4. <strong>Resist the corruption of your children</strong> at all costs\n5. <strong>Trust in the promised restoration</strong> — God\'s plan is greater than the apostasy\n\nThe traditional Catholic does not panic. He plants seeds, raises faithful children, and prays. The harvest is in God\'s hands. Our duty is fidelity.'
+    }
+  }
+];
+
+function renderProphecies() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  const cardHtml = PROPHECIES.map(p => {
+    const approvalBadge = {
+      'approved': '✅ Church Approved',
+      'approved-with-notes': '⚠️ Approved with Notes',
+      'historical': '📜 Historical',
+      'private-revelation': '⚠️ Private Revelation',
+      'scripture': '📖 Sacred Scripture',
+      'not-approved': '🚫 Not Approved'
+    }[p.approval] || '';
+    const badgeColor = {
+      'approved': '#10b981',
+      'approved-with-notes': '#f59e0b',
+      'historical': '#6d28d9',
+      'private-revelation': '#dc2626',
+      'scripture': '#2563eb',
+      'not-approved': '#dc2626'
+    }[p.approval] || '#6b7280';
+
+    return `
+      <button onclick="renderProphecy('${p.id}')" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef2f2); border: 3px solid #991b1b; border-radius: 18px; padding: 14px 12px; margin: 10px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 4px 0 #7f1d1d; text-align: left;">
+        <div style="display: flex; align-items: start; gap: 12px;">
+          <div style="font-size: 2.4rem; flex-shrink: 0;">${p.icon}</div>
+          <div style="flex: 1;">
+            <h3 style="font-family: 'Pacifico', cursive; color: #991b1b; margin: 0; font-size: 1.2rem; line-height: 1.1;">${escapeHtml(p.name)}</h3>
+            <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 0.95rem; margin: 2px 0;">~ ${escapeHtml(p.nameBs)} ~</p>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0;">
+              <span style="background: ${badgeColor}; color: #fff; padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;">${approvalBadge}</span>
+              <span style="background: #6b7280; color: #fff; padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: 700;">📅 ${escapeHtml(p.era)}</span>
+            </div>
+            <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.85rem; margin: 6px 0 0; line-height: 1.4;">${escapeHtml(p.summary)}</p>
+          </div>
+        </div>
+      </button>
+    `;
+  }).join('');
+
+  render(`
+    <button class="share-button" onclick="openShareSheet()" title="Share">📤</button>
+    <button class="sound-toggle" onclick="toggleSounds(); renderProphecies();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #1f2937 0%, #4b1d1d 50%, #7f1d1d 100%); border-radius: 22px; padding: 22px 16px; min-height: 100vh;">
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.95); border: 3px solid #fff; color: #991b1b; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 rgba(0,0,0,0.3);">
+          🏠 ← All Categories
+        </button>
+        <button onclick="printCategory('prophecy')" title="Print all prophecies" style="background: rgba(255,255,255,0.95); border: 2px solid #fff; color: #991b1b; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 12px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 rgba(0,0,0,0.3);">
+          🖨️
+        </button>
+      </div>
+
+      <div style="text-align: center;">
+        <div style="font-size: 4rem;">🔮 ⚡ 📜</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 2.2rem; text-shadow: 2px 2px 0 #000; margin: 6px 0;">Divine Prophecies</h1>
+        <p style="font-family: 'Caveat', cursive; color: #fbbf24; font-size: 1.4rem;">~ Mga Tagna gikan sa Langit ~</p>
+        <p style="font-family: 'Caveat', cursive; color: #fed7aa; font-size: 1.1rem;">"Behold, I have foretold all things to you." — Mark 13:23</p>
+      </div>
+
+      <!-- WARNING BOX -->
+      <div style="background: linear-gradient(135deg, #fef3c7, #fbbf24); border: 3px solid #92400e; border-radius: 18px; padding: 14px 16px; margin: 18px 0; box-shadow: 0 4px 0 #78350f;">
+        <h3 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.3rem; margin: 0 0 6px;">⚠️ Important Notice</h3>
+        <p style="font-family: 'Quicksand', sans-serif; color: #1f2937; font-size: 0.88rem; line-height: 1.5; margin: 0 0 6px;">
+          This section contains <strong>Church-approved apparitions</strong>, <strong>Sacred Scripture</strong>, and some <strong>private revelations</strong>. The Catholic Church distinguishes between:
+        </p>
+        <ul style="font-family: 'Quicksand', sans-serif; color: #1f2937; font-size: 0.85rem; line-height: 1.5; margin: 0; padding-left: 18px;">
+          <li><strong>✅ Church-Approved</strong> — Catholics may give pious belief</li>
+          <li><strong>📖 Scripture</strong> — Required belief (the inspired Word of God)</li>
+          <li><strong>⚠️ Private Revelation</strong> — Catholics are NOT required to believe; discern with prudence</li>
+        </ul>
+        <p style="font-family: 'Quicksand', sans-serif; color: #1f2937; font-size: 0.85rem; line-height: 1.5; margin: 6px 0 0; font-style: italic;">
+          Even non-approved prophecies, when from holy souls, can stir us to greater conversion. Read with the Holy Spirit\'s guidance.
+        </p>
+      </div>
+
+      <!-- MODE TOGGLE -->
+      <div style="background: rgba(0,0,0,0.4); border: 2px solid #fbbf24; border-radius: 16px; padding: 12px; margin: 14px 0;">
+        <p style="font-family: 'Pacifico', cursive; color: #fbbf24; font-size: 1.1rem; margin: 0 0 8px; text-align: center;">📖 Choose Reading Mode</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <button onclick="setProphecyMode('kids')" style="background: ${prophecyState.mode === 'kids' ? 'linear-gradient(135deg, #fbbf24, #d97706)' : 'rgba(255,255,255,0.85)'}; color: ${prophecyState.mode === 'kids' ? '#fff' : '#92400e'}; border: 3px solid #fbbf24; padding: 10px 8px; border-radius: 12px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.9rem;">
+            👶 For Kids<br>
+            <span style="font-size: 0.75rem; font-weight: 400; font-style: italic;">~ Para sa mga Bata ~</span>
+          </button>
+          <button onclick="setProphecyMode('adults')" style="background: ${prophecyState.mode === 'adults' ? 'linear-gradient(135deg, #991b1b, #7f1d1d)' : 'rgba(255,255,255,0.85)'}; color: ${prophecyState.mode === 'adults' ? '#fff' : '#991b1b'}; border: 3px solid #991b1b; padding: 10px 8px; border-radius: 12px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.9rem;">
+            👨‍🦳 For Adults<br>
+            <span style="font-size: 0.75rem; font-weight: 400; font-style: italic;">~ Para sa mga Hamtong ~</span>
+          </button>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: #fed7aa; font-size: 0.78rem; margin: 8px 0 0; text-align: center; line-height: 1.4;">
+          ${prophecyState.mode === 'kids' ? '🌟 Kids mode: stories that stir wonder and questions' : '🔥 Adults mode: deep texts to stir holy fear and conversion'}
+        </p>
+      </div>
+
+      <h2 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.4rem; text-align: center; margin: 20px 0 4px;">📜 The Prophecies</h2>
+      <p style="font-family: 'Caveat', cursive; color: #fed7aa; text-align: center; font-size: 1rem; margin-bottom: 12px;">~ Pilia ang tagna nga buot mong basahon ~</p>
+
+      ${cardHtml}
+
+      <div style="background: rgba(0,0,0,0.5); border: 2px dashed #fbbf24; border-radius: 14px; padding: 14px; margin: 14px 0; text-align: center;">
+        <p style="font-family: 'Caveat', cursive; color: #fbbf24; font-size: 1.2rem; margin: 0;">"Watch ye therefore, because you know not what hour your Lord will come."</p>
+        <p style="font-family: 'Quicksand', sans-serif; color: #fed7aa; font-size: 0.85rem; margin: 4px 0 0;">— Matthew 24:42</p>
+      </div>
+
+      <div style="background: rgba(0,0,0,0.4); border: 1px dashed #fbbf24; border-radius: 12px; padding: 10px 14px; margin: 14px 0; text-align: center;">
+        <p style="font-family: 'Quicksand', sans-serif; color: #fed7aa; font-size: 0.82rem; margin: 0; font-style: italic;">
+          📌 More prophecies coming in future updates: Akita, St. Malachy, The Great Monarch, Anna Katharina Emmerich, Garabandal, and more.
+        </p>
+      </div>
+    </div>
+  `);
+}
+
+function setProphecyMode(mode) {
+  prophecyState.mode = mode;
+  if (prophecyState.current) {
+    renderProphecy(prophecyState.current);
+  } else {
+    renderProphecies();
+  }
+}
+
+function renderProphecy(prophecyId) {
+  if (!activeStudent) return renderWhoIsPlaying();
+  const p = PROPHECIES.find(x => x.id === prophecyId);
+  if (!p) return renderProphecies();
+
+  prophecyState.current = prophecyId;
+  const isKids = prophecyState.mode === 'kids';
+  const data = isKids ? p.kids : p.adults;
+
+  const approvalBadge = {
+    'approved': { label: '✅ Church Approved', color: '#10b981' },
+    'approved-with-notes': { label: '⚠️ Approved with Notes', color: '#f59e0b' },
+    'historical': { label: '📜 Historical Account', color: '#6d28d9' },
+    'private-revelation': { label: '⚠️ Private Revelation', color: '#dc2626' },
+    'scripture': { label: '📖 Sacred Scripture', color: '#2563eb' },
+    'not-approved': { label: '🚫 Not Approved', color: '#dc2626' }
+  }[p.approval];
+
+  let bodyHtml = '';
+
+  if (isKids) {
+    bodyHtml = `
+      <h2 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.6rem; text-align: center; margin: 16px 0;">${escapeHtml(data.title)}</h2>
+
+      <!-- THE STORY -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #fbbf24; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #d97706;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #92400e; font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 8px;">📖 THE STORY</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.7; font-size: 1rem; white-space: pre-line;">${escapeHtml(data.story)}</p>
+      </div>
+
+      <!-- AMAZING FACTS -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #5b21b6;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #5b21b6; font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 8px;">✨ AMAZING FACTS</div>
+        ${data.facts.map(f => `<div style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.7; padding: 3px 0;">${escapeHtml(f)}</div>`).join('')}
+      </div>
+
+      <!-- QUESTION HOOK -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px dashed #ec4899; border-radius: 18px; padding: 16px; margin: 14px 0; text-align: center;">
+        <div style="font-size: 2rem;">💭</div>
+        <h3 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.3rem; margin: 4px 0;">Think About This...</h3>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.98rem; margin: 8px 0; font-style: italic;">${escapeHtml(data.questionHook)}</p>
+      </div>
+
+      <!-- BISAYA -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 2px dashed #7c3aed; border-radius: 14px; padding: 12px 14px; margin: 14px 0;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #5b21b6; font-size: 0.78rem; letter-spacing: 0.15em; margin-bottom: 6px;">📖 SA BISAYA</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.6; margin: 0; font-style: italic;">${escapeHtml(data.bisayaSummary)}</p>
+      </div>
+    `;
+  } else {
+    // ADULTS MODE
+    const keyTextsHtml = data.keyTexts.map(kt => `
+      <div style="background: linear-gradient(135deg, #1f2937, #374151); border: 2px solid #fbbf24; border-radius: 14px; padding: 14px 16px; margin: 12px 0;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #fbbf24; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 8px;">📖 ${escapeHtml(kt.ref)}</div>
+        <p style="font-family: 'Georgia', serif; color: #fef3c7; font-size: 0.94rem; line-height: 1.7; margin: 0 0 10px; font-style: italic; border-left: 3px solid #fbbf24; padding-left: 12px;">"${escapeHtml(kt.text)}"</p>
+        <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+          <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #f87171; font-size: 0.75rem; letter-spacing: 0.1em; margin-bottom: 4px;">📜 FULFILLMENT / NOTES</div>
+          <p style="font-family: 'Quicksand', sans-serif; color: #fed7aa; font-size: 0.88rem; line-height: 1.6; margin: 0;">${escapeHtml(kt.fulfilled)}</p>
+        </div>
+      </div>
+    `).join('');
+
+    bodyHtml = `
+      <h2 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.5rem; text-align: center; margin: 16px 0; line-height: 1.2;">${escapeHtml(data.title)}</h2>
+
+      <!-- REFLECTION -->
+      <div style="background: rgba(0,0,0,0.5); border: 2px solid #f87171; border-radius: 16px; padding: 16px; margin: 14px 0;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #fbbf24; font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 8px;">📖 REFLECTION</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.96rem; white-space: pre-line;">${data.reflection}</p>
+      </div>
+
+      <!-- KEY PROPHETIC TEXTS -->
+      <h3 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.4rem; text-align: center; margin: 18px 0 6px; text-shadow: 1px 1px 0 #000;">📜 The Prophetic Texts</h3>
+      ${keyTextsHtml}
+
+      <!-- CALL TO CONVERSION -->
+      <div style="background: linear-gradient(135deg, #7f1d1d, #4c1d95); border: 3px solid #fbbf24; border-radius: 18px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #000;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #fbbf24; font-size: 0.9rem; letter-spacing: 0.15em; margin-bottom: 10px;">🔥 CALL TO CONVERSION</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 1rem; white-space: pre-line;">${data.callToConversion}</p>
+      </div>
+    `;
+  }
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderProphecy('${prophecyId}');">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #1f2937 0%, #4b1d1d 50%, #7f1d1d 100%); border-radius: 22px; padding: 22px 16px; min-height: 100vh;">
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderProphecies()" style="background: rgba(255,255,255,0.95); border: 3px solid #fff; color: #991b1b; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 rgba(0,0,0,0.3);">← All Prophecies</button>
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.95); border: 2px solid #fff; color: #991b1b; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 rgba(0,0,0,0.3);">🏠 Home</button>
+      </div>
+
+      <!-- HEADER -->
+      <div style="text-align: center; margin-bottom: 14px;">
+        <div style="font-size: 4rem;">${p.icon}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.9rem; margin: 6px 0; text-shadow: 2px 2px 0 #000; line-height: 1.1;">${escapeHtml(p.name)}</h1>
+        <p style="font-family: 'Caveat', cursive; color: #fed7aa; font-size: 1.15rem;">~ ${escapeHtml(p.nameBs)} ~</p>
+        <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 8px 0;">
+          <span style="background: ${approvalBadge.color}; color: #fff; padding: 4px 10px; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-size: 0.78rem; font-weight: 700;">${approvalBadge.label}</span>
+          <span style="background: #6b7280; color: #fff; padding: 4px 10px; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-size: 0.78rem; font-weight: 700;">📅 ${escapeHtml(p.era)}</span>
+        </div>
+      </div>
+
+      <!-- MODE TOGGLE (mid-page so user can switch) -->
+      <div style="background: rgba(0,0,0,0.4); border: 2px solid #fbbf24; border-radius: 14px; padding: 8px; margin: 12px 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <button onclick="setProphecyMode('kids')" style="background: ${isKids ? 'linear-gradient(135deg, #fbbf24, #d97706)' : 'rgba(255,255,255,0.85)'}; color: ${isKids ? '#fff' : '#92400e'}; border: 2px solid #fbbf24; padding: 8px 6px; border-radius: 10px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.85rem;">
+            👶 Kids Mode${isKids ? ' ✓' : ''}
+          </button>
+          <button onclick="setProphecyMode('adults')" style="background: ${!isKids ? 'linear-gradient(135deg, #991b1b, #7f1d1d)' : 'rgba(255,255,255,0.85)'}; color: ${!isKids ? '#fff' : '#991b1b'}; border: 2px solid #991b1b; padding: 8px 6px; border-radius: 10px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.85rem;">
+            👨‍🦳 Adults Mode${!isKids ? ' ✓' : ''}
+          </button>
+        </div>
+      </div>
+
+      ${bodyHtml}
+
+      <button onclick="renderProphecies()" style="width: 100%; background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #78350f; margin: 14px 0;">
+        🔮 Read Another Prophecy
+      </button>
+
+      <button onclick="renderHome()" style="width: 100%; background: rgba(255,255,255,0.95); color: #991b1b; border: 3px solid #fff; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 rgba(0,0,0,0.3); margin: 8px 0;">
+        🏠 All Categories
       </button>
     </div>
   `);
