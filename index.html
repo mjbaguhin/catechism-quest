@@ -14896,6 +14896,20 @@ function renderBigQuestion(questionId) {
 }
 
 
+
+// ============================================
+// 🔧 SCROLL-PRESERVING RENDER HELPER
+// Used by memory match games to keep position when cards flip
+// ============================================
+function preserveScrollAndRender(renderFn) {
+  const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  renderFn();
+  // Restore scroll AFTER the DOM has updated (next frame)
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
+  });
+}
+
 // ============================================
 // 🎮 MARY GAMES FOR KIDS
 // 5 games: Memory Match, Trivia Quiz, True/False, Word Fill, Rosary Wheel
@@ -15096,18 +15110,18 @@ function flipMemoryCard(idx) {
         s.matched.push(a, b);
         s.flipped = [];
         s.locked = false;
-        renderMemoryMatch();
+        preserveScrollAndRender(renderMemoryMatch);
       }, 800);
     } else {
       // No match
       setTimeout(() => {
         s.flipped = [];
         s.locked = false;
-        renderMemoryMatch();
+        preserveScrollAndRender(renderMemoryMatch);
       }, 1200);
     }
   }
-  renderMemoryMatch();
+  preserveScrollAndRender(renderMemoryMatch);
 }
 
 // ============================================
@@ -15837,12 +15851,12 @@ function flipBibleCard(idx) {
     s.locked = true;
     const [a, b] = s.flipped;
     if (s.cards[a].id === s.cards[b].id && a !== b) {
-      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; renderBibleMatch(); }, 800);
+      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; preserveScrollAndRender(renderBibleMatch); }, 800);
     } else {
-      setTimeout(() => { s.flipped = []; s.locked = false; renderBibleMatch(); }, 1200);
+      setTimeout(() => { s.flipped = []; s.locked = false; preserveScrollAndRender(renderBibleMatch); }, 1200);
     }
   }
-  renderBibleMatch();
+  preserveScrollAndRender(renderBibleMatch);
 }
 
 // ============================================
@@ -16391,12 +16405,12 @@ function flipLatinCard(idx) {
     s.locked = true;
     const [a, b] = s.flipped;
     if (s.cards[a].id === s.cards[b].id && a !== b) {
-      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; renderLatinMatch(); }, 800);
+      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; preserveScrollAndRender(renderLatinMatch); }, 800);
     } else {
-      setTimeout(() => { s.flipped = []; s.locked = false; renderLatinMatch(); }, 1200);
+      setTimeout(() => { s.flipped = []; s.locked = false; preserveScrollAndRender(renderLatinMatch); }, 1200);
     }
   }
-  renderLatinMatch();
+  preserveScrollAndRender(renderLatinMatch);
 }
 
 // ============================================
@@ -16856,12 +16870,12 @@ function flipCreedCard(idx) {
     s.locked = true;
     const [a, b] = s.flipped;
     if (s.cards[a].id === s.cards[b].id && a !== b) {
-      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; renderCreedMatch(); }, 800);
+      setTimeout(() => { s.matched.push(a, b); s.flipped = []; s.locked = false; preserveScrollAndRender(renderCreedMatch); }, 800);
     } else {
-      setTimeout(() => { s.flipped = []; s.locked = false; renderCreedMatch(); }, 1200);
+      setTimeout(() => { s.flipped = []; s.locked = false; preserveScrollAndRender(renderCreedMatch); }, 1200);
     }
   }
-  renderCreedMatch();
+  preserveScrollAndRender(renderCreedMatch);
 }
 
 // ============================================
@@ -17910,6 +17924,49 @@ setupFirstInteractionListener();
 // ============================================
 let deferredInstallPrompt = null;
 
+// Detect if user is in Facebook/Messenger/Instagram in-app browser
+function isInAppBrowser() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return /FBAN|FBAV|Instagram|Messenger|Line|MicroMessenger|Twitter|TikTok/i.test(ua);
+}
+
+// Show a friendly banner telling users to open in Chrome/Safari for best experience
+function showInAppBrowserBanner() {
+  if (document.getElementById('inapp-banner')) return;
+  if (sessionStorage.getItem('inapp-banner-dismissed')) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'inapp-banner';
+  banner.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #fbbf24, #b45309); color: #fff; padding: 12px 16px; font-family: Quicksand, sans-serif; font-size: 0.88rem; line-height: 1.4; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 99999; text-align: center;';
+  banner.innerHTML = '<div style="font-weight: 700; margin-bottom: 4px;">💡 For the best experience</div><div style="font-size: 0.82rem; margin-bottom: 8px;">Open this app in <strong>Chrome</strong> or <strong>Safari</strong> to install it on your phone!</div><div style="display: flex; gap: 8px; justify-content: center;"><button onclick="copyAppLink()" style="background: rgba(255,255,255,0.9); color: #92400e; border: none; padding: 6px 14px; border-radius: 12px; font-family: Quicksand, sans-serif; font-weight: 700; font-size: 0.8rem; cursor: pointer;">📋 Copy Link</button><button onclick="dismissInAppBanner()" style="background: rgba(0,0,0,0.2); color: #fff; border: none; padding: 6px 14px; border-radius: 12px; font-family: Quicksand, sans-serif; font-weight: 700; font-size: 0.8rem; cursor: pointer;">✕ Close</button></div>';
+  document.body.insertBefore(banner, document.body.firstChild);
+  document.body.style.paddingTop = banner.offsetHeight + 'px';
+}
+
+function copyAppLink() {
+  const link = 'https://mjbaguhin.github.io/catechism-quest/';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(() => {
+      const banner = document.getElementById('inapp-banner');
+      if (banner) {
+        banner.innerHTML = '<div style="font-weight: 700;">✅ Link Copied!</div><div style="font-size: 0.8rem; margin-top: 4px;">Now paste it in Chrome or Safari.</div>';
+      }
+    });
+  } else {
+    // Fallback: show link to manually copy
+    prompt('Copy this link and paste it in Chrome or Safari:', link);
+  }
+}
+
+function dismissInAppBanner() {
+  const banner = document.getElementById('inapp-banner');
+  if (banner) {
+    banner.remove();
+    document.body.style.paddingTop = '';
+    sessionStorage.setItem('inapp-banner-dismissed', '1');
+  }
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredInstallPrompt = e;
@@ -17949,6 +18006,11 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW failed:', err));
   });
+}
+
+// Show in-app browser banner if needed (after a small delay so it doesn't flash on top of loading)
+if (isInAppBrowser()) {
+  setTimeout(showInAppBrowserBanner, 1500);
 }
 
 // Always go straight to home — no teacher setup gate to avoid friction
