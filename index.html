@@ -9686,6 +9686,35 @@ function renderMassSection() {
           </div>
         </div>
       </button>
+
+      <!-- Why these matter for the Mass -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 2px dashed #d97706; border-radius: 14px; padding: 12px 14px; margin: 14px 0 6px;">
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.9rem; line-height: 1.5; margin: 0; text-align: center;">
+          💡 <strong>Before receiving Holy Communion</strong>, we must be in a state of grace. That means knowing God's Commandments and going to Confession when we sin!
+        </p>
+      </div>
+
+      <button onclick="renderTenCommandments()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 18px; padding: 16px 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #92400e; text-align: left; margin: 8px 0;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 2.5rem;">⛰️</div>
+          <div style="flex: 1;">
+            <h3 style="font-family: 'Pacifico', cursive; color: #92400e; margin: 0; font-size: 1.4rem;">The Ten Commandments</h3>
+            <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.05rem; margin: 2px 0;">~ Ang Napulo ka Sugo ~</p>
+            <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.9rem; margin: 4px 0 0;">God's rules of love — with examples for kids</p>
+          </div>
+        </div>
+      </button>
+
+      <button onclick="renderConfessionGuide()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 18px; padding: 16px 14px; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 5px 0 #5b21b6; text-align: left; margin: 8px 0;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 2.5rem;">🙏</div>
+          <div style="flex: 1;">
+            <h3 style="font-family: 'Pacifico', cursive; color: #5b21b6; margin: 0; font-size: 1.4rem;">Guide to Confession</h3>
+            <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.05rem; margin: 2px 0;">~ Giya sa Pagkumpisal ~</p>
+            <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.9rem; margin: 4px 0 0;">Step-by-step — prepare your soul for Holy Communion</p>
+          </div>
+        </div>
+      </button>
     </div>
   `);
 }
@@ -10966,6 +10995,131 @@ Ever this day be at my side,
 to light and guard, to rule and guide. Amen.</p>
       <p><strong>Bisaya:</strong> Anghel sa Diyos, akong mahal nga magbalantay, nga kanako gitugyan sa gugma sa Diyos, karong adlawa hatagi ako og kahayag, panalipdi, dumalaha, ug giyahi ako. Amen.</p>
     </div>
+
+    <h2 class="section-break">📜 The Ten Commandments — Detailed Guide</h2>
+    <p><strong>Why include this here?</strong> Before receiving Holy Communion, we must be in a state of grace. That means knowing God's Commandments, examining our conscience, and going to Confession when we sin!</p>
+    <p>God gave Moses the Ten Commandments on Mount Sinai over 3,000 years ago. They are <strong>God's rules of love</strong> — the first 3 teach us how to love God, and the last 7 teach us how to love our neighbor.</p>
+    <p><em>~ Ang Napulo ka Sugo dili para magsubo kanato — kini magtabang nga magmalipayon ug magbalaan kita! ~</em></p>
+
+    <div class="facts">
+      <strong>📋 Two Tables of the Law</strong>
+      <p style="margin: 6px 0 0;"><strong>1st Table (Commandments 1-3):</strong> Love God ❤️</p>
+      <p style="margin: 0;"><strong>2nd Table (Commandments 4-10):</strong> Love your neighbor 🤝</p>
+    </div>
+  `;
+
+  if (typeof TEN_COMMANDMENTS !== 'undefined') {
+    TEN_COMMANDMENTS.forEach(c => {
+      html += `
+        <div class="story-block" style="page-break-inside: avoid;">
+          <h3>${c.icon} Commandment ${c.num}: ${c.text}</h3>
+          <p style="margin: 0 0 8px;"><em>${c.textBs}</em></p>
+
+          <h4>📖 What It Means</h4>
+          <p>${c.meaning}</p>
+          <p style="font-style: italic; color: #6d28d9;">${c.meaningBs}</p>
+
+          <h4 style="color: #047857;">😇 Good — Do This</h4>
+          <ul style="list-style: none; padding-left: 12px;">
+            ${c.goodExamples.map(ex => `<li style="margin: 2px 0;">${ex}</li>`).join('')}
+          </ul>
+
+          <h4 style="color: #b91c1c;">😢 Sin — Avoid This</h4>
+          <ul style="list-style: none; padding-left: 12px;">
+            ${c.badExamples.map(ex => `<li style="margin: 2px 0;">${ex}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    });
+  }
+
+  html += `
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #ec4899; padding: 14px 18px; margin: 16px 0;">
+      <strong>💕 Jesus' Summary (Matthew 22:37-40):</strong><br>
+      "Thou shalt love the Lord thy God with thy whole heart, and with thy whole soul, and with thy whole mind. This is the greatest and the first commandment. And the second is like to this: Thou shalt love thy neighbor as thyself. On these two commandments dependeth the whole law and the prophets."
+    </div>
+
+    <h2 class="section-break">🙏 Guide to Confession — Step by Step</h2>
+    <p><em>~ Giya sa Pagkumpisal ~</em></p>
+
+    <h3>💕 Why Do We Go to Confession?</h3>
+    <p>When we sin, we hurt our friendship with Jesus. Confession (also called <strong>Penance</strong> or <strong>Reconciliation</strong>) is a beautiful Sacrament where Jesus washes away our sins through the priest! It's like a big spiritual bath — we come out clean and white as snow!</p>
+    <p>Jesus gave the priests this power on Easter Sunday: <em>"Whose sins you shall forgive, they are forgiven them" (John 20:23)</em>. The priest acts <strong>"in persona Christi"</strong> — in the person of Christ. <strong>Jesus Himself forgives you</strong> through the priest!</p>
+    <p><strong>Connection to the Mass:</strong> A person in mortal sin must go to Confession before receiving Holy Communion. To receive Jesus worthily, we must be in His friendship — clean of serious sin.</p>
+
+    <h3>⚖️ Two Kinds of Sin</h3>
+    <div class="facts">
+      <p style="margin: 0 0 8px;"><strong>💛 Venial Sin (Small Sin):</strong> Small sins that hurt our friendship with Jesus but don't break it. Examples: telling a small lie, saying a mean word, being lazy with prayers.</p>
+      <p style="margin: 0;"><strong>❤️‍🩹 Mortal Sin (Big Sin):</strong> Serious sins that <strong>break</strong> our friendship with Jesus. Three things make a sin mortal: (1) Serious matter, (2) You knew it was wrong, (3) You did it anyway with full will. <strong>A person in mortal sin must NOT receive Holy Communion until going to Confession!</strong></p>
+    </div>
+
+    <h3>1️⃣ Examination of Conscience</h3>
+    <p>Before going to Confession, find a quiet place and think back. Ask yourself questions based on the Ten Commandments:</p>
+    <ul>
+      <li>🙏 Did I skip my prayers? Did I miss Mass on Sunday?</li>
+      <li>✝️ Did I say "Oh my God" or use Jesus' name carelessly?</li>
+      <li>👨‍👩‍👧 Did I disobey or talk back to my parents?</li>
+      <li>💚 Did I hit, bully, or hate someone?</li>
+      <li>💝 Did I look at bad pictures or watch bad shows?</li>
+      <li>🤝 Did I steal or cheat in school or games?</li>
+      <li>🗣️ Did I lie or gossip?</li>
+      <li>🎁 Was I jealous or greedy?</li>
+      <li>🙏 Did I miss my Easter duty (yearly Confession + Communion)?</li>
+    </ul>
+    <p><em>💡 Tip: Try to remember <strong>how many times</strong> for each sin (e.g., "I lied about 3 times").</em></p>
+
+    <h3>2️⃣ Be Sorry (Contrition)</h3>
+    <p>Tell Jesus you are sorry — not because you got caught, but because <strong>you love Him</strong> and don't want to hurt Him anymore. <strong>Promise to try not to sin again</strong>, with God's help.</p>
+
+    <h3>3️⃣ In the Confessional</h3>
+    <p>Walk to the priest. You can <strong>kneel behind the screen</strong> (traditional way) or sit face-to-face. Then say:</p>
+    <div class="quote" style="background: #d1fae5; border-left: 4px solid #10b981;">
+      <strong>"Bless me Father, for I have sinned. It has been [time] since my last Confession."</strong><br>
+      <em>(Example: "...one week since my last Confession")</em>
+    </div>
+    <p><strong>Then tell your sins clearly with how many times. Tell ALL mortal sins — don't hide any!</strong></p>
+    <ul>
+      <li>"I disobeyed my parents 4 times."</li>
+      <li>"I lied 2 times."</li>
+      <li>"I missed Mass on Sunday 1 time."</li>
+    </ul>
+    <p>Then say: <strong>"For these and all the sins of my past life, I am heartily sorry."</strong></p>
+
+    <h3>4️⃣ Listen to the Priest</h3>
+    <p>The priest may give you advice. Then he will give you a <strong>penance</strong> — usually some prayers to say (like 3 Hail Marys or 1 Our Father). Listen carefully and remember it!</p>
+
+    <h3>5️⃣ Pray the Act of Contrition</h3>
+    <div class="quote" style="background: #ede9fe; border-left: 4px solid #7c3aed;">
+      <strong>Act of Contrition (English):</strong><br>
+      O my God, I am heartily sorry for having offended Thee, and I detest all my sins because of Thy just punishments, but most of all because they offend Thee, my God, who art all good and deserving of all my love. I firmly resolve, with the help of Thy grace, to confess my sins, to do penance, and to amend my life. Amen.
+    </div>
+    <div class="quote" style="background: #ede9fe; border-left: 4px solid #7c3aed;">
+      <strong>Act of Contrition (Bisaya):</strong><br>
+      O Diyos ko, masulub-on gayud ako sa akong nahimong kasaypanan Kanimo, ug akong gikalain ang akong mga sala tungod sa Imong matarong nga silot, apan labaw sa tanan tungod kay nakahatag silag kasakit Kanimo, akong Diyos, nga puno sa kaayo ug takus sa tanan kong gugma. Naghimo ako og lig-on nga tinguha, pinaagi sa Imong grasya, sa pagkumpisal sa akong mga sala, sa pagpenitensiya, ug sa pag-usab sa akong kinabuhi. Amen.
+    </div>
+
+    <h3>6️⃣ ✨ Absolution! ✨</h3>
+    <p>The priest will raise his hand and say: <em>"...and I absolve you from your sins, in the name of the Father, and of the Son, and of the Holy Spirit. Amen."</em></p>
+    <p><strong>This is the moment Jesus forgives ALL your sins!</strong> Make the sign of the cross. You can answer: "Amen." The priest may say: <em>"Go in peace."</em> You answer: <strong>"Thanks be to God"</strong> (or "Salamat sa Diyos").</p>
+
+    <h3>7️⃣ Do Your Penance</h3>
+    <p>Right after Confession, kneel before the Tabernacle (or near the altar) and <strong>pray your penance</strong>. Don't forget! Then thank Jesus for the beautiful gift of forgiveness.</p>
+
+    <h3>💡 Helpful Tips</h3>
+    <ul>
+      <li>🌹 <strong>Go often!</strong> Once a month is great. Saints went weekly.</li>
+      <li>📓 Write your sins down on paper (then tear it up after).</li>
+      <li>😌 Don't be afraid! The priest cannot tell anyone — it's the <strong>Seal of Confession</strong>.</li>
+      <li>👼 If you forget a sin, that's okay! Mention it next time.</li>
+      <li>💕 Ask Mama Mary to help you make a good confession before you go.</li>
+      <li>✨ After Confession, your soul is whiter than snow!</li>
+    </ul>
+
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #ec4899; padding: 14px 18px; margin: 16px 0;">
+      <strong>💕 Jesus is Waiting for You!</strong><br>
+      Don't be afraid! Jesus loves you SO much that He waits in the confessional just for YOU. Even if your sins are big, His mercy is BIGGER. Come back to Him often, especially before receiving Holy Communion!<br><br>
+      <em>~ Si Hesus naghulat kanimo. Ayaw kahadlok — labaw pa kadako ang iyang kalooy kay sa imong sala! ~</em>
+    </div>
   `;
   return html;
 }
@@ -11324,6 +11478,132 @@ function buildBiblePrintContent() {
     });
   }
 
+  // Add Ten Commandments section
+  html += `
+    <h2 class="section-break">📜 The Ten Commandments — Detailed Guide</h2>
+    <p>God gave Moses the Ten Commandments on Mount Sinai over 3,000 years ago. They are <strong>God's rules of love</strong> — the first 3 teach us how to love God, and the last 7 teach us how to love our neighbor.</p>
+    <p><em>~ Ang Napulo ka Sugo dili para magsubo kanato — kini magtabang nga magmalipayon ug magbalaan kita! ~</em></p>
+
+    <div class="facts">
+      <strong>📋 Two Tables of the Law</strong>
+      <p style="margin: 6px 0 0;"><strong>1st Table (Commandments 1-3):</strong> Love God ❤️</p>
+      <p style="margin: 0;"><strong>2nd Table (Commandments 4-10):</strong> Love your neighbor 🤝</p>
+    </div>
+  `;
+
+  if (typeof TEN_COMMANDMENTS !== 'undefined') {
+    TEN_COMMANDMENTS.forEach(c => {
+      html += `
+        <div class="story-block" style="page-break-inside: avoid;">
+          <h3>${c.icon} Commandment ${c.num}: ${c.text}</h3>
+          <p style="margin: 0 0 8px;"><em>${c.textBs}</em></p>
+
+          <h4>📖 What It Means</h4>
+          <p>${c.meaning}</p>
+          <p style="font-style: italic; color: #6d28d9;">${c.meaningBs}</p>
+
+          <h4 style="color: #047857;">😇 Good — Do This</h4>
+          <ul style="list-style: none; padding-left: 12px;">
+            ${c.goodExamples.map(ex => `<li style="margin: 2px 0;">${ex}</li>`).join('')}
+          </ul>
+
+          <h4 style="color: #b91c1c;">😢 Sin — Avoid This</h4>
+          <ul style="list-style: none; padding-left: 12px;">
+            ${c.badExamples.map(ex => `<li style="margin: 2px 0;">${ex}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    });
+  }
+
+  html += `
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #ec4899; padding: 14px 18px; margin: 16px 0;">
+      <strong>💕 Jesus' Summary (Matthew 22:37-40):</strong><br>
+      "Thou shalt love the Lord thy God with thy whole heart, and with thy whole soul, and with thy whole mind. This is the greatest and the first commandment. And the second is like to this: Thou shalt love thy neighbor as thyself. On these two commandments dependeth the whole law and the prophets."
+    </div>
+
+    <h2 class="section-break">🙏 Guide to Confession — Step by Step</h2>
+    <p><em>~ Giya sa Pagkumpisal ~</em></p>
+
+    <h3>💕 Why Do We Go to Confession?</h3>
+    <p>When we sin, we hurt our friendship with Jesus. Confession (also called <strong>Penance</strong> or <strong>Reconciliation</strong>) is a beautiful Sacrament where Jesus washes away our sins through the priest! It's like a big spiritual bath — we come out clean and white as snow!</p>
+    <p>Jesus gave the priests this power on Easter Sunday: <em>"Whose sins you shall forgive, they are forgiven them" (John 20:23)</em>. The priest acts <strong>"in persona Christi"</strong> — in the person of Christ. <strong>Jesus Himself forgives you</strong> through the priest!</p>
+
+    <h3>⚖️ Two Kinds of Sin</h3>
+    <div class="facts">
+      <p style="margin: 0 0 8px;"><strong>💛 Venial Sin (Small Sin):</strong> Small sins that hurt our friendship with Jesus but don't break it. Examples: telling a small lie, saying a mean word, being lazy with prayers.</p>
+      <p style="margin: 0;"><strong>❤️‍🩹 Mortal Sin (Big Sin):</strong> Serious sins that <strong>break</strong> our friendship with Jesus. Three things make a sin mortal: (1) Serious matter, (2) You knew it was wrong, (3) You did it anyway with full will. <strong>A person in mortal sin must NOT receive Holy Communion until going to Confession!</strong></p>
+    </div>
+
+    <h3>1️⃣ Examination of Conscience</h3>
+    <p>Before going to Confession, find a quiet place and think back. Ask yourself questions based on the Ten Commandments:</p>
+    <ul>
+      <li>🙏 Did I skip my prayers? Did I miss Mass on Sunday?</li>
+      <li>✝️ Did I say "Oh my God" or use Jesus' name carelessly?</li>
+      <li>👨‍👩‍👧 Did I disobey or talk back to my parents?</li>
+      <li>💚 Did I hit, bully, or hate someone?</li>
+      <li>💝 Did I look at bad pictures or watch bad shows?</li>
+      <li>🤝 Did I steal or cheat in school or games?</li>
+      <li>🗣️ Did I lie or gossip?</li>
+      <li>🎁 Was I jealous or greedy?</li>
+      <li>🙏 Did I miss my Easter duty (yearly Confession + Communion)?</li>
+    </ul>
+    <p><em>💡 Tip: Try to remember <strong>how many times</strong> for each sin (e.g., "I lied about 3 times").</em></p>
+
+    <h3>2️⃣ Be Sorry (Contrition)</h3>
+    <p>Tell Jesus you are sorry — not because you got caught, but because <strong>you love Him</strong> and don't want to hurt Him anymore. <strong>Promise to try not to sin again</strong>, with God's help.</p>
+
+    <h3>3️⃣ In the Confessional</h3>
+    <p>Walk to the priest. You can <strong>kneel behind the screen</strong> (traditional way) or sit face-to-face. Then say:</p>
+    <div class="quote" style="background: #d1fae5; border-left: 4px solid #10b981;">
+      <strong>"Bless me Father, for I have sinned. It has been [time] since my last Confession."</strong><br>
+      <em>(Example: "...one week since my last Confession")</em>
+    </div>
+    <p><strong>Then tell your sins clearly with how many times. Tell ALL mortal sins — don't hide any!</strong></p>
+    <ul>
+      <li>"I disobeyed my parents 4 times."</li>
+      <li>"I lied 2 times."</li>
+      <li>"I missed Mass on Sunday 1 time."</li>
+    </ul>
+    <p>Then say: <strong>"For these and all the sins of my past life, I am heartily sorry."</strong></p>
+
+    <h3>4️⃣ Listen to the Priest</h3>
+    <p>The priest may give you advice. Then he will give you a <strong>penance</strong> — usually some prayers to say (like 3 Hail Marys or 1 Our Father). Listen carefully and remember it!</p>
+
+    <h3>5️⃣ Pray the Act of Contrition</h3>
+    <div class="quote" style="background: #ede9fe; border-left: 4px solid #7c3aed;">
+      <strong>Act of Contrition (English):</strong><br>
+      O my God, I am heartily sorry for having offended Thee, and I detest all my sins because of Thy just punishments, but most of all because they offend Thee, my God, who art all good and deserving of all my love. I firmly resolve, with the help of Thy grace, to confess my sins, to do penance, and to amend my life. Amen.
+    </div>
+    <div class="quote" style="background: #ede9fe; border-left: 4px solid #7c3aed;">
+      <strong>Act of Contrition (Bisaya):</strong><br>
+      O Diyos ko, masulub-on gayud ako sa akong nahimong kasaypanan Kanimo, ug akong gikalain ang akong mga sala tungod sa Imong matarong nga silot, apan labaw sa tanan tungod kay nakahatag silag kasakit Kanimo, akong Diyos, nga puno sa kaayo ug takus sa tanan kong gugma. Naghimo ako og lig-on nga tinguha, pinaagi sa Imong grasya, sa pagkumpisal sa akong mga sala, sa pagpenitensiya, ug sa pag-usab sa akong kinabuhi. Amen.
+    </div>
+
+    <h3>6️⃣ ✨ Absolution! ✨</h3>
+    <p>The priest will raise his hand and say: <em>"...and I absolve you from your sins, in the name of the Father, and of the Son, and of the Holy Spirit. Amen."</em></p>
+    <p><strong>This is the moment Jesus forgives ALL your sins!</strong> Make the sign of the cross. You can answer: "Amen." The priest may say: <em>"Go in peace."</em> You answer: <strong>"Thanks be to God"</strong> (or "Salamat sa Diyos").</p>
+
+    <h3>7️⃣ Do Your Penance</h3>
+    <p>Right after Confession, kneel before the Tabernacle (or near the altar) and <strong>pray your penance</strong>. Don't forget! Then thank Jesus for the beautiful gift of forgiveness.</p>
+
+    <h3>💡 Helpful Tips</h3>
+    <ul>
+      <li>🌹 <strong>Go often!</strong> Once a month is great. Saints went weekly.</li>
+      <li>📓 Write your sins down on paper (then tear it up after).</li>
+      <li>😌 Don't be afraid! The priest cannot tell anyone — it's the <strong>Seal of Confession</strong>.</li>
+      <li>👼 If you forget a sin, that's okay! Mention it next time.</li>
+      <li>💕 Ask Mama Mary to help you make a good confession before you go.</li>
+      <li>✨ After Confession, your soul is whiter than snow!</li>
+    </ul>
+
+    <div class="quote" style="background: #fce7f3; border-left: 4px solid #ec4899; padding: 14px 18px; margin: 16px 0;">
+      <strong>💕 Jesus is Waiting for You!</strong><br>
+      Don't be afraid! Jesus loves you SO much that He waits in the confessional just for YOU. Even if your sins are big, His mercy is BIGGER. Come back to Him often.<br><br>
+      <em>~ Si Hesus naghulat kanimo. Ayaw kahadlok — labaw pa kadako ang iyang kalooy kay sa imong sala! ~</em>
+    </div>
+  `;
+
   return html;
 }
 
@@ -11598,8 +11878,594 @@ function renderBibleStory(storyId) {
         </p>
       </div>
 
+      ${storyId === 'moses' ? `
+        <!-- Special: Ten Commandments + Confession buttons -->
+        <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px dashed #d97706; border-radius: 20px; padding: 16px; margin: 14px 0;">
+          <h3 style="font-family: 'Pacifico', cursive; color: #92400e; text-align: center; font-size: 1.4rem; margin: 0 0 6px;">📚 Special Sections</h3>
+          <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.1rem; margin: 0 0 12px;">~ Learn the 10 Commandments and How to Confess ~</p>
+
+          <button onclick="renderTenCommandments()" style="display: block; width: 100%; background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border: 3px solid #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 14px 16px; border-radius: 16px; cursor: pointer; font-size: 1rem; margin: 8px 0; box-shadow: 0 4px 0 #92400e; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="font-size: 2.2rem;">📜</div>
+              <div style="flex: 1;">
+                <div style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.2rem; line-height: 1.1;">The Ten Commandments</div>
+                <div style="font-family: 'Caveat', cursive; color: #be185d; font-size: 0.95rem; margin-top: 2px;">~ Ang Napulo ka Sugo ~ With clear meaning and examples</div>
+              </div>
+            </div>
+          </button>
+
+          <button onclick="renderConfessionGuide()" style="display: block; width: 100%; background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border: 3px solid #7c3aed; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 14px 16px; border-radius: 16px; cursor: pointer; font-size: 1rem; margin: 8px 0; box-shadow: 0 4px 0 #5b21b6; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="font-size: 2.2rem;">🙏</div>
+              <div style="flex: 1;">
+                <div style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.2rem; line-height: 1.1;">Guide to Confession</div>
+                <div style="font-family: 'Caveat', cursive; color: #be185d; font-size: 0.95rem; margin-top: 2px;">~ Step-by-step for kids ~</div>
+              </div>
+            </div>
+          </button>
+        </div>
+      ` : ''}
+
       <button onclick="renderBibleStories()" style="width: 100%; background: linear-gradient(180deg, ${bgColor} 0%, ${accentColor} 100%); color: #fff; border: 3px solid ${accentColor}; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 ${accentColor}; margin: 14px 0;">
         📖 Read Another Story
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// 📜 THE TEN COMMANDMENTS
+// Clear meanings + examples for kids
+// ============================================
+
+const TEN_COMMANDMENTS = [
+  {
+    num: 1,
+    text: 'I am the Lord thy God; thou shalt not have strange gods before me.',
+    textBs: 'Ako ang Ginoo nga imong Diyos; ayaw pagsimba sa laing diyos gawas Kanako.',
+    icon: '🙏',
+    meaning: 'Love God more than anything else! Worship only the one true God. Don\'t make anything else more important than Him — not money, not toys, not games, not even people.',
+    meaningBs: 'Higugmaa ang Diyos labaw sa tanan! Pagsimba lamang sa tinuod nga Diyos. Ayaw himo-a nga mas importante ang ubang butang kay Kaniya.',
+    goodExamples: [
+      '✅ Saying morning and night prayers',
+      '✅ Going to Mass every Sunday',
+      '✅ Putting God first in your day',
+      '✅ Making the sign of the cross before meals'
+    ],
+    badExamples: [
+      '❌ Skipping prayer because you\'re tired',
+      '❌ Loving video games more than God',
+      '❌ Believing in fortune-tellers, horoscopes, charms (anting-anting)',
+      '❌ Using witchcraft or magic'
+    ]
+  },
+  {
+    num: 2,
+    text: 'Thou shalt not take the name of the Lord thy God in vain.',
+    textBs: 'Ayaw paggamit sa ngalan sa Ginoo nga imong Diyos sa kawang.',
+    icon: '✝️',
+    meaning: 'Always speak about God, Jesus, and Mary with love and respect. Never use their holy names as a curse word or joke. Keep your promises that you make to God!',
+    meaningBs: 'Pagsulti bahin sa Diyos, Hesus, ug Maria nga adunay paghigugma ug pagtahod. Ayaw gamita ang ilang balaan nga ngalan ingon nga panghimaraot.',
+    goodExamples: [
+      '✅ Saying "Praise God!" or "Thank you, Jesus!"',
+      '✅ Bowing your head when you say "Jesus"',
+      '✅ Speaking softly and kindly when praying',
+      '✅ Keeping promises to God'
+    ],
+    badExamples: [
+      '❌ Saying "Oh my God!" as an exclamation',
+      '❌ Using "Jesus!" or "Christ!" as a curse',
+      '❌ Making fun of holy things',
+      '❌ Breaking promises made to God'
+    ]
+  },
+  {
+    num: 3,
+    text: 'Remember thou keep holy the Sabbath day.',
+    textBs: 'Hinumdomi ang adlaw nga Igpapahulay aron pagbalaan niini.',
+    icon: '⛪',
+    meaning: 'Sunday is the Lord\'s Day! We MUST go to Mass every Sunday. We rest from work and spend time with God and family. It\'s a holy day, not just a fun day.',
+    meaningBs: 'Ang Domingo mao ang adlaw sa Ginoo! Kinahanglan moadto kita sa Misa matag Domingo. Mopahulay kita gikan sa trabaho.',
+    goodExamples: [
+      '✅ Going to Holy Mass every Sunday',
+      '✅ Praying as a family',
+      '✅ Resting and visiting family',
+      '✅ Doing acts of charity'
+    ],
+    badExamples: [
+      '❌ Skipping Mass without a serious reason',
+      '❌ Doing unnecessary heavy work on Sunday',
+      '❌ Treating Sunday like any other day',
+      '❌ Choosing fun activities over Mass'
+    ]
+  },
+  {
+    num: 4,
+    text: 'Honor thy father and thy mother.',
+    textBs: 'Tahuron mo ang imong amahan ug ang imong inahan.',
+    icon: '👨‍👩‍👧‍👦',
+    meaning: 'Love, respect, and obey your parents! Listen to them, help them, and never speak rudely to them. This also means respecting elders, teachers, priests, and lawful authorities.',
+    meaningBs: 'Higugmaa, tahura, ug tumana ang imong mga ginikanan! Pagtahod sa mga magulang, magtutudlo, ug mga pari.',
+    goodExamples: [
+      '✅ Obeying mom and dad the first time',
+      '✅ Helping with chores without complaining',
+      '✅ Saying "Po" and "Opo" / "Ate" and "Kuya"',
+      '✅ Respecting your teachers and elders',
+      '✅ Praying for your parents'
+    ],
+    badExamples: [
+      '❌ Talking back to mom or dad',
+      '❌ Rolling your eyes when told to do something',
+      '❌ Disrespecting Lola and Lolo (grandparents)',
+      '❌ Not listening to your teacher',
+      '❌ Lying to your parents'
+    ]
+  },
+  {
+    num: 5,
+    text: 'Thou shalt not kill.',
+    textBs: 'Ayaw pagpatay.',
+    icon: '💚',
+    meaning: 'Every life is precious to God! Don\'t hurt people physically or with mean words. Don\'t hate people. Don\'t hurt yourself either. Be kind to animals too. Forgive those who hurt you.',
+    meaningBs: 'Ang matag kinabuhi bililhon sa Diyos! Ayaw pagsakit sa mga tawo. Ayaw mo pagdumot.',
+    goodExamples: [
+      '✅ Being kind to everyone, even people you don\'t like',
+      '✅ Forgiving those who hurt you',
+      '✅ Helping when someone is sad or hurt',
+      '✅ Taking care of your body (food, sleep, exercise)',
+      '✅ Being gentle with animals'
+    ],
+    badExamples: [
+      '❌ Hitting, kicking, or pinching others',
+      '❌ Bullying or making fun of someone',
+      '❌ Saying mean words that hurt people',
+      '❌ Hating someone or holding grudges',
+      '❌ Hurting animals on purpose',
+      '❌ Hurting your own body'
+    ]
+  },
+  {
+    num: 6,
+    text: 'Thou shalt not commit adultery.',
+    textBs: 'Ayaw pagpanapaw.',
+    icon: '💝',
+    meaning: 'Keep your body and heart pure! God made us to be holy. We dress modestly, behave modestly, and treat our bodies with respect because they are temples of the Holy Spirit. We avoid bad shows, bad words, and bad pictures.',
+    meaningBs: 'Bantayi nga putli ang imong lawas ug kasingkasing! Ang lawas mao ang templo sa Espiritu Santo.',
+    goodExamples: [
+      '✅ Dressing modestly (clothes that cover well)',
+      '✅ Behaving like a gentleman or lady',
+      '✅ Avoiding bad TV shows and games',
+      '✅ Saying clean words only',
+      '✅ Treating boys/girls with respect'
+    ],
+    badExamples: [
+      '❌ Watching shows or videos with bad scenes',
+      '❌ Looking at bad pictures',
+      '❌ Saying or singing dirty words',
+      '❌ Wearing clothes that are too revealing',
+      '❌ Touching others inappropriately'
+    ]
+  },
+  {
+    num: 7,
+    text: 'Thou shalt not steal.',
+    textBs: 'Ayaw pagpangawat.',
+    icon: '🤝',
+    meaning: 'Don\'t take what isn\'t yours! Always ask permission. Return what you borrowed. Be honest in everything. Don\'t cheat in school or in games. Take care of other people\'s things.',
+    meaningBs: 'Ayaw pagkuha sa dili imo! Pangayo og pagtugot. Ibalik ang imong gihulam.',
+    goodExamples: [
+      '✅ Asking before taking something',
+      '✅ Returning what you borrowed',
+      '✅ Telling a cashier if they gave you too much change',
+      '✅ Doing your own homework (not copying)',
+      '✅ Being honest in games — no cheating'
+    ],
+    badExamples: [
+      '❌ Taking your sibling\'s toy without asking',
+      '❌ Keeping money you found that isn\'t yours',
+      '❌ Cheating on tests or homework',
+      '❌ Cheating in games to win',
+      '❌ Damaging other people\'s things on purpose'
+    ]
+  },
+  {
+    num: 8,
+    text: 'Thou shalt not bear false witness against thy neighbor.',
+    textBs: 'Ayaw pagpamatuod og bakak batok sa imong silingan.',
+    icon: '🗣️',
+    meaning: 'Always tell the truth! Don\'t lie. Don\'t gossip about others. Don\'t make up stories that hurt people. If you said something bad about someone, fix it.',
+    meaningBs: 'Pagsulti kanunay og tinuod! Ayaw pagpamakak. Ayaw pag-tsismis bahin sa uban.',
+    goodExamples: [
+      '✅ Telling the truth, even when it\'s hard',
+      '✅ Saying sorry when you lied',
+      '✅ Defending someone being gossiped about',
+      '✅ Keeping secrets that should be kept',
+      '✅ Saying nice things about others'
+    ],
+    badExamples: [
+      '❌ Lying to mom or dad to avoid trouble',
+      '❌ Spreading rumors or gossip (tsismis)',
+      '❌ Telling on someone unfairly',
+      '❌ Saying "I didn\'t do it!" when you did',
+      '❌ Making fun of someone behind their back'
+    ]
+  },
+  {
+    num: 9,
+    text: 'Thou shalt not covet thy neighbor\'s wife.',
+    textBs: 'Ayaw paghandom sa asawa sa imong silingan.',
+    icon: '💕',
+    meaning: 'Keep your thoughts pure and clean! Don\'t think bad thoughts about others. Be happy with the family God gave you. (For grown-ups: don\'t want someone else\'s spouse.)',
+    meaningBs: 'Bantayi ang imong panghunahuna nga limpyo! Magmalipayon sa pamilya nga gihatag sa Diyos.',
+    goodExamples: [
+      '✅ Thinking kind thoughts about others',
+      '✅ Being grateful for your family',
+      '✅ Praying when bad thoughts come',
+      '✅ Filling your mind with good things (prayers, songs, holy books)'
+    ],
+    badExamples: [
+      '❌ Thinking dirty or unkind thoughts',
+      '❌ Wishing your friend\'s family was yours',
+      '❌ Wanting things that belong to others',
+      '❌ Daydreaming about bad things'
+    ]
+  },
+  {
+    num: 10,
+    text: 'Thou shalt not covet thy neighbor\'s goods.',
+    textBs: 'Ayaw paghandom sa kabtangan sa imong silingan.',
+    icon: '🎁',
+    meaning: 'Don\'t be jealous of what others have! Be grateful for what God gives you. Don\'t complain. Don\'t want more and more stuff. Help those who have less.',
+    meaningBs: 'Ayaw pagkasina sa nahimo sa uban! Magpasalamat sa gihatag sa Diyos kanimo.',
+    goodExamples: [
+      '✅ Being thankful for what you have',
+      '✅ Sharing your toys and food',
+      '✅ Being happy when others get good things',
+      '✅ Helping the poor',
+      '✅ Saying "Salamat, Lord!" every day'
+    ],
+    badExamples: [
+      '❌ Saying "I want that!" all the time',
+      '❌ Being jealous of your friend\'s toys',
+      '❌ Complaining "I don\'t have what they have"',
+      '❌ Refusing to share',
+      '❌ Always wanting more, never satisfied'
+    ]
+  }
+];
+
+function renderTenCommandments() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  const commandmentsHtml = TEN_COMMANDMENTS.map(c => `
+    <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 20px; padding: 18px; margin: 14px 0; box-shadow: 0 4px 0 #92400e;">
+      <!-- Header -->
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px; border-bottom: 2px solid #fbbf24; padding-bottom: 10px;">
+        <div style="background: linear-gradient(135deg, #d97706, #92400e); color: #fff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.6rem; flex-shrink: 0; box-shadow: 0 3px 0 #78350f;">${c.num}</div>
+        <div style="flex: 1;">
+          <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.2rem; margin: 0; line-height: 1.2;">${c.icon} ${escapeHtml(c.text)}</h2>
+          <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1rem; margin: 4px 0 0; font-style: italic;">~ ${escapeHtml(c.textBs)} ~</p>
+        </div>
+      </div>
+
+      <!-- What It Means -->
+      <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #2563eb; padding: 12px 14px; margin: 8px 0; border-radius: 8px;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #1e40af; font-size: 0.78rem; letter-spacing: 0.15em; margin-bottom: 6px;">📖 WHAT IT MEANS</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.6; margin: 0;">${escapeHtml(c.meaning)}</p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--pastel-lavender-darker); font-size: 0.85rem; line-height: 1.5; margin: 6px 0 0; font-style: italic;">${escapeHtml(c.meaningBs)}</p>
+      </div>
+
+      <!-- Good Examples -->
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border-left: 4px solid #10b981; padding: 12px 14px; margin: 8px 0; border-radius: 8px;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #047857; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 8px;">😇 GOOD — DO THIS</div>
+        ${c.goodExamples.map(ex => `<div style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.7; padding: 2px 0;">${escapeHtml(ex)}</div>`).join('')}
+      </div>
+
+      <!-- Bad Examples -->
+      <div style="background: linear-gradient(135deg, #fff, #fee2e2); border-left: 4px solid #dc2626; padding: 12px 14px; margin: 8px 0; border-radius: 8px;">
+        <div style="font-family: 'Quicksand', sans-serif; font-weight: 700; color: #b91c1c; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 8px;">😢 SIN — AVOID THIS</div>
+        ${c.badExamples.map(ex => `<div style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.7; padding: 2px 0;">${escapeHtml(ex)}</div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderTenCommandments();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border-radius: 22px; padding: 22px 16px;">
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #be185d;">🏠 All Categories</button>
+        <button onclick="renderBibleStory('moses')" style="background: rgba(255,255,255,0.85); border: 2px solid #d97706; color: #92400e; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #d97706;">← Moses</button>
+        <button onclick="renderMassSection()" style="background: rgba(255,255,255,0.85); border: 2px solid #ec4899; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #ec4899;">⛪ Mass</button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">📜 ⛰️ ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 2rem; margin: 8px 0; text-shadow: 1px 1px 0 #fff;">The Ten Commandments</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Ang Napulo ka Sugo ~</p>
+      </div>
+
+      <!-- Intro -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 18px; padding: 16px; margin: 16px 0; box-shadow: 0 4px 0 #d97706;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; margin: 0 0 8px;">📚 What Are the Ten Commandments?</h2>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          God gave Moses the Ten Commandments on Mount Sinai over 3,000 years ago. They are <strong>God's rules of love</strong> — the first 3 teach us how to LOVE GOD, and the last 7 teach us how to LOVE OUR NEIGHBOR. These rules don't make us sad — they help us live happy and holy lives! 💕
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.88rem; line-height: 1.5; margin-top: 8px;">
+          ~ Ang Napulo ka Sugo dili para magsubo kanato — kini magtabang nga magmalipayon ug magbalaan kita! ~
+        </p>
+      </div>
+
+      <!-- Two Tables -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 2px dashed #7c3aed; border-radius: 16px; padding: 14px; margin: 14px 0;">
+        <h3 style="font-family: 'Pacifico', cursive; color: #6d28d9; font-size: 1.2rem; margin: 0 0 8px; text-align: center;">📋 Two Tables of the Law</h3>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.9rem; line-height: 1.5; margin: 0; text-align: center;">
+          <strong>1st Table (Commandments 1-3):</strong> Love God ❤️<br>
+          <strong>2nd Table (Commandments 4-10):</strong> Love your neighbor 🤝
+        </p>
+      </div>
+
+      ${commandmentsHtml}
+
+      <!-- Summary -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 20px; padding: 18px; margin: 14px 0; text-align: center; box-shadow: 0 4px 0 #ec4899;">
+        <div style="font-size: 2.5rem;">💕</div>
+        <h3 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem; margin: 4px 0;">Jesus' Summary</h3>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin: 8px 0;">
+          When asked which commandment is greatest, Jesus said:
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #ec4899; padding: 12px 14px; margin: 10px 0; border-radius: 8px; text-align: left;">
+          <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.15rem; margin: 0; line-height: 1.5;">
+            "Thou shalt love the Lord thy God with thy whole heart, and with thy whole soul, and with thy whole mind. This is the greatest and the first commandment. And the second is like to this: Thou shalt love thy neighbor as thyself. On these two commandments dependeth the whole law and the prophets."
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; font-size: 0.78rem; color: var(--pastel-lavender-darker); margin: 6px 0 0;">— Matthew 22:37-40</p>
+        </div>
+      </div>
+
+      <!-- Go to Confession -->
+      <button onclick="renderConfessionGuide()" style="display: block; width: 100%; background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border: 3px solid #7c3aed; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 16px 16px; border-radius: 18px; cursor: pointer; font-size: 1.05rem; margin: 14px 0; box-shadow: 0 5px 0 #5b21b6; text-align: center;">
+        🙏 Did You Break a Commandment? Learn How to Confess →
+      </button>
+
+      <button onclick="renderBibleStory('moses')" style="width: 100%; background: linear-gradient(180deg, #fef3c7 0%, #d97706 100%); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #92400e; margin: 8px 0;">
+        ← Back to Moses Story
+      </button>
+    </div>
+  `);
+}
+
+// ============================================
+// 🙏 GUIDE TO CONFESSION
+// Step-by-step for kids
+// ============================================
+function renderConfessionGuide() {
+  if (!activeStudent) return renderWhoIsPlaying();
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderConfessionGuide();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #be185d;">🏠 All Categories</button>
+        <button onclick="renderTenCommandments()" style="background: rgba(255,255,255,0.85); border: 2px solid #7c3aed; color: #5b21b6; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #7c3aed;">← Commandments</button>
+        <button onclick="renderMassSection()" style="background: rgba(255,255,255,0.85); border: 2px solid #ec4899; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #ec4899;">⛪ Mass</button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">🙏 ✝️ 💕</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 2rem; margin: 8px 0; text-shadow: 1px 1px 0 #fff;">Guide to Confession</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Giya sa Pagkumpisal ~</p>
+      </div>
+
+      <!-- Why Confession -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 18px; padding: 16px; margin: 16px 0; box-shadow: 0 4px 0 #7c3aed;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.4rem; margin: 0 0 8px;">💕 Why Do We Go to Confession?</h2>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          When we sin, we hurt our friendship with Jesus. Confession (also called <strong>Penance</strong> or <strong>Reconciliation</strong>) is a beautiful Sacrament where Jesus washes away our sins through the priest! It's like a big <strong>spiritual bath</strong> 🛁 — we come out clean and white as snow!
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin-top: 8px;">
+          Jesus gave the priests this power on Easter Sunday: <em>"Whose sins you shall forgive, they are forgiven them" (John 20:23)</em>. The priest acts <strong>"in persona Christi"</strong> — in the person of Christ. <strong>Jesus Himself forgives you</strong> through the priest!
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.88rem; line-height: 1.5; margin-top: 8px;">
+          ~ Ang pagkumpisal mao ang pagsuluk-an sa kalag. Si Hesus mismo ang nagpasaylo kanato pinaagi sa pari! ~
+        </p>
+      </div>
+
+      <!-- Two Kinds of Sin -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 18px; padding: 16px; margin: 14px 0;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; margin: 0 0 10px;">⚖️ Two Kinds of Sin</h2>
+
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #fbbf24; padding: 12px 14px; margin: 8px 0; border-radius: 8px;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #d97706; margin: 0 0 4px; font-size: 1.1rem;">💛 Venial Sin (Small Sin)</h4>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0;">
+            Small sins that hurt our friendship with Jesus but don't break it. Example: telling a small lie, saying a mean word, being lazy with prayers.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #dc2626; padding: 12px 14px; margin: 8px 0; border-radius: 8px;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #b91c1c; margin: 0 0 4px; font-size: 1.1rem;">❤️‍🩹 Mortal Sin (Big Sin)</h4>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.5; margin: 0 0 6px;">
+            Serious sins that <strong>break</strong> our friendship with Jesus. Three things make a sin mortal:
+          </p>
+          <ul style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.9rem; line-height: 1.5; margin: 0; padding-left: 20px;">
+            <li>Serious matter (like a big lie, hating someone)</li>
+            <li>You knew it was wrong</li>
+            <li>You did it anyway with full will</li>
+          </ul>
+          <p style="font-family: 'Quicksand', sans-serif; color: #b91c1c; font-size: 0.88rem; line-height: 1.5; margin: 6px 0 0; font-weight: 700;">
+            ⚠️ A person in mortal sin must NOT receive Holy Communion until going to Confession!
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 1 Examination -->
+      <div style="background: linear-gradient(135deg, #fff, #dbeafe); border: 3px solid #2563eb; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #2563eb;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: #2563eb; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #1e40af;">1</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #1e40af; font-size: 1.4rem; margin: 0;">Examination of Conscience</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin-bottom: 10px;">
+          Before going to Confession, find a quiet place and think back. Ask yourself questions based on the Ten Commandments:
+        </p>
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #2563eb; padding: 12px 14px; border-radius: 8px;">
+          <ul style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.92rem; line-height: 1.7; margin: 0; padding-left: 18px;">
+            <li>🙏 Did I skip my prayers? Did I miss Mass on Sunday?</li>
+            <li>✝️ Did I say "Oh my God" or use Jesus' name carelessly?</li>
+            <li>👨‍👩‍👧 Did I disobey or talk back to my parents?</li>
+            <li>💚 Did I hit, bully, or hate someone?</li>
+            <li>💝 Did I look at bad pictures or watch bad shows?</li>
+            <li>🤝 Did I steal or cheat in school or games?</li>
+            <li>🗣️ Did I lie or gossip?</li>
+            <li>🎁 Was I jealous or greedy?</li>
+            <li>🙏 Did I miss my Easter duty (yearly Confession + Communion)?</li>
+          </ul>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.88rem; margin-top: 8px;">
+          💡 Tip: Try to remember <strong>how many times</strong> for each sin (e.g., "I lied about 3 times").
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #ec4899;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: #ec4899; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #be185d;">2</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem; margin: 0;">Be Sorry (Contrition)</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          Tell Jesus you are sorry — not because you got caught, but because <strong>you love Him</strong> and don't want to hurt Him anymore. <strong>Promise to try not to sin again</strong>, with God's help.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #10b981;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: #10b981; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #047857;">3</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem; margin: 0;">In the Confessional</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin-bottom: 10px;">
+          Walk to the priest. You can <strong>kneel behind the screen</strong> (traditional way, very holy!) or sit face-to-face. Then say:
+        </p>
+
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #10b981; padding: 14px 16px; border-radius: 8px; margin: 10px 0;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #047857; margin: 0 0 6px; font-size: 1.1rem;">📜 The Script:</h4>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.7; margin: 0;">
+            ✝️ <strong>"Bless me Father, for I have sinned. It has been [time] since my last Confession."</strong><br>
+            <span style="color: var(--pastel-lavender-darker); font-style: italic;">(Example: "...one week since my last Confession")</span>
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #10b981; padding: 14px 16px; border-radius: 8px; margin: 10px 0;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #047857; margin: 0 0 6px; font-size: 1.1rem;">🗣️ Then Tell Your Sins:</h4>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.7; margin: 0;">
+            Say each sin clearly with how many times. <strong>Tell ALL mortal sins</strong> — don't hide any! Examples:<br>
+            • "I disobeyed my parents 4 times."<br>
+            • "I lied 2 times."<br>
+            • "I missed Mass on Sunday 1 time."
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #10b981; padding: 14px 16px; border-radius: 8px; margin: 10px 0;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #047857; margin: 0 0 6px; font-size: 1.1rem;">🙏 Then Say:</h4>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); font-size: 0.95rem; line-height: 1.7; margin: 0;">
+            <strong>"For these and all the sins of my past life, I am heartily sorry."</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #d97706; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #d97706;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: #d97706; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #92400e;">4</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; margin: 0;">Listen to the Priest</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          The priest may give you advice. Then he will give you a <strong>penance</strong> — usually some prayers to say (like 3 Hail Marys or 1 Our Father). <strong>Listen carefully and remember it!</strong> 👂
+        </p>
+      </div>
+
+      <!-- Step 5 - Act of Contrition -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #7c3aed;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: #7c3aed; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #5b21b6;">5</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.4rem; margin: 0;">Pray the Act of Contrition</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin-bottom: 10px;">
+          When the priest tells you, pray this prayer slowly and with love. Memorize it!
+        </p>
+
+        <div style="background: rgba(255,255,255,0.95); border: 2px solid #7c3aed; padding: 14px 16px; border-radius: 12px; margin: 10px 0;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #5b21b6; margin: 0 0 8px; font-size: 1.15rem; text-align: center;">📜 Act of Contrition</h4>
+          <p style="font-family: 'Georgia', serif; color: var(--plum-deep); font-style: italic; font-size: 0.95rem; line-height: 1.7; margin: 0; text-align: center;">
+            O my God, I am heartily sorry for having offended Thee, and I detest all my sins because of Thy just punishments, but most of all because they offend Thee, my God, who art all good and deserving of all my love. I firmly resolve, with the help of Thy grace, to confess my sins, to do penance, and to amend my life. Amen.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.85); border-left: 4px solid #7c3aed; padding: 12px 14px; margin: 10px 0; border-radius: 8px;">
+          <h4 style="font-family: 'Pacifico', cursive; color: #6d28d9; margin: 0 0 6px; font-size: 1rem;">🇵🇭 Bisaya Version:</h4>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--pastel-lavender-darker); font-style: italic; font-size: 0.92rem; line-height: 1.6; margin: 0;">
+            O Diyos ko, masulub-on gayud ako sa akong nahimong kasaypanan Kanimo, ug akong gikalain ang akong mga sala tungod sa Imong matarong nga silot, apan labaw sa tanan tungod kay nakahatag silag kasakit Kanimo, akong Diyos, nga puno sa kaayo ug takus sa tanan kong gugma. Naghimo ako og lig-on nga tinguha, pinaagi sa Imong grasya, sa pagkumpisal sa akong mga sala, sa pagpenitensiya, ug sa pag-usab sa akong kinabuhi. Amen.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 6 - Absolution -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #fbbf24; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #d97706;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #92400e;">6</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.4rem; margin: 0;">✨ Absolution! ✨</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          The priest will raise his hand and say beautiful words ending with: <em>"...and I absolve you from your sins, in the name of the Father, and of the Son, and of the Holy Spirit. Amen."</em>
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin-top: 8px;">
+          🌟 <strong>This is the moment Jesus forgives ALL your sins!</strong> Make the sign of the cross. You can answer: "Amen."
+        </p>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem; margin-top: 8px;">
+          The priest may say: <em>"Go in peace."</em> You can answer: <strong>"Thanks be to God"</strong> (or "Salamat sa Diyos").
+        </p>
+      </div>
+
+      <!-- Step 7 - Penance -->
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 18px; padding: 16px; margin: 14px 0; box-shadow: 0 4px 0 #10b981;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <div style="background: #10b981; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Pacifico', cursive; font-size: 1.4rem; box-shadow: 0 3px 0 #047857;">7</div>
+          <h2 style="font-family: 'Pacifico', cursive; color: #047857; font-size: 1.4rem; margin: 0;">Do Your Penance</h2>
+        </div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          Right after Confession, kneel before the Tabernacle (or near the altar) and <strong>pray your penance</strong>. Don't forget! Then thank Jesus for the beautiful gift of forgiveness. 🙏
+        </p>
+      </div>
+
+      <!-- Tips -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px dashed #d97706; border-radius: 18px; padding: 16px; margin: 14px 0;">
+        <h2 style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.3rem; margin: 0 0 10px;">💡 Helpful Tips</h2>
+        <ul style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.92rem; margin: 0; padding-left: 20px;">
+          <li>🌹 <strong>Go often!</strong> Once a month is great. Saints went weekly.</li>
+          <li>📓 Write your sins down on paper (then tear it up after).</li>
+          <li>😌 Don't be afraid! The priest cannot tell anyone — it's the <strong>Seal of Confession</strong>.</li>
+          <li>👼 If you forget a sin, that's okay! Mention it next time.</li>
+          <li>💕 Ask Mama Mary to help you make a good confession before you go.</li>
+          <li>✨ After Confession, your soul is whiter than snow!</li>
+        </ul>
+      </div>
+
+      <!-- Final Encouragement -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 20px; padding: 18px; margin: 14px 0; text-align: center; box-shadow: 0 4px 0 #ec4899;">
+        <div style="font-size: 2.5rem;">💕✨🌹</div>
+        <h3 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.4rem; margin: 6px 0;">Jesus is Waiting for You!</h3>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.6; font-size: 0.95rem;">
+          Don't be afraid! Jesus loves you SO much that He waits in the confessional just for YOU. Even if your sins are big, His mercy is BIGGER. Come back to Him often. 🙏
+        </p>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem; margin: 8px 0 0;">
+          ~ Si Hesus naghulat kanimo. Ayaw kahadlok — labaw pa kadako ang iyang kalooy kay sa imong sala! ~
+        </p>
+      </div>
+
+      <button onclick="renderTenCommandments()" style="width: 100%; background: linear-gradient(180deg, #ede9fe 0%, #7c3aed 100%); color: #fff; border: 3px solid #5b21b6; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #5b21b6; margin: 8px 0;">
+        ← Back to Ten Commandments
+      </button>
+      <button onclick="renderBibleStory('moses')" style="width: 100%; background: linear-gradient(180deg, #fef3c7 0%, #d97706 100%); color: #fff; border: 3px solid #92400e; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 5px 0 #92400e; margin: 8px 0;">
+        📖 Back to Moses Story
       </button>
     </div>
   `);
