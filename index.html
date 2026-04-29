@@ -5295,7 +5295,26 @@ function renderHome() {
 
       <!-- Responsive grid: 2 columns on desktop, 1 on mobile for compact layout -->
       <div class="category-grid">
-      <!-- Category 1: The Mass: Then and Now (foundational - Holy Mass first) -->
+      <!-- Category 1 (FIRST — most important): Big Questions -->
+      <button onclick="renderBigQuestions()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7 30%, #fce7f3 60%, #ede9fe); border: 4px solid #ec4899; border-radius: 24px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 6px 0 #be185d, 0 0 30px rgba(236, 72, 153, 0.3); text-align: left; position: relative;">
+        <div style="position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 4px 14px; border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.1em; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: rotate(8deg);">✨ START HERE ✨</div>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+          <div style="font-size: 3.5rem;">💫</div>
+          <div style="flex: 1;">
+            <div style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem; line-height: 1.1;">Big Questions</div>
+            <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.05rem; margin-top: 2px;">~ Dagkong mga Pangutana ~</div>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.85); border-radius: 14px; padding: 10px 12px; margin-top: 8px;">
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 0.92rem; color: var(--plum-deep); font-weight: 700; line-height: 1.5;">Who am I? Why am I here?<br>Why is my heart beating?</div>
+          <div style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1rem; margin-top: 4px; font-style: italic;">~ Real answers for the questions every child wonders ~</div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <span style="display: inline-block; background: linear-gradient(180deg, #ec4899, #be185d); color: #fff; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 22px; border-radius: 14px; font-size: 0.92rem; box-shadow: 0 3px 0 #9f1239;">▶ Start Wondering</span>
+        </div>
+      </button>
+
+      <!-- Category 2: The Mass: Then and Now (foundational - Holy Mass first) -->
       <button onclick="renderMassSection()" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, #fef3c7 50%, #ede9fe); border: 4px solid #d97706; border-radius: 24px; padding: 22px 18px; margin: 12px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 6px 0 #92400e, 0 0 30px rgba(217, 119, 6, 0.2); text-align: left; position: relative;">
         <div style="position: absolute; top: 12px; right: 16px; font-size: 1.4rem;">📿</div>
         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
@@ -14287,6 +14306,529 @@ function renderLifeOfMaryChapter(chapterId) {
       </div>
 
       <button onclick="renderLifeOfMary()" style="width: 100%; background: linear-gradient(180deg, #fff 0%, #dbeafe 100%); border: 3px solid #2563eb; color: #1e40af; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 14px 18px; border-radius: 18px; cursor: pointer; font-size: 1.05rem; box-shadow: 0 5px 0 #1e40af; margin: 8px 0;">📖 Back to All Chapters</button>
+    </div>
+  `);
+}
+
+
+// ============================================
+// 💫 BIG QUESTIONS
+// The first thing children see on the home page.
+// Written for ages 5+ — meeting the child in their wonder
+// before any religious words. Then gently bringing in God.
+// ============================================
+
+const BIG_QUESTIONS = [
+  {
+    id: 'who-am-i',
+    num: 1,
+    icon: '🤔',
+    color: '#ec4899',
+    bgColor: '#fce7f3',
+    question: 'Who am I?',
+    questionBs: 'Kinsa ko?',
+    wonder: 'Sometimes I look at my hands. I look at my feet. And I think... who is this? Who am I? Am I just my body? Or is there a real ME inside?',
+    wonderBs: 'Usahay tan-awon nako akong mga kamot. Akong mga tiil. Ug maghunahuna ko... kinsa ni? Kinsa ko? Lawas ra ba ko? O aduna pay laing AKO sa sulod?',
+    notAlone: 'Many, many children wonder this. Big people wonder it too. You are not weird. This is a good question.',
+    notAloneBs: 'Daghang bata ang naghunahuna niini. Bisan ang dagko. Dili ka katingad-an. Maayo ning pangutana.',
+    truth: 'You are real. You are special. There is a YOU inside that no one else has — only you.\n\nAnd here is the most beautiful part: God made you. He made YOU on purpose. Not by accident. He wanted there to be a YOU in the world. And He named you in His heart, even before your mama and papa knew you were coming.',
+    truthBs: 'Tinuod ka. Espesyal ka. Aduna kay AKO sa sulod nga walay laing tawo nga adunay sama — ikaw lang.\n\nUg ang labing maanyag: Ang Diyos ang nagbuhat kanimo. Tinuyo. Wala Siya magsayop. Gusto Niya nga aduna kay puy-anan sa kalibutan. Ug gihatagan ka Niyag ngalan sa Iyang kasingkasing, sa wala pa kahibalo si Mama ug Papa nimo.',
+    prayer: 'God, thank You for making me. I am happy You wanted me here.',
+    prayerBs: 'Diyos, salamat sa pagbuhat kanako. Lipay ko nga gusto Mo ako diri.'
+  },
+  {
+    id: 'thinking',
+    num: 2,
+    icon: '💭',
+    color: '#7c3aed',
+    bgColor: '#ede9fe',
+    question: 'Why do I think?',
+    questionBs: 'Nganong maghunahuna ko?',
+    wonder: 'When I close my eyes, I can hear my own thinking. Like little words inside my head. Who is making the words? Where do they come from? Am I the only one who hears them?',
+    wonderBs: 'Kung mopiyong ko, madungog nako akong kaugalingong hunahuna. Mura silag gagmay nga pulong sa akong utok. Kinsay nagbuhat sa pulong? Asa sila gikan? Ako ra ba ang makadungog nila?',
+    notAlone: 'Every person in the world has a quiet voice inside. Yours is YOURS — no one else hears it. But you are not alone in there. Not really.',
+    notAloneBs: 'Ang matag tawo sa kalibutan adunay hilom nga tingog sa sulod. Imo kana — walay laing makadungog. Apan dili ka nag-inusara sa sulod. Tinuod kana.',
+    truth: 'God can hear your thinking. Every little thought. Not in a scary way — in a soft, kind way. Like Mama listening to a baby breathe at night.\n\nWhen you think happy thoughts, He smiles. When you think sad thoughts, He is sad too. He is closer to you than your own thinking is.',
+    truthBs: 'Ang Diyos makadungog sa imong hunahuna. Matag gamay nga pulong. Dili sa makahadlok nga paagi — sa malumo nga paagi. Sama ni Mama nga naminaw sa gininhawa sa bata sa gabii.\n\nKung magmalipayong hunahuna ka, mokatawa Siya. Kung magsubo, mosubo usab Siya. Mas duol Siya kanimo kay sa imong kaugalingong hunahuna.',
+    prayer: 'God, You can hear me thinking right now. I am not alone. Thank You.',
+    prayerBs: 'Diyos, madungog Mo ko karon nga naghunahuna. Dili ko nag-inusara. Salamat.'
+  },
+  {
+    id: 'why-here',
+    num: 3,
+    icon: '🌍',
+    color: '#10b981',
+    bgColor: '#d1fae5',
+    question: 'Why am I here?',
+    questionBs: 'Nganong ania ko?',
+    wonder: 'There are SO many people in the world. Why am I one of them? Why ME? What am I supposed to do here?',
+    wonderBs: 'Daghan kaayong tawo sa kalibutan. Nganong usa ko nila? Nganong AKO? Unsay kinahanglan nakong buhaton dinhi?',
+    notAlone: 'You are here for a reason. A real one. Not by mistake. Not by accident.',
+    notAloneBs: 'Ania ka tungod adunay rason. Tinuod nga rason. Dili sayop. Dili sulagma.',
+    truth: 'God put you here because He loves you. He wanted you to be alive. He wanted to be your friend.\n\nAnd God gave you a special job. Only YOU can do it. Your job is to love — to love God, and to love the people around you. That is why you are here. To love and be loved.',
+    truthBs: 'Gibutang ka sa Diyos dinhi tungod kay nahigugma Siya kanimo. Gusto Niya nga buhi ka. Gusto Niya nga higala ka Niya.\n\nUg gihatagan ka Niyag espesyal nga buluhaton. Ikaw lang makahimo niini. Ang imong buluhaton mao ang paghigugma — paghigugma sa Diyos, ug paghigugma sa mga tawo sa imong palibot. Mao kana ang rason nganong ania ka.',
+    prayer: 'God, help me to love You and the people around me. That is why I am here.',
+    prayerBs: 'Diyos, tabangi ko nga maghigugma Kanimo ug sa mga tawo sa akong palibot. Mao kana ang rason ngano ania ko.'
+  },
+  {
+    id: 'where-from',
+    num: 4,
+    icon: '✨',
+    color: '#fbbf24',
+    bgColor: '#fef3c7',
+    question: 'Where did I come from?',
+    questionBs: 'Asa ko gikan?',
+    wonder: 'Was I always here? What was I before I was a baby? Was I anywhere? Or was there just nothing... and then suddenly ME?',
+    wonderBs: 'Naa na ba ko sa wala pa ako natawo? Unsa ko sa wala pa ko bata? Naa ba ko bisan asa? O wala lang... ug kalit lang nahimong AKO?',
+    notAlone: 'You did not used to be anywhere. Then one day, you became real. That is not a sad thing. That is the most amazing thing.',
+    notAloneBs: 'Wala ka kanhi bisan asa. Unya usa ka adlaw, nahimo kang tinuod. Dili kana subo. Maanindot kaayo kana.',
+    truth: 'God made you. Out of nothing. He just THOUGHT of you, and you began to be.\n\nYour body grew inside your mama. But the YOU inside — the real you — that came straight from God. Brand new. Just for you. Like a gift wrapped up just for the world.\n\nGod thought about you BEFORE the stars were made. He was excited for the day you would be born.',
+    truthBs: 'Ang Diyos ang nagbuhat kanimo. Gikan sa wala. Iya lang gihunahuna ka, ug nagsugod ka og buhi.\n\nAng imong lawas mitubo sa sulod ni Mama. Apan ang AKO sa sulod — ang tinuod nimo — kana gikan sa Diyos. Bag-o gayud. Para nimo lang. Sama sa gasa nga giputos para sa kalibutan.\n\nAng Diyos naghunahuna kanimo sa wala pa ang mga bituon. Nalipay Siya sa adlaw nga matawo ka.',
+    prayer: 'God, thank You for thinking of me. I am happy You made me real.',
+    prayerBs: 'Diyos, salamat sa paghunahuna kanako. Lipay ko nga gibuhat Mo ko nga tinuod.'
+  },
+  {
+    id: 'heartbeat',
+    num: 5,
+    icon: '❤️',
+    color: '#dc2626',
+    bgColor: '#fee2e2',
+    question: 'Why is my heart going thump-thump?',
+    questionBs: 'Nganong nagdup-dup ang akong kasingkasing?',
+    wonder: 'I did not tell my heart to do that. I do not even think about it. But it keeps going... thump-thump, thump-thump. Who is making it work? What if it stops?',
+    wonderBs: 'Wala nako gisugo akong kasingkasing nga buhaton. Wala pa gani nako gihunahuna. Apan padayon... dup-dup, dup-dup. Kinsay nagpalihok ani? Unsa kaha kung mohunong?',
+    notAlone: 'Put your hand on your chest right now. Feel it? That bump-bump? Someone is keeping it going. You are not doing it. Someone else is.',
+    notAloneBs: 'Ibutang ang imong kamot sa imong dughan karon. Bation ba? Kana nga dup-dup? Adunay nagpadayon niana. Dili ikaw. Adunay laing tawo.',
+    truth: 'God is keeping your heart going right now. Every single thump. He is doing it because He LOVES you. He wants you to be alive.\n\nGod is also keeping the sun shining. The rain falling. The flowers growing. The birds singing. He never gets tired.\n\nFeel your heartbeat. It is like God whispering: "I love you. I love you. I love you." Over and over.',
+    truthBs: 'Ang Diyos ang nagpadayon sa imong kasingkasing karon. Matag dup-dup. Gibuhat Niya kini tungod kay GIHIGUGMA ka Niya. Gusto Niya nga buhi ka.\n\nAng Diyos usab ang nagpadayon sa adlaw nga mosidlak. Sa ulan nga mahulog. Sa bulak nga motubo. Sa langgam nga mokanta. Wala gayud Siyay kakapoy.\n\nBation ang imong kasingkasing. Mura siyag Diyos nga naghagulhog: "Gihigugma ko ikaw. Gihigugma ko ikaw."',
+    prayer: 'God, thank You for keeping my heart going. I love You back.',
+    prayerBs: 'Diyos, salamat sa pagpadayon sa akong kasingkasing. Gihigugma ko usab Ikaw.'
+  },
+  {
+    id: 'falling',
+    num: 6,
+    icon: '🌑',
+    color: '#1e40af',
+    bgColor: '#dbeafe',
+    question: 'Why do I sometimes feel like I\'m falling?',
+    questionBs: 'Nganong usahay mura kog naghulog?',
+    wonder: 'Sometimes — at night, or when I am alone — I feel a strange thing. Like I am falling into a deep dark place. Like nothing is holding me. It scares me. What is that feeling?',
+    wonderBs: 'Usahay — sa gabii, o kung mag-inusara ko — adunay kahibulongang gibati ko. Mura kog naghulog sa lawom, ngitngit nga dapit. Mura walay nag-agak kanako. Mahadlok ko. Unsa kana?',
+    notAlone: 'You are not the only one. Many children feel this. Even big people feel this. You are not broken. The feeling is real — but listen to what it really means.',
+    notAloneBs: 'Dili ka lang. Daghang bata ang nakabati niini. Bisan ang dagko. Dili ka guba. Tinuod ang gibati — apan paminawi unsay kahulogan.',
+    truth: 'That falling feeling is something good telling you a true thing: you are little. You cannot hold yourself up. You need Someone bigger to catch you.\n\nThat Someone is GOD. He has been holding you the whole time. You are NOT really falling. You are being HELD. Right now.\n\nNext time the feeling comes, you can whisper just three words: "Jesus, hold me." Try it. He will. He always does.',
+    truthBs: 'Kanang gibati nga paghulog mao ang maayong butang nga nagsulti og kamatuoran: gamay ka. Dili nimo kaya hupton ang imong kaugalingon. Nanginahanglan ka og laing mas dako nga modakop.\n\nKana ang DIYOS. Naghupot Siya kanimo sa tibuok panahon. Wala ka tinuoray naghulog. Gihupot ka. Karon.\n\nSa sunod higayon nga moabot ang pagbati, ihagulhog: "Hesus, kupti ko." Sulayi. Iya kang kuptan. Kanunay.',
+    prayer: 'Jesus, when I feel like I am falling, hold me. Do not let me go.',
+    prayerBs: 'Hesus, kung bation nakong naghulog ko, kupti ko. Ayaw ko pasagdi.'
+  },
+  {
+    id: 'watching',
+    num: 7,
+    icon: '👀',
+    color: '#0ea5e9',
+    bgColor: '#e0f2fe',
+    question: 'Is anyone watching over me?',
+    questionBs: 'Aduna bay nagbantay nako?',
+    wonder: 'When I am all alone in my room, when nobody knows where I am, when I am sleeping — does anyone see me? Does anyone care?',
+    wonderBs: 'Kung mag-inusara ko sa kuwarto, kung walay nahibalo asa ko, kung natulog ko — adunay nakakita nako? Adunay nag-amping?',
+    notAlone: 'Yes. Always. Every second. Even right this minute, while you are reading these words.',
+    notAloneBs: 'Oo. Kanunay. Matag segundo. Bisan karon, samtang nagbasa ka.',
+    truth: 'God sees you. He never closes His eyes. He never falls asleep. He sees you when you are happy. He sees you when you are sad. He sees you when you are scared.\n\nAnd you have a special friend nobody can see — a guardian angel. God gave you your very own angel when He made you. The angel is with you ALL the time. Day and night. Awake and asleep. The angel never leaves.\n\nYou are not alone. Not even a little bit.',
+    truthBs: 'Ang Diyos nakakita kanimo. Wala gayud Siya nagpiyong. Wala gayud natulog. Nakita Niya ka kung malipayon ka. Nakita Niya ka kung magsubo ka. Nakita Niya ka kung mahadlok ka.\n\nUg aduna kay espesyal nga higala nga walay makakita — usa ka anghel nga magbalantay. Gihatag sa Diyos ang imong kaugalingong anghel sa pagbuhat kanimo. Kanunay siya uban kanimo. Adlaw ug gabii. Wala gayud siya mobiya.\n\nDili ka nag-inusara. Bisan gamay.',
+    prayer: 'Angel of God, my guardian dear — stay close to me. God, thank You for watching over me.',
+    prayerBs: 'Anghel sa Diyos, akong magbalantay — pabilin sa duol nako. Diyos, salamat sa pagbantay kanako.'
+  },
+  {
+    id: 'sad',
+    num: 8,
+    icon: '😢',
+    color: '#6366f1',
+    bgColor: '#e0e7ff',
+    question: 'Why do I feel sad sometimes for no reason?',
+    questionBs: 'Nganong magsubo ko usahay nga walay rason?',
+    wonder: 'Sometimes I feel sad inside. Nothing bad happened. I just feel... empty. Like something is missing. But I do not know what.',
+    wonderBs: 'Usahay magsubo ko sa sulod. Walay daotang nahitabo. Mura ko walay sulod. Mura adunay nawala. Apan wala ko kahibalo unsa.',
+    notAlone: 'That feeling is real. Many, many people feel it. Even saints felt it. You are not weird for feeling empty sometimes.',
+    notAloneBs: 'Tinuod ang gibati. Daghang tawo ang nakabati niini. Bisan ang santos. Dili ka katingad-an.',
+    truth: 'Inside every heart there is a special spot. A spot only God can fill. Not toys. Not yummy food. Not even your best friend. Only GOD fits in that spot.\n\nWhen you feel empty, that is your heart saying: "I miss God." That is okay. That is good, even. It means your heart is awake.\n\nNext time you feel that empty feeling, you can say: "Jesus, I miss You. Come close to me." And He will.',
+    truthBs: 'Sa sulod sa matag kasingkasing adunay espesyal nga lugar. Lugar nga ang Diyos lang ang makapuno. Dili dulaan. Dili lami nga pagkaon. Bisan ang labing suod nga higala. ANG DIYOS LANG ang mohaom.\n\nKung walay sulod ang bation, kana ang imong kasingkasing nga nag-ingon: "Nagmingaw ko sa Diyos." Okey lang kana. Maayo gani. Nagpasabot nga buhi imong kasingkasing.\n\nSa sunod higayon, makaingon ka: "Hesus, nagmingaw ko Nimo. Padool kanako." Mosanong Siya.',
+    prayer: 'Jesus, when I feel empty, please come close to me. Fill my heart.',
+    prayerBs: 'Hesus, kung walay sulod ko, palihog padool kanako. Pun-a akong kasingkasing.'
+  },
+  {
+    id: 'bad-things',
+    num: 9,
+    icon: '💔',
+    color: '#9333ea',
+    bgColor: '#f3e8ff',
+    question: 'Why do bad things happen?',
+    questionBs: 'Nganong adunay daotang mahitabo?',
+    wonder: 'If God loves us, why do people get sick? Why do people we love die? Why do mommies and daddies cry? Why is there anything bad at all?',
+    wonderBs: 'Kung mahigugmaon ang Diyos, nganong adunay nagkasakit? Nganong namatay ang atong gimahal? Nganong naghilak si Mama ug Papa? Nganong adunay daotan?',
+    notAlone: 'This is one of the hardest questions ever. Even big people do not fully understand. But there is a small piece of the answer that helps.',
+    notAloneBs: 'Usa kini sa labing lisud nga pangutana. Bisan ang dagko dili tibuok makasabot. Apan adunay gamay nga tubag nga makatabang.',
+    truth: 'God did not make a world with bad things in it. He made everything PERFECT. No sickness. No sad. No dying.\n\nBut a long time ago, the very first people made a wrong choice. That wrong choice broke the world. We are still living in the broken world. That is why bad things happen now.\n\nBut here is the most important part: GOD did not leave us alone in the broken world. He came down HIMSELF, as Jesus. He cried real tears. He had real boo-boos. He even DIED. He knows what it feels like.\n\nAnd one day, God will fix EVERYTHING. No more sad. No more sick. No more dying. The bad things are real. But they will not last forever. Heaven will.',
+    truthBs: 'Wala gibuhat sa Diyos ang kalibutan nga adunay daotan. Hingpit ang Iyang gibuhat. Walay sakit. Walay subo. Walay kamatayon.\n\nApan dugay na, ang unang mga tawo mipili og sayop. Kanang sayop nga pagpili nakaguba sa kalibutan. Karon nagpuyo ta sa guba nga kalibutan. Mao kana nganong adunay daotan.\n\nApan: ang DIYOS wala mibiya kanato. MIPANAOG mismo Siya, isip Hesus. Mihilak siyag tinuod. Adunay siyay tinuod nga sakit. NAMATAY pa gani siya. Nahibalo Siya unsa ang gibati.\n\nUg balaodayon, ayuhon sa Diyos ang TANAN. Walay na subo. Walay na sakit. Walay na kamatayon. Tinuod ang daotan. Apan dili magpadayon hangtod sa kahangturan. Ang Langit, oo.',
+    prayer: 'Jesus, when bad things happen, hold me close. I know You understand because You felt sad too.',
+    prayerBs: 'Hesus, kung adunay daotang mahitabo, kupti ko og hugot. Nahibalo ko nga nakasabot Ka kay nagsubo Ka usab.'
+  },
+  {
+    id: 'die',
+    num: 10,
+    icon: '🌅',
+    color: '#f59e0b',
+    bgColor: '#fef3c7',
+    question: 'What happens when I die?',
+    questionBs: 'Unsay mahitabo kung mamatay ko?',
+    wonder: 'Everyone dies one day. Even me? What will happen? Will it hurt? Will it just be... nothing? Or will I still be ME?',
+    wonderBs: 'Tanan mamatay ra usab. Bisan ako? Unsay mahitabo? Sakit ba? Walay na lang ba? O AKO gihapon?',
+    notAlone: 'It is okay to wonder about this. It is okay to feel a little scared. But you do not need to be afraid. Listen.',
+    notAloneBs: 'Okay lang nga maghunahuna niini. Okay lang nga mahadlok og gamay. Apan dili na kinahanglang mahadlok. Paminaw.',
+    truth: 'When you die, your body stops working — like a flashlight when the battery runs out. But the YOU inside? The real you? That part NEVER dies. Never ever.\n\nThe real you goes to Heaven if you have loved God. Heaven is a place where everyone is happy ALL the time. No tears. No sad. No sick. Just love. Forever.\n\nIn Heaven, you will see Jesus face to face. You will see Mama Mary. You will hug the people you missed. You will not be tired or scared anymore. You will be home.\n\nLove God now. Be sorry when you do something bad. Be kind to people. Then one day, Jesus will come for you, and He will say: "Welcome home."',
+    truthBs: 'Kung mamatay ka, mohunong imong lawas — sama sa flashlight nga nahurot ang baterya. Apan ang AKO sa sulod? Ang tinuod nimo? Kana wala gayud mamatay.\n\nAng tinuod nimo moadto sa Langit kung gihigugma nimo ang Diyos. Ang Langit dapit diin ang tanan malipayon KANUNAY. Walay luha. Walay subo. Walay sakit. Gugma lang. Hangtod sa kahangturan.\n\nSa Langit, makita nimo si Hesus nga nawong sa nawong. Makita nimo si Mama Mary. Mahalukan nimo ang mga tawo nga gimingaw nimo. Dili ka na makapoy o mahadlok. Mouli ka na.\n\nHigugmaa ang Diyos karon. Pasayloa ang imong mga sayop. Pagmaayo sa mga tawo. Unya usa ka adlaw, mokuha si Hesus kanimo, ug moingon: "Welcome home."',
+    prayer: 'Jesus, please take me to Heaven one day. I want to live with You forever.',
+    prayerBs: 'Hesus, palihog dad-a ko sa Langit usa ka adlaw. Gusto kong mag-uban Nimo hangtod sa kahangturan.'
+  },
+  {
+    id: 'lonely',
+    num: 11,
+    icon: '🤐',
+    color: '#0891b2',
+    bgColor: '#cffafe',
+    question: 'Why do I feel lonely even when people are around?',
+    questionBs: 'Nganong mag-inusara ko bisag adunay tawo?',
+    wonder: 'Sometimes I am with my family. Or with friends. But inside, I still feel alone. Like no one really knows me. Like nobody can really see ME. Why?',
+    wonderBs: 'Usahay uban ko sa akong pamilya. O sa mga higala. Apan sa sulod, mag-inusara gihapon ko. Mura walay nakaila sa tinuod nako. Mura walay makakita sa AKO. Ngano?',
+    notAlone: 'This kind of lonely is not a bad thing. It is your heart telling you something important.',
+    notAloneBs: 'Kining matang sa pag-inusara dili daotan. Ang imong kasingkasing nag-ingon og importante.',
+    truth: 'No person can fully see inside you. Not even your mama. Not even your best friend. They love you. But there is a part of you only ONE person can see — and that is GOD.\n\nGod sees ALL of you. The happy parts. The sad parts. The secret parts you have not told anybody. He sees everything — and He loves it ALL.\n\nWhen you feel lonely even with people around, that is your heart looking for the One who really sees you. Talk to Him. Even just inside your head. He hears.',
+    truthBs: 'Walay tawo nga makakita gayud sa imong sulod. Bisan si Mama. Bisan ang imong labing suod nga higala. Gimahal ka nila. Apan adunay bahin nimo nga ANG DIYOS lang ang makakita.\n\nNakita sa Diyos ang TANAN nimo. Ang malipayong bahin. Ang sad-an nga bahin. Ang tinago nga walay gisultian. Nakita Niya ang tanan — ug GIHIGUGMA Niya ang TANAN.\n\nKung mag-inusara ka bisag uban sa mga tawo, ang imong kasingkasing nangita sa USA nga nakakita gayud kanimo. Pakigsulti Niya. Bisan sa imong kasing-kasing. Madunggan ka.',
+    prayer: 'Jesus, You see all of me. I am never really alone because You are with me.',
+    prayerBs: 'Hesus, nakita Mo ang tibuok nako. Wala gayud ko mag-inusara kay uban Ka kanako.'
+  },
+  {
+    id: 'love-me',
+    num: 12,
+    icon: '🌟',
+    color: '#be185d',
+    bgColor: '#fce7f3',
+    question: 'Does God really love ME?',
+    questionBs: 'Tinuod ba nga gimahal ko sa Diyos?',
+    wonder: 'I hear that God loves people. But me? Even me? With all my mistakes? With the bad things I have done? With the parts of me I do not like? Does He really love ME?',
+    wonderBs: 'Madungog nako nga gimahal sa Diyos ang mga tawo. Apan ako? Bisan ako? Bisan adunay mga sayop ko? Bisan adunay daotan kong gibuhat? Bisan adunay bahin nako nga dili ko ganahan? Tinuod ba nga gimahal Niya AKO?',
+    notAlone: 'Yes. The answer is YES. Bigger than yes. Stronger than yes. Forever yes.',
+    notAloneBs: 'Oo. Ang tubag OO. Mas dako kay sa oo. Mas kusgan. Hangtod sa kahangturan.',
+    truth: 'God loves YOU. The real you. With ALL your mistakes. With everything you have ever done.\n\nYou know how much He loves you? Listen to this: When you broke God\'s rules and made wrong choices, He did not get rid of you. He sent His OWN SON, Jesus, to come down and die on a cross — just so YOU could come home to Him one day.\n\nThat is how much. That much. Jesus did all that for YOU. Even if you were the only person in the world, He would have done it just for you.\n\nWhen you do something wrong, just say sorry. He always says: "I forgive you. Come back. I love you. I love you. I love you."\n\nYou are loved. You will always be loved. NOTHING you do can make God stop loving you. Nothing. Ever.',
+    truthBs: 'Gimahal ka sa Diyos. Ang tinuod nimo. Uban sa TANAN nimong sayop. Uban sa tanang nabuhat nimo.\n\nKahibalo ka unsa ka grabe ang iyang gugma? Paminaw: Kung gilapas nimo ang balaod sa Diyos ug nagbuhat og sayop, wala ka Niya gilabay. Iyang gipadala ang IYANG ANAK, si Hesus, aron mokanaog ug mamatay sa krus — para LANG ka makapauli kanako.\n\nIngon ana kadako. Para nimo. Bisan ikaw lang ang tawo sa kalibutan, gibuhat gihapon ni Hesus para nimo lang.\n\nKung adunay sayop ka, ingnig pasayloa lang. Moingon Siya kanunay: "Pasayloon taka. Balik. Gimahal taka. Gimahal taka."\n\nGimahal ka. Magpabilin ka nga gimahal. WALAY mahimo nga makapaundang sa gugma sa Diyos para nimo. Wala. Hangtod sa kahangturan.',
+    prayer: 'Jesus, thank You for loving me. Even me. Help me believe it every day.',
+    prayerBs: 'Hesus, salamat sa paghigugma kanako. Bisan ako. Tabangi ko motuo niini matag adlaw.'
+  }
+];
+
+let bigQuestionsState = { current: null };
+
+// Main page — list of all 12 Big Questions
+function renderBigQuestions() {
+  ensureGuestStudent();
+
+  const questionsHtml = BIG_QUESTIONS.map(q => `
+    <button onclick="renderBigQuestion('${q.id}')" style="display: block; width: 100%; background: linear-gradient(135deg, #fff, ${q.bgColor}); border: 3px solid ${q.color}; border-radius: 18px; padding: 14px 16px; margin: 10px 0; cursor: pointer; font-family: 'Quicksand', sans-serif; box-shadow: 0 4px 0 ${q.color}; text-align: left;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 2.4rem;">${q.icon}</div>
+        <div style="flex: 1;">
+          <div style="font-family: 'Pacifico', cursive; color: ${q.color}; font-size: 1.15rem; line-height: 1.2;">${escapeHtml(q.question)}</div>
+          <div style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1rem; margin-top: 2px;">~ ${escapeHtml(q.questionBs)} ~</div>
+        </div>
+      </div>
+    </button>
+  `).join('');
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderBigQuestions();">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 30%, #fce7f3 60%, #ede9fe 100%); border-radius: 22px; padding: 22px 16px;">
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px;">
+        <button onclick="renderHome()" style="background: linear-gradient(180deg, #fff 0%, #fef3c7 100%); border: 3px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 10px 20px; border-radius: 16px; cursor: pointer; font-size: 0.95rem; box-shadow: 0 4px 0 #be185d;">
+          🏠 ← All Categories
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4rem;">💫 🤔 ✨</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 2.2rem; margin: 6px 0; text-shadow: 2px 2px 0 #fff; line-height: 1.1;">Big Questions</h1>
+        <p style="font-family: 'Caveat', cursive; color: #be185d; font-size: 1.3rem;">~ Dagkong mga Pangutana ~</p>
+      </div>
+
+      <!-- ✨ DRAMATIC OPENING: Two layers — for parents, for children -->
+
+      <!-- For Parents — quiet, dramatic, the soul's hunger -->
+      <div style="background: linear-gradient(180deg, #1e1b4b 0%, #4c1d95 100%); border: 3px solid #fbbf24; border-radius: 22px; padding: 22px; margin: 14px 0; box-shadow: 0 6px 0 #000, 0 0 30px rgba(251, 191, 36, 0.3); position: relative;">
+        <div style="position: absolute; top: -12px; left: 18px; background: #fbbf24; color: #1e1b4b; padding: 4px 14px; border-radius: 12px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; box-shadow: 0 2px 0 rgba(0,0,0,0.4);">📖 FOR PARENTS</div>
+
+        <p style="font-family: 'Pacifico', cursive; color: #fbbf24; font-size: 1.4rem; line-height: 1.3; text-align: center; margin: 12px 0 14px; text-shadow: 1px 1px 0 #000;">
+          Your child's soul is searching.<br>It has been searching since the day it was made.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          When your child lies awake at night and wonders <em>who am I, why is my heart beating, where did I come from</em> — that is not random. That is not idle curiosity. That is the <strong style="color: #fbbf24;">soul reaching for its Maker</strong>, even before it knows His name. Every soul God creates comes into the world already <strong>thirsty</strong> for Him. Already <strong>looking</strong>. Already <strong>aching</strong> for the One who made it.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          St. Augustine wrote one of the most piercing sentences in all of human language:<br>
+          <em style="color: #fbbf24; font-size: 1.05rem;">"You have made us for Yourself, O Lord, and our hearts are restless until they rest in You."</em>
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          That restlessness lives inside your child right now. They cannot name it. They do not have the words. They only feel a strange longing, a small ache, a wondering they cannot turn off. <strong style="color: #fbbf24;">It is the soul, looking for Home.</strong>
+        </p>
+
+        <div style="border-top: 1px solid rgba(251, 191, 36, 0.4); margin: 18px 0; padding-top: 16px;">
+          <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 0.96rem; margin: 12px 0;">
+            If you do not give your child the answer — <strong>the soul will keep searching anyway</strong>. It will reach for fairies, for stories, for cartoons, for fantasies. Later, it will reach for fame. For pleasure. For approval. For sin. For anything that promises to fill the silent hunger inside.
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 0.96rem; margin: 12px 0;">
+            <strong style="color: #fbbf24;">Nothing will fit.</strong> Because the soul was not made for fairies, or fame, or pleasure. The soul was made for <strong style="color: #fbbf24;">GOD</strong>. And only God is shaped to fit the empty space inside.
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 0.96rem; margin: 12px 0;">
+            <strong style="color: #fbbf24;">Tell your child the truth NOW</strong> — while their heart is still soft, while they still trust you, while they will still believe you. Sit with them as they read. Pray with them. Make God their first language. So that when life pulls them away one day — <strong>and life will try</strong> — they will already know the way home.
+          </p>
+          <p style="font-family: 'Caveat', cursive; color: #fbbf24; font-size: 1.3rem; line-height: 1.5; margin: 18px 0 0; text-align: center; text-shadow: 1px 1px 0 #000;">
+            "Suffer the little children to come unto Me."<br>
+            <span style="font-family: 'Quicksand', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em;">— MARK 10:14</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- For Children — warm, intimate, naming the longing -->
+      <div style="background: linear-gradient(135deg, #fff, #fce7f3); border: 3px solid #ec4899; border-radius: 22px; padding: 22px; margin: 14px 0; box-shadow: 0 6px 0 #be185d; position: relative;">
+        <div style="position: absolute; top: -12px; left: 18px; background: #ec4899; color: #fff; padding: 4px 14px; border-radius: 12px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; box-shadow: 0 2px 0 #be185d;">💌 FOR YOU, LITTLE ONE</div>
+
+        <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.5rem; line-height: 1.3; text-align: center; margin: 12px 0 14px; text-shadow: 1px 1px 0 #fff;">
+          Your soul is searching.<br>Even when you do not know it. ✨
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          Have you ever felt a small ache inside, even when nothing bad happened? Have you ever felt like you are <em>looking for something</em>, but you do not know what?
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          That little ache is your <strong style="color: #be185d;">SOUL</strong>. Your soul is the real YOU. It lives inside your body, but it is much bigger than your body. And your soul has a secret: <strong style="color: #be185d;">it is looking for the One who made it</strong>. It is looking for Home.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          The wondering you feel — <em>who am I, why am I here, why is my heart going thump-thump</em> — that is your soul whispering. Your soul knows it came from Somewhere very beautiful. Your soul wants to go back.
+        </p>
+
+        <div style="background: rgba(236, 72, 153, 0.1); border-left: 4px solid #ec4899; padding: 14px 16px; border-radius: 8px; margin: 16px 0;">
+          <p style="font-family: 'Pacifico', cursive; color: #be185d; font-size: 1.25rem; line-height: 1.4; margin: 0;">
+            Listen carefully, little one:
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 10px 0 0;">
+            <strong style="color: #be185d;">Someone made your soul.</strong> On purpose. With love. With great joy.<br>
+            <strong style="color: #be185d;">Someone is holding your soul right now.</strong> Even when you cannot see Him.<br>
+            <strong style="color: #be185d;">Someone hears every whisper your soul makes.</strong> And He loves you.<br><br>
+            That Someone is <strong style="color: #be185d;">GOD</strong>. He is your Father. He made your soul to find Him. He has been waiting for you.
+          </p>
+        </div>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 14px 0;">
+          When you read these Big Questions, do not just read with your eyes. <strong style="color: #be185d;">Listen with your soul.</strong> Your soul already KNOWS the answers — it just needs someone to tell it the names.
+        </p>
+
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem; line-height: 1.5; margin: 16px 0 0; font-style: italic; text-align: center;">
+          ~ Ang imong kalag nangita kang Hesus. Si Hesus uban kanimo karon. Higugma Niya ka. ~
+        </p>
+      </div>
+
+      <p style="font-family: 'Caveat', cursive; color: #be185d; text-align: center; font-size: 1.15rem; margin: 18px 0 8px;">~ Pilia ang pangutana ~ Pick a question ~</p>
+
+      ${questionsHtml}
+
+      <!-- THE PROMISE OF RETURN — for when the soul gets lost -->
+      <div style="background: linear-gradient(180deg, #4c1d95 0%, #1e3a8a 100%); border: 3px solid #fbbf24; border-radius: 22px; padding: 24px; margin: 20px 0; box-shadow: 0 6px 0 #000, 0 0 30px rgba(251, 191, 36, 0.25); position: relative;">
+        <div style="position: absolute; top: -12px; left: 18px; background: #fbbf24; color: #1e1b4b; padding: 4px 14px; border-radius: 12px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; box-shadow: 0 2px 0 rgba(0,0,0,0.4);">🌅 THE PROMISE OF RETURN</div>
+
+        <div style="text-align: center; margin: 12px 0;">
+          <div style="font-size: 3rem;">🕯️</div>
+          <p style="font-family: 'Pacifico', cursive; color: #fbbf24; font-size: 1.5rem; line-height: 1.3; margin: 8px 0; text-shadow: 1px 1px 0 #000;">
+            If one day your soul forgets the way home...
+          </p>
+        </div>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.96rem; margin: 14px 0;">
+          Some children grow up and the world gets very loud. The soul keeps searching, but no one tells it what it is searching for. So it reaches for shiny things that look like answers. Pleasure. Approval. Things that glitter but do not shine. Roads that look exciting but lead nowhere.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.96rem; margin: 14px 0;">
+          And nothing fits. <strong style="color: #fbbf24;">Nothing ever fits.</strong> The soul keeps aching. The void grows wider. The heart whispers, <em>"This is not it. This is not it."</em> And still the world says: <em>"Try this. Try that. Try harder."</em>
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: #fef3c7; line-height: 1.8; font-size: 0.96rem; margin: 14px 0;">
+          But the soul never stops searching. It cannot. <strong style="color: #fbbf24;">It was made by God to find God</strong> — and it will not rest until it does. The very ache that makes you feel lost is the SAME ache that will lead you home, if you listen to it.
+        </p>
+
+        <div style="background: rgba(251, 191, 36, 0.15); border-left: 4px solid #fbbf24; padding: 14px 16px; border-radius: 8px; margin: 16px 0;">
+          <p style="font-family: 'Pacifico', cursive; color: #fbbf24; font-size: 1.25rem; line-height: 1.5; margin: 0; text-shadow: 1px 1px 0 #000;">
+            If a day comes when you feel lost —
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 0.94rem; margin: 10px 0 0;">
+            when the falling feeling comes back stronger than ever, when nothing in the world makes the empty space go away — <strong style="color: #fbbf24;">REMEMBER THIS APP</strong>. Remember Mama Mary. Remember the Latin prayers. Remember the questions had answers.
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 0.94rem; margin: 12px 0 0;">
+            Just whisper one word: <strong style="color: #fbbf24;">"Jesus."</strong>
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: #fff; line-height: 1.8; font-size: 0.94rem; margin: 10px 0 0;">
+            He will hear you. He has been waiting your entire life. He will run to meet you, the way the Father ran to meet His son who came home (Luke 15:20). He has never stopped looking for you. <strong style="color: #fbbf24;">He has been the One you were searching for, all along.</strong>
+          </p>
+        </div>
+
+        <p style="font-family: 'Caveat', cursive; color: #fbbf24; font-size: 1.25rem; line-height: 1.5; margin: 18px 0 0; text-align: center; font-style: italic; text-shadow: 1px 1px 0 #000;">
+          ~ Ang imong kalag nangita Niya. Siya nangita usab kanimo. Hagulhog lang: "Hesus." Magdagan Siya aron motagbo nimo. ~
+        </p>
+      </div>
+
+      <!-- PRAYERS DON'T EXPIRE — your father's gift -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #b45309; border-radius: 22px; padding: 22px; margin: 18px 0; box-shadow: 0 5px 0 #92400e; position: relative;">
+        <div style="position: absolute; top: -12px; left: 18px; background: #b45309; color: #fff; padding: 4px 14px; border-radius: 12px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; box-shadow: 0 2px 0 #78350f;">⏳ PRAYERS NEVER EXPIRE</div>
+
+        <p style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.35rem; line-height: 1.3; text-align: center; margin: 14px 0; text-shadow: 1px 1px 0 #fff;">
+          Every prayer ever prayed for you<br>is still working right now.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 12px 0;">
+          When your grandmother prayed the Rosary for you while you were still in your mother's womb — that prayer is still alive.<br><br>
+          When your father whispered your name to God before sleeping — that prayer is still working.<br><br>
+          When a saint who lived 500 years ago prayed for "all the children of the future" — <strong>that prayer reached YOU.</strong>
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.98rem; margin: 12px 0;">
+          Prayers do not expire. They do not get tired. They keep working through years, through decades, through generations. Sometimes a prayer prayed today does not bear fruit until 30 years from now — but it always bears fruit.
+        </p>
+
+        <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #b45309; padding: 14px 16px; border-radius: 8px; margin: 16px 0;">
+          <p style="font-family: 'Pacifico', cursive; color: #92400e; font-size: 1.15rem; line-height: 1.4; margin: 0;">
+            🙏 So pray for the people you love.
+          </p>
+          <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.7; font-size: 0.92rem; margin: 8px 0 0;">
+            Pray for your mama. Pray for your papa. Pray for your grandparents — the ones still here, and the ones in Heaven. Pray for your future self. Pray for your future children. <strong>Your prayers will outlive you.</strong> They will keep working long after you have grown up.
+          </p>
+        </div>
+
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem; line-height: 1.5; margin: 14px 0 0; font-style: italic; text-align: center;">
+          ~ Ang pag-ampo wala mahurot. Magpadayon sa pagtrabaho hangtod sa katuigan. ~
+        </p>
+      </div>
+
+      <!-- THE FIFTEEN PRAYERS OF ST. BRIDGET — quiet treasure for later -->
+      <div style="background: linear-gradient(135deg, #fff, #ede9fe); border: 3px solid #7c3aed; border-radius: 22px; padding: 22px; margin: 18px 0; box-shadow: 0 5px 0 #5b21b6; position: relative;">
+        <div style="position: absolute; top: -12px; left: 18px; background: #7c3aed; color: #fff; padding: 4px 14px; border-radius: 12px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.15em; box-shadow: 0 2px 0 #5b21b6;">📜 A QUIET TREASURE</div>
+
+        <p style="font-family: 'Pacifico', cursive; color: #5b21b6; font-size: 1.35rem; line-height: 1.3; text-align: center; margin: 14px 0; text-shadow: 1px 1px 0 #fff;">
+          The Fifteen Prayers of St. Bridget
+        </p>
+        <p style="font-family: 'Caveat', cursive; color: #6d28d9; font-size: 1.15rem; text-align: center; margin: 0 0 12px;">
+          ~ Ang Napulog-Lima ka Pag-ampo ni Santa Bridget ~
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.96rem; margin: 12px 0;">
+          Long ago, a holy woman named <strong>St. Bridget of Sweden</strong> wanted to know how many wounds Jesus suffered for us. Jesus appeared to her and said: <em>"5,480 wounds, my daughter."</em> Then He gave her FIFTEEN special prayers — one for each year, prayed every day for a whole year — that bring tremendous graces to anyone who prays them faithfully, and to their loved ones.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.96rem; margin: 12px 0;">
+          These prayers are too long for little children to pray now. <strong>But they are a gift waiting for you when you grow up.</strong> When life gets heavy. When someone you love is dying. When you yourself are afraid. The Fifteen Prayers of St. Bridget will be there.
+        </p>
+
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 0.96rem; margin: 12px 0;">
+          One of the great promises Jesus made: <em>"Whoever prays these prayers for one year — fifteen souls of their family will be saved, and they themselves will obtain perfect contrition before death."</em>
+        </p>
+
+        <div style="background: rgba(124, 58, 237, 0.1); border-left: 4px solid #7c3aed; padding: 12px 16px; border-radius: 8px; margin: 16px 0;">
+          <p style="font-family: 'Caveat', cursive; color: #5b21b6; font-size: 1.2rem; line-height: 1.5; margin: 0; font-style: italic;">
+            ~ Tipigi kining pulong sa imong kasingkasing. Sa adlaw nga magkinahanglan ka, mahinumdom ka. Kanang adlaw, pangitaa ang Napulog-Lima ka Pag-ampo ni Santa Bridget. Sila magtabang nimo. ~
+          </p>
+        </div>
+
+        <p style="font-family: 'Quicksand', sans-serif; font-style: italic; color: var(--pastel-lavender-darker); font-size: 0.85rem; line-height: 1.6; margin: 14px 0 0; text-align: center;">
+          Keep this name in your heart. On the day you need it, you will remember. On that day, search for the Fifteen Prayers of St. Bridget — they will help you.
+        </p>
+      </div>
+
+      <!-- BOTTOM ENCOURAGEMENT -->
+      <div style="background: linear-gradient(135deg, #fef3c7, #fbbf24); border: 3px solid #b45309; border-radius: 18px; padding: 16px; margin: 18px 0; text-align: center; box-shadow: 0 4px 0 #b45309;">
+        <div style="font-size: 2.5rem;">💙</div>
+        <p style="font-family: 'Pacifico', cursive; color: #fff; font-size: 1.4rem; margin: 4px 0; text-shadow: 1px 1px 0 #b45309;">You are loved.</p>
+        <p style="font-family: 'Caveat', cursive; color: #fef3c7; font-size: 1.15rem; margin: 0;">~ Gimahal ka. ~</p>
+      </div>
+    </div>
+  `);
+}
+
+// Detail page — one specific Big Question with wonder, comfort, truth, prayer
+function renderBigQuestion(questionId) {
+  ensureGuestStudent();
+  const q = BIG_QUESTIONS.find(x => x.id === questionId);
+  if (!q) return renderBigQuestions();
+
+  const idx = BIG_QUESTIONS.findIndex(x => x.id === questionId);
+  const prev = idx > 0 ? BIG_QUESTIONS[idx - 1] : null;
+  const next = idx < BIG_QUESTIONS.length - 1 ? BIG_QUESTIONS[idx + 1] : null;
+
+  render(`
+    <button class="sound-toggle" onclick="toggleSounds(); renderBigQuestion('${questionId}');">${soundsEnabled ? "🔊" : "🔇"}</button>
+    <div class="home" style="background: linear-gradient(180deg, #fff 0%, ${q.bgColor} 100%); border-radius: 22px; padding: 22px 16px;">
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button onclick="renderBigQuestions()" style="background: rgba(255,255,255,0.85); border: 2px solid ${q.color}; color: ${q.color}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 ${q.color};">← All Questions</button>
+        <button onclick="renderHome()" style="background: rgba(255,255,255,0.85); border: 2px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 8px 14px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 0 #be185d;">🏠 Home</button>
+      </div>
+
+      <!-- Question header -->
+      <div style="text-align: center; margin-bottom: 18px;">
+        <div style="font-size: 4.5rem; margin-bottom: 6px;">${q.icon}</div>
+        <h1 style="font-family: 'Pacifico', cursive; color: ${q.color}; font-size: 1.8rem; margin: 4px 0; line-height: 1.2; text-shadow: 1px 1px 0 #fff;">${escapeHtml(q.question)}</h1>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.2rem;">~ ${escapeHtml(q.questionBs)} ~</p>
+      </div>
+
+      <!-- 1. THE WONDER (the child's voice) -->
+      <div style="background: linear-gradient(135deg, #fff, ${q.bgColor}); border: 3px solid ${q.color}; border-radius: 18px; padding: 18px; margin: 12px 0; box-shadow: 0 4px 0 ${q.color}; position: relative;">
+        <div style="position: absolute; top: -12px; left: 16px; background: ${q.color}; color: #fff; padding: 4px 12px; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em;">💭 THE WONDER</div>
+        <p style="font-family: 'Caveat', cursive; color: ${q.color}; font-size: 1.3rem; line-height: 1.6; margin: 8px 0 0; font-style: italic;">"${escapeHtml(q.wonder)}"</p>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.15rem; line-height: 1.5; margin: 8px 0 0; font-style: italic;">~ "${escapeHtml(q.wonderBs)}" ~</p>
+      </div>
+
+      <!-- 2. YOU ARE NOT ALONE -->
+      <div style="background: linear-gradient(135deg, #fff, #fef3c7); border: 3px solid #f59e0b; border-radius: 18px; padding: 18px; margin: 12px 0; box-shadow: 0 4px 0 #b45309; position: relative;">
+        <div style="position: absolute; top: -12px; left: 16px; background: #f59e0b; color: #fff; padding: 4px 12px; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em;">💛 YOU ARE NOT ALONE</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.7; font-size: 1rem; margin: 8px 0 0;">${escapeHtml(q.notAlone)}</p>
+        <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem; line-height: 1.5; margin: 8px 0 0; font-style: italic;">~ ${escapeHtml(q.notAloneBs)} ~</p>
+      </div>
+
+      <!-- 3. THE TRUTH -->
+      <div style="background: linear-gradient(135deg, #fff, #d1fae5); border: 3px solid #10b981; border-radius: 18px; padding: 18px; margin: 12px 0; box-shadow: 0 4px 0 #047857; position: relative;">
+        <div style="position: absolute; top: -12px; left: 16px; background: #10b981; color: #fff; padding: 4px 12px; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em;">✨ THE TRUTH</div>
+        <p style="font-family: 'Quicksand', sans-serif; color: var(--plum-deep); line-height: 1.8; font-size: 1rem; margin: 8px 0 0; white-space: pre-line;">${escapeHtml(q.truth)}</p>
+        <div style="border-top: 2px dashed #10b981; margin: 14px 0 8px; padding-top: 10px;">
+          <p style="font-family: 'Caveat', cursive; color: var(--pastel-lavender-darker); font-size: 1.1rem; line-height: 1.6; margin: 0; font-style: italic; white-space: pre-line;">~ ${escapeHtml(q.truthBs)} ~</p>
+        </div>
+      </div>
+
+      <!-- 4. A LITTLE PRAYER -->
+      <div style="background: linear-gradient(135deg, #1e3a8a, #4c1d95); border: 3px solid #fbbf24; border-radius: 18px; padding: 18px; margin: 12px 0; text-align: center; box-shadow: 0 5px 0 #000; position: relative;">
+        <div style="position: absolute; top: -12px; left: 16px; background: #fbbf24; color: #1e3a8a; padding: 4px 12px; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em;">🙏 A LITTLE PRAYER</div>
+        <div style="font-size: 2rem; margin-top: 4px;">🙏</div>
+        <p style="font-family: 'Caveat', cursive; color: #fbbf24; font-size: 1.4rem; line-height: 1.5; margin: 4px 0; text-shadow: 1px 1px 0 #000;">"${escapeHtml(q.prayer)}"</p>
+        <p style="font-family: 'Caveat', cursive; color: #fef3c7; font-size: 1.15rem; line-height: 1.5; margin: 6px 0 0; font-style: italic;">~ "${escapeHtml(q.prayerBs)}" ~</p>
+      </div>
+
+      <!-- Navigation -->
+      <div style="display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap;">
+        ${prev ? `<button onclick="renderBigQuestion('${prev.id}')" style="flex: 1; min-width: 130px; background: linear-gradient(180deg, #fff, ${prev.bgColor}); border: 3px solid ${prev.color}; color: ${prev.color}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 12px 14px; border-radius: 14px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 0 ${prev.color};">← ${prev.icon} Previous</button>` : ''}
+        ${next ? `<button onclick="renderBigQuestion('${next.id}')" style="flex: 1; min-width: 130px; background: linear-gradient(180deg, ${next.bgColor}, ${next.color}); color: #fff; border: 3px solid ${next.color}; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 12px 14px; border-radius: 14px; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 0 ${next.color};">${next.icon} Next →</button>` : ''}
+      </div>
+
+      <button onclick="renderBigQuestions()" style="width: 100%; background: linear-gradient(180deg, #fff, #fef3c7); border: 3px solid #be185d; color: #be185d; font-family: 'Quicksand', sans-serif; font-weight: 700; padding: 14px 18px; border-radius: 18px; cursor: pointer; font-size: 1.05rem; box-shadow: 0 5px 0 #be185d; margin: 8px 0;">
+        💫 Back to All Questions
+      </button>
     </div>
   `);
 }
